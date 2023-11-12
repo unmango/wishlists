@@ -1,0 +1,14 @@
+# Packages
+node_modules/
+
+# Build Artifacts
+bin/
+obj/
+build/
+coverage/
+
+# User specific
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.env*.local

@@ -1,0 +1,26 @@
+{
+	"name": "UnMango Wishlists",
+	"dockerComposeFile": "docker-compose.yaml",
+	"service": "devcontainer",
+	"workspaceFolder": "/workspaces",
+  "customizations": {
+    "vscode": {
+			"extensions": [
+				"ms-azuretools.vscode-docker",
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"graphql.vscode-graphql-syntax",
+				"editorconfig.editorconfig",
+				"ms-dotnettools.csharp"
+			],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "zsh"
+          }
+        }
+      }
+    }
+  }
+}
