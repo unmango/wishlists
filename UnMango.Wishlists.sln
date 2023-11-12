@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{EC96956C-DE44-4D28-81C3-F8324FAB1423}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnMango.Wishlists.Api", "api\UnMango.Wishlists.Api\UnMango.Wishlists.Api.csproj", "{A9854E4A-27A6-4531-B02A-327402EBDEFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9854E4A-27A6-4531-B02A-327402EBDEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9854E4A-27A6-4531-B02A-327402EBDEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9854E4A-27A6-4531-B02A-327402EBDEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9854E4A-27A6-4531-B02A-327402EBDEFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A9854E4A-27A6-4531-B02A-327402EBDEFC} = {EC96956C-DE44-4D28-81C3-F8324FAB1423}
+	EndGlobalSection
+EndGlobal

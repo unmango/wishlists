@@ -1,0 +1,22 @@
+version: '3.8'
+name: unmango-wishlists-devcontainer
+
+services:
+  devcontainer:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    ulimits: # https://github.com/moby/moby/issues/45436
+      nofile:
+        soft: 1024
+        hard: 10240
+    volumes:
+      - ..:/workspaces:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: vscode
+    command: /bin/sh -c "while sleep 1000; do :; done"
+  cosmos:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
+    ports:
+      - '8081:8081'
+      - '10250-10255:10250-10255'

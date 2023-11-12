@@ -1,0 +1,6 @@
+.devcontainer/
+api/
+app/*
+!app/web/
+LICENSE
+README.md
