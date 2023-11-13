@@ -9,8 +9,10 @@ RUN groupadd --gid $GID $USERNAME \
 	&& pacman -Syu --needed --noconfirm \
 		inetutils \
 		sudo \
+		bash \
 		zsh \
 		base-devel \
+		curl \
 		git \
 		go \
 	&& echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
@@ -24,16 +26,17 @@ RUN git clone https://aur.archlinux.org/yay.git \
 	&& rm -rf .cache yay
 
 COPY .nvmrc .
-ENV NVM_DIR=/usr/share/nvm
+ENV NVM_DIR=~/.nvm
 
 RUN yay -Sy --noconfirm \
 	docker \
 	docker-compose \
 	python \
 	thefuck \
-	nvm \
 	dotnet-sdk-preview-bin \
 	azure-cli-bin \
+	&& curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash \
+	&& . $NVM_DIR/nvm.sh \
 	&& nvm install && nvm use
 
 ENV PATH=$NVM_DIR:$PATH
