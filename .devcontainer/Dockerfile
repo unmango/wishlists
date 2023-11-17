@@ -9,31 +9,39 @@ RUN groupadd --gid $GID $USERNAME \
 	&& pacman -Syu --needed --noconfirm \
 		inetutils \
 		sudo \
+		bash \
 		zsh \
 		base-devel \
+		curl \
 		git \
 		go \
 	&& echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
 	&& chmod 0440 /etc/sudoers.d/$USERNAME
 
 USER $USERNAME
-
 WORKDIR /home/$USERNAME
+
 RUN git clone https://aur.archlinux.org/yay.git \
 	&& cd yay && makepkg -sri --needed --noconfirm \
 	&& rm -rf .cache yay
-
-COPY .nvmrc .
-ENV NVM_DIR=/usr/share/nvm
 
 RUN yay -Sy --noconfirm \
 	docker \
 	docker-compose \
 	python \
 	thefuck \
-	nvm \
-	dotnet-sdk-preview-bin \
+	dotnet-sdk-bin \
 	azure-cli-bin \
+	kubectl \
+	nvm \
+	pulumi
+
+COPY .nvmrc .
+ENV NVM_DIR=/home/$USERNAME/.nvm
+
+RUN echo "source /usr/share/nvm/init-nvm.sh" > ~/.zprofile \
+	&& source /usr/share/nvm/init-nvm.sh \
+	&& nvm alias default "$(cat .nvmrc)" \
 	&& nvm install && nvm use
 
 ENV PATH=$NVM_DIR:$PATH
