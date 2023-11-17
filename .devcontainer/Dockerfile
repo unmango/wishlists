@@ -19,26 +19,29 @@ RUN groupadd --gid $GID $USERNAME \
 	&& chmod 0440 /etc/sudoers.d/$USERNAME
 
 USER $USERNAME
-
 WORKDIR /home/$USERNAME
+
 RUN git clone https://aur.archlinux.org/yay.git \
 	&& cd yay && makepkg -sri --needed --noconfirm \
 	&& rm -rf .cache yay
-
-COPY .nvmrc .
-ENV NVM_DIR=~/.nvm
 
 RUN yay -Sy --noconfirm \
 	docker \
 	docker-compose \
 	python \
 	thefuck \
-	dotnet-sdk-preview-bin \
-	azure-cli-bin
+	dotnet-sdk-bin \
+	azure-cli-bin \
+	kubectl \
+	nvm \
+	pulumi
 
-RUN mkdir $NVM_DIR \
-	&& curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash \
-	&& . $NVM_DIR/nvm.sh \
+COPY .nvmrc .
+ENV NVM_DIR=/home/$USERNAME/.nvm
+
+RUN echo "source /usr/share/nvm/init-nvm.sh" > ~/.zprofile \
+	&& source /usr/share/nvm/init-nvm.sh \
+	&& nvm alias default "$(cat .nvmrc)" \
 	&& nvm install && nvm use
 
 ENV PATH=$NVM_DIR:$PATH
