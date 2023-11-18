@@ -14,6 +14,44 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".devcontainer", ".devcontai
 		.devcontainer\Dockerfile = .devcontainer\Dockerfile
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hack", "hack", "{6976306C-992F-453C-877C-2962D71823A2}"
+	ProjectSection(SolutionItems) = preProject
+		hack\build.cmd = hack\build.cmd
+		hack\build.ps1 = hack\build.ps1
+		hack\build.sh = hack\build.sh
+		hack\start.cmd = hack\start.cmd
+		hack\start.ps1 = hack\start.ps1
+		hack\start.sh = hack\start.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E4254116-38F9-4EF6-BF65-253A2BDB2BF9}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		.editorconfig = .editorconfig
+		.prettierignore = .prettierignore
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6FADFD17-ACB4-473E-8938-BA6CF43420E4}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.nvmrc = .nvmrc
+		docker-compose.yaml = docker-compose.yaml
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{62C8A5C6-B3A1-44F4-AE83-678CB2706FA7}"
+	ProjectSection(SolutionItems) = preProject
+		.github\renovate.json = .github\renovate.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{5E6F1516-74F6-4B61-986C-1FCA04355BFF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{EBFDD8A0-ADE3-45F0-94F4-333A3D67AAE3}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +68,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A9854E4A-27A6-4531-B02A-327402EBDEFC} = {EC96956C-DE44-4D28-81C3-F8324FAB1423}
+		{5E6F1516-74F6-4B61-986C-1FCA04355BFF} = {62C8A5C6-B3A1-44F4-AE83-678CB2706FA7}
 	EndGlobalSection
 EndGlobal
