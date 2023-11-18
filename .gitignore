@@ -12,3 +12,5 @@ coverage/
 !.vscode/settings.json
 !.vscode/extensions.json
 .env*.local
+discord.xml
+protobuf.xml
