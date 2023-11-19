@@ -3,8 +3,9 @@
 	"dockerComposeFile": "docker-compose.yaml",
 	"service": "devcontainer",
 	"workspaceFolder": "/workspaces",
-	"remoteUser": "vscode","features": {
-	"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+	"remoteUser": "vscode",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
 	"customizations": {
 		"vscode": {
