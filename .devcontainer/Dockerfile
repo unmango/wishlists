@@ -34,7 +34,8 @@ RUN yay -Sy --noconfirm \
 	azure-cli-bin \
 	kubectl \
 	nvm \
-	pulumi
+	pulumi \
+	act
 
 COPY .nvmrc .
 ENV NVM_DIR=/home/$USERNAME/.nvm

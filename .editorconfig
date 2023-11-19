@@ -7,3 +7,4 @@ indent_style = tab # Accessibility
 
 [*.{yml,yaml}]
 indent_style = space
+indent_size = 2
