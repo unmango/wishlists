@@ -6,6 +6,7 @@ bin/
 obj/
 build/
 coverage/
+__generated__/
 
 # User specific
 .vscode/*

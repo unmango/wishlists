@@ -54,5 +54,5 @@ pwsh ./hack/start.ps1
 ```shell
 cd app/web
 npm ci
-npm run start
+npm run dev
 ```
