@@ -23,8 +23,7 @@ jobs:
         with:
           global-json-file: global.json
           cache: true
-          cache-dependency-path: |
-            api/UnMango.Wishlists.Api/packages.lock.json
+          cache-dependency-path: api/UnMango.Wishlists.Api/packages.lock.json
 
       - run: dotnet restore --locked-mode
       - run: dotnet build -c Release
