@@ -7,6 +7,9 @@ obj/
 build/
 coverage/
 __generated__/
+/out/
+next-env.d.ts
+/coverage
 
 # User specific
 .vscode/*
@@ -15,3 +18,6 @@ __generated__/
 .env*.local
 discord.xml
 protobuf.xml
+.next/
+.env*.local
+.vercel
