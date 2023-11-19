@@ -1,6 +1,5 @@
 FROM node:21.2.0 as build
 
-WORKDIR /build
 COPY package*.json .
 RUN npm ci
 
@@ -8,4 +7,4 @@ COPY ./ .
 RUN npm run build
 
 FROM nginx:1.25.3
-COPY --from=build /build/build /usr/share/nginx/html
+COPY --from=build /build /usr/share/nginx/html
