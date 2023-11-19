@@ -82,7 +82,7 @@ jobs:
           context: api/UnMango.Wishlists.Api
           file: api/UnMango.Wishlists.Api/Dockerfile
           provenance: true
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
