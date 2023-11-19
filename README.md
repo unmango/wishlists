@@ -13,9 +13,13 @@ Create React App Static Web Application
 |API|[`/api/UnMango.Wishlists.Api/`](./api/UnMango.Wishlists.Api/)|
 |Web App|[`/app/web/`](./app/web/)|
 
+## API
+
+The API documentation can be found [here](./api/UnMango.Wishlists.Api/README.md).
+
 ## Building
 
-As a convencience, build scripts are provided to build both applications.
+As a convencience, scripts are provided to build both applications.
 
 ```shell
 ./hack/build.sh
@@ -23,13 +27,6 @@ As a convencience, build scripts are provided to build both applications.
 
 ```shell
 pwsh ./hack/build.ps1
-```
-
-### API
-
-```shell
-cd api/UnMango.Wishlists.Api
-dotnet build
 ```
 
 ### Web App
@@ -42,7 +39,7 @@ npm run build
 
 ## Running
 
-As a convencience, start scripts are provided to build both applications.
+As a convencience, scripts are provided to start both applications.
 
 ```shell
 ./hack/start.sh
@@ -50,13 +47,6 @@ As a convencience, start scripts are provided to build both applications.
 
 ```shell
 pwsh ./hack/start.ps1
-```
-
-### API
-
-```shell
-cd api/UnMango.Wishlists.Api
-dotnet run
 ```
 
 ### Web App
