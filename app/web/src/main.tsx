@@ -2,10 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+
+const apiUrl = import.meta.env.VITE_API_URL as string;
 
 const client = new ApolloClient({
-	uri: import.meta.env.VITE_API_URL,
+	uri: apiUrl,
 	cache: new InMemoryCache(),
 });
 
