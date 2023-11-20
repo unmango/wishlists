@@ -3,10 +3,6 @@
 	"dockerComposeFile": "docker-compose.yaml",
 	"service": "devcontainer",
 	"workspaceFolder": "/workspaces",
-	"remoteUser": "vscode",
-	"features": {
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
-	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -15,7 +11,16 @@
 				"esbenp.prettier-vscode",
 				"graphql.vscode-graphql-syntax",
 				"editorconfig.editorconfig",
-				"ms-dotnettools.csharp"
+				"ms-dotnettools.csharp",
+				"ms-dotnettools.csdevkit",
+				"GraphQL.vscode-graphql-syntax",
+				"EditorConfig.EditorConfig",
+				"ms-dotnettools.vscodeintellicode-csharp",
+				"ms-vsliveshare.vsliveshare",
+				"DavidAnson.vscode-markdownlint",
+				"bradlc.vscode-tailwindcss",
+				"redhat.vscode-yaml",
+				"eamodio.gitlens"
 			],
 			"settings": {
 				"terminal.integrated.defaultProfile.linux": "zsh",

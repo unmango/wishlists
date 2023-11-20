@@ -15,6 +15,16 @@
           "HotChocolate.Types.Scalars.Upload": "13.7.0"
         }
       },
+      "HotChocolate.AspNetCore.CommandLine": {
+        "type": "Direct",
+        "requested": "[13.7.0, )",
+        "resolved": "13.7.0",
+        "contentHash": "oHvfkC55Bt87oZyPy+tqkv2SMm0BmekLTi/FiKGplwVKlMG/6QmMZueRN2QC7MY3Pu/Qyo1rmgeNOyCizXvmSA==",
+        "dependencies": {
+          "HotChocolate": "13.7.0",
+          "System.CommandLine": "2.0.0-beta4.22272.1"
+        }
+      },
       "BananaCakePop.Middleware": {
         "type": "Transitive",
         "resolved": "7.0.4",
@@ -275,6 +285,11 @@
         "type": "Transitive",
         "resolved": "8.0.0-rc.2.23479.6",
         "contentHash": "+iYjFMCIQMT7FCkZgiYY4Xk9fYCmmiPtCLNn3qqMTJ7Jeqa6SfYdFKsAk4XHTPK81Ov0LsFbKKSMDGFggTc+ZA=="
+      },
+      "System.CommandLine": {
+        "type": "Transitive",
+        "resolved": "2.0.0-beta4.22272.1",
+        "contentHash": "1uqED/q2H0kKoLJ4+hI2iPSBSEdTuhfCYADeJrAqERmiGQ2NNacYKRNEQ+gFbU4glgVyK8rxI+ZOe1onEtr/Pg=="
       },
       "System.ComponentModel.Annotations": {
         "type": "Transitive",
