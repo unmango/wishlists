@@ -1,7 +1,8 @@
 import { CodegenConfig } from '@graphql-codegen/cli';
+import * as path from 'path';
 
 const config: CodegenConfig = {
-	schema: 'http://localhost:5249/graphql',
+	schema: path.join(__dirname, '..', '..', 'api', 'schema.graphql'),
 	documents: ['src/**/*.{ts,tsx}'],
 	generates: {
 		'./src/__generated__/': {
