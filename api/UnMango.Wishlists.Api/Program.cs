@@ -9,4 +9,4 @@ var app = builder.Build();
 
 app.MapGraphQL();
 
-app.Run();
+app.RunWithGraphQLCommands(args);
