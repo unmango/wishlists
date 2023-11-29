@@ -10,7 +10,7 @@
 		"preview": "npm run compile && vite preview",
 		"compile": "graphql-codegen",
 		"watch": "graphql-codegen -w",
-		"schema": "cp ../../api/schema.graphql src/__generated__"
+		"schema": "mkdir -p src/__generated__ && cp ../../api/schema.graphql src/__generated__"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.8.7",
