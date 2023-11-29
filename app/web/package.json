@@ -9,7 +9,8 @@
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "npm run compile && vite preview",
 		"compile": "graphql-codegen",
-		"watch": "graphql-codegen -w"
+		"watch": "graphql-codegen -w",
+		"schema": "cp ../../api/schema.graphql src/__generated__"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.8.7",
