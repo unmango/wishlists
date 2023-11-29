@@ -9,7 +9,7 @@ query ListWishlists {
 	}
 }`);
 
-function App() {
+function App(): React.JSX.Element {
 	const { data, loading, error, client } = useQuery(LIST_WISHLISTS);
 
 	console.log(client);
