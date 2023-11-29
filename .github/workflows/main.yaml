@@ -88,6 +88,9 @@ jobs:
 
   web-docker:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/web
     steps:
       - uses: actions/checkout@v4
 
