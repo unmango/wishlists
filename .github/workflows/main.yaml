@@ -22,10 +22,9 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
           global-json-file: global.json
-          # No dependencies ATM 🙃
-          # cache: true
-          # cache-dependency-path: |
-          #   api/UnMango.Wishlists.Api/packages.lock.json
+          cache: true
+          cache-dependency-path: |
+            api/UnMango.Wishlists.Api/packages.lock.json
 
       - run: dotnet restore --locked-mode
       - run: dotnet build -c Release
