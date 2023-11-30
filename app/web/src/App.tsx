@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useQuery } from "@apollo/client";
+import { gql } from "./__generated__";
+import "./App.css";
+
+const LIST_WISHLISTS = gql(`
+query ListWishlists {
+	listWishlists {
+		items
+	}
+}`);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const { data, loading, error, client } = useQuery(LIST_WISHLISTS);
+
+	console.log(client);
+	console.log(import.meta.env.VITE_API_URL);
+
+	if (error) return <span>{JSON.stringify(error)}</span>;
+	if (loading) return <span>Loading...</span>;
+
+	return (
+		<div>
+			<span>Hiya</span>
+			{!data && <span>Aww...</span>}
+			{data?.listWishlists.map((l, i) => (
+				<li key={i}>{l.items.join(",")}</li>
+			))}
+		</div>
+	);
 }
 
 export default App;

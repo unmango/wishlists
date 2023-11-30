@@ -31,6 +31,8 @@ RUN yay -Sy --noconfirm \
 	python \
 	thefuck \
 	dotnet-sdk-bin \
+	aspnet-targeting-pack-bin \
+	aspnet-runtime-bin \
 	azure-cli-bin \
 	kubectl \
 	nvm \
