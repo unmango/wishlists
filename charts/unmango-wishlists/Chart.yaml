@@ -1,0 +1,20 @@
+apiVersion: v2
+name: unmango-wishlists
+description: Helm chart for installing UnMango Wishlists
+type: application
+version: 0.1.0
+appVersion: v0.0.1-alpha
+sources:
+  - https://github.com/unmango/wishlists
+kubeVersion: '>= 1.25'
+maintainers:
+  - name: UnstoppableMango
+    url: https://github.com/UnstoppableMango
+dependencies:
+  - name: common
+    version: 2.14.1
+    repository: oci://registry-1.docker.io/bitnamicharts
+  - name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 13.2.27
+    condition: .postgresql.enabled
