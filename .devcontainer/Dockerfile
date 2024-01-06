@@ -26,18 +26,19 @@ RUN git clone https://aur.archlinux.org/yay.git \
 	&& rm -rf .cache yay
 
 RUN yay -Sy --noconfirm \
+	act \
+	aspnet-runtime-bin \
+	aspnet-targeting-pack-bin \
+	azure-cli-bin \
 	docker \
 	docker-compose \
-	python \
-	thefuck \
 	dotnet-sdk-bin \
-	aspnet-targeting-pack-bin \
-	aspnet-runtime-bin \
-	azure-cli-bin \
+	helm \
 	kubectl \
 	nvm \
 	pulumi \
-	act
+	python \
+	thefuck
 
 COPY .nvmrc .
 ENV NVM_DIR=/home/$USERNAME/.nvm
