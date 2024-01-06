@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: unmango-wishlists
+  serviceName: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: unmango-wishlists
+    spec:
+      containers:
+        - name: api
+          image: {{ include "image" }}
+          ports:
+            - name: http
+              containerPort: 5000
+          env:
+            - name: PUID
+              value: {{ .Values.global.uid | quote }}
+            - name: PGID
+              value: {{ .Values.global.gid | quote }}
