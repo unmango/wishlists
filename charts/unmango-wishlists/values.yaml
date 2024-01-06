@@ -1,0 +1,6 @@
+global:
+  uid: 1001
+  gid: 1001
+
+postgresql:
+  enabled: true
