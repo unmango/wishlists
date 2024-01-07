@@ -141,6 +141,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
   helm:
     name: ${{ github.event_name == 'push' && 'Helm Publish' || 'Helm Package' }}
     runs-on: ubuntu-latest
@@ -155,14 +156,16 @@ jobs:
           fetch-depth: 0
           filter: tree:0
 
-      - uses: actions/setup-dotnet@v4
-        with:
-          global-json-file: global.json
-
       - name: Setup helm
         uses: azure/setup-helm@v3
         with:
           version: '3.13.2'
+
+      - run: helm lint
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
 
       - run: dotnet tool install -g minver-cli
 
