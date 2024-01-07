@@ -1,13 +1,18 @@
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "context" $ ) | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  serviceName: {{ include "wishlsits.v1.api.svc.headless" . }}
+  {{- $podLabels := .Values.podLabels }}
   selector:
     matchLabels:
       app: unmango-wishlists
-  serviceName: {{ .Release.Name }}
   template:
     metadata:
       labels:
@@ -15,10 +20,10 @@ spec:
     spec:
       containers:
         - name: api
-          image: {{ include "image" }}
+          image: {{ include "wishlists.v1.api.image" . }}
           ports:
             - name: http
-              containerPort: 5000
+              containerPort: 5080
           env:
             - name: PUID
               value: {{ .Values.global.uid | quote }}
