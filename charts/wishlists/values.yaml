@@ -1,6 +1,97 @@
+## @section Global parameters
+## Please, note that this will override the parameters, including dependencies, configured to use the global value
+##
 global:
+  ## @param global.imageRegistry Global Docker image registry
+  ##
+  imageRegistry: ''
+
+  ## @param global.imagePullSecrets Global Docker registry secret names as an array
+  ## e.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+
+  ## @param global.storageClass Global StorageClass for Persistent Volume(s)
+  ##
+  storageClass: ''
   uid: 1001
   gid: 1001
 
-postgresql:
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template
+##
+fullnameOverride: ""
+
+api:
+  ## ref: https://github.com/unmango/wishlists/pkgs/container/wishlists-api
+  ## @param api.image.registry [default: REGISTRY_NAME]
+  ## @param api.image.repository [default: REPOSITORY_NAME/wishlists-api]
+  ## @skip api.image.tag
+  ## @param api.image.digest Image digest formatted as sha256:aa...
+  ## @param api.image.pullPolicy Image pull policy
+  ## @param api.image.pullSecrets Specify image pull secrets
+  ##
+  image:
+    registry: ghcr.io
+    repository: unmango/wishlists-api
+    tag: v0.0.1-alpha
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+web:
+  ## ref: https://github.com/unmango/wishlists/pkgs/container/wishlists-web
+  ## @param web.image.registry [default: REGISTRY_NAME]
+  ## @param web.image.repository [default: REPOSITORY_NAME/wishlists-web]
+  ## @skip web.image.tag
+  ## @param web.image.digest Image digest formatted as sha256:aa...
+  ## @param web.image.pullPolicy Image pull policy
+  ## @param web.image.pullSecrets Specify image pull secrets
+  ##
+  image:
+    registry: ghcr.io
+    repository: unmango/wishlists-web
+    tag: v0.0.1-alpha
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+autoScaling:
   enabled: true
+
+## @param replicaCount The number of replicas to deploy
+##
+replicaCount: 1
+
+## @param podLabels Map of labels to add to the pods
+##
+podLabels: {}
+
+postgresql:
+  enabled: false
