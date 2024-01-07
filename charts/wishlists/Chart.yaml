@@ -1,5 +1,5 @@
 apiVersion: v2
-name: unmango-wishlists
+name: wishlists
 description: Helm chart for installing UnMango Wishlists
 type: application
 version: 0.1.0
