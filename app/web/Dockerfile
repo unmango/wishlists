@@ -7,5 +7,5 @@ RUN npm ci
 COPY ./ .
 RUN npm run build
 
-FROM nginx:1.26.0
+FROM nginx:1.27.0
 COPY --from=build /build/dist /usr/share/nginx/html
