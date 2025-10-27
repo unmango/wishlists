@@ -23,3 +23,4 @@ protobuf.xml
 .next/
 *.local
 .vercel
+.DS_Store

@@ -3,6 +3,14 @@
     <File Path="docker-compose.yaml" />
     <File Path="global.json" />
     <File Path="Makefile" />
+    <File Path=".dockerignore" />
+    <File Path="Dockerfile" />
+  </Folder>
+  <Folder Name="/doc/">
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj" />

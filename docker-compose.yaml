@@ -1,16 +1,8 @@
-version: '3.8'
 name: unmango-wishlists
 
 services:
-  api:
+  app:
     build:
-      context: api/UnMango.Wishlists.Api
-      dockerfile: Dockerfile
+      context: .
     ports:
-      - '8000:8080'
-  web:
-    build:
-      context: app/web
-      dockerfile: Dockerfile
-    ports:
-      - '8080:80'
+      - '8080:8080'
