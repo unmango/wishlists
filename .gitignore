@@ -15,8 +15,8 @@ dist-ssr
 
 # User specific
 .vscode/*
-!.vscode/settings.json
 !.vscode/extensions.json
+.idea/
 .env*.local
 discord.xml
 protobuf.xml
