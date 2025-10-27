@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/build/">
+    <File Path="docker-compose.yaml" />
+    <File Path="global.json" />
+    <File Path="Makefile" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj" />
+  </Folder>
+</Solution>
