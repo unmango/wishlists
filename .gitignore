@@ -24,3 +24,4 @@ protobuf.xml
 *.local
 .vercel
 .DS_Store
+.envrc
