@@ -25,3 +25,4 @@ protobuf.xml
 .vercel
 .DS_Store
 .envrc
+.direnv/

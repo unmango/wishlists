@@ -10,6 +10,7 @@ pkgs.mkShellNoCC {
     shellcheck
     watchexec
     dotnetCorePackages.dotnet_10.sdk
-    nodejs
+    nodejs # For JetBrains tools
+    bun
   ];
 }
