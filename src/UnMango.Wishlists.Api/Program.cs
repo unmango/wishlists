@@ -1,6 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+using UnMango.Wishlists.Api.Domain;
+
 var builder = WebApplication.CreateSlimBuilder(args);
 
-builder.Services.AddOpenApi();
+builder.Services.ConfigureHttpJsonOptions(options => options
+	.SerializerOptions.TypeInfoResolverChain
+	.Add(WishlistSerializationContext.Default));
+
+builder.Services
+	.AddOpenApi()
+	.AddDbContext<WishlistsContext>((services, options) => {
+		var configuration = services.GetRequiredService<IConfiguration>();
+		options.UseNpgsql(
+			configuration.GetConnectionString("Wishlists"),
+			x => x.SetPostgresVersion(18, 0));
+	});
 
 var app = builder.Build();
 app.MapOpenApi();
@@ -9,12 +23,9 @@ var api = app.MapGroup("/api");
 var wishlists = api.MapGroup("/wishlists");
 wishlists.MapGet("/", () => Results.Ok(new[] { "Sample Wishlist 1", "Sample Wishlist 2" }));
 
-List<Func<HttpContext, bool>> spaExclusions = [
-	context => !context.Request.Path.StartsWithSegments("/api"),
-	context => !context.Request.Path.StartsWithSegments("/openapi")
-];
+List<PathString> excludedPrefixes = ["/api", "/openapi"];
 
-app.UseWhen(ctx => spaExclusions.Aggregate(true, (acc, fn) => fn(ctx) && acc), then => {
+app.UseWhen(ctx => excludedPrefixes.Any(ctx.Request.Path.StartsWithSegments), then => {
 	if (app.Environment.IsDevelopment()) {
 		then.UseSpa(x => x.UseProxyToSpaDevelopmentServer("http://localhost:5173"));
 	} else {

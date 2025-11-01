@@ -11,8 +11,6 @@ COPY src/web/ ./src/web/
 RUN bun run build
 
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0-noble AS api
-ARG TARGETOS
-ARG TARGETARCH
 ARG CONFIGURATION=Release
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -21,14 +19,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /build
 
-# IDK why this is being terrible
-#COPY src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj .
-#RUN dotnet restore
+# https://github.com/dotnet/sdk/issues/40517
+COPY src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj .
+RUN dotnet restore \
+    --use-current-runtime \
+	-p:SelfContained=true
 
 COPY src/UnMango.Wishlists.Api/ ./
 COPY --from=web /build/dist ./wwwroot
 
 RUN dotnet publish \
+    --no-restore \
     --use-current-runtime \
     --configuration $CONFIGURATION \
     --output /out
