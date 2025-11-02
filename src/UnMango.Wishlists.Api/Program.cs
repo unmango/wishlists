@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using UnMango.Wishlists.Api.Domain;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -17,7 +18,6 @@ builder.Services
 
 var app = builder.Build();
 app.MapOpenApi();
-app.MapStaticAssets();
 app.MapGroup("/auth").MapIdentityApi<User>();
 
 var api = app.MapGroup("/api").RequireAuthorization();
@@ -26,7 +26,7 @@ me.MapGet("/", () => Results.Ok(new User("Test")));
 var wishlists = api.MapGroup("/wishlists");
 wishlists.MapGet("/", () => Results.Ok(new[] { "Sample Wishlist 1", "Sample Wishlist 2" }));
 
-List<PathString> excludedPrefixes = ["/api", "/openapi", "/users"];
+List<PathString> excludedPrefixes = ["/api", "/auth", "/openapi"];
 
 app.UseWhen(ctx => !excludedPrefixes.Any(ctx.Request.Path.StartsWithSegments), then => {
 	if (app.Environment.IsDevelopment()) {
@@ -34,8 +34,13 @@ app.UseWhen(ctx => !excludedPrefixes.Any(ctx.Request.Path.StartsWithSegments), t
 		// then.UseWishlistsDevServer();
 	} else {
 		// This isn't handling / for some reason
-		then.UseStaticFiles();
+		// then.UseStaticFiles();
 	}
 });
+
+// This just doesn't work
+if (app.Environment.IsProduction()) {
+	app.MapStaticAssets();
+}
 
 app.Run();
