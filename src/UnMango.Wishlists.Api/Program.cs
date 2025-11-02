@@ -28,8 +28,8 @@ List<PathString> excludedPrefixes = ["/api", "/openapi"];
 
 app.UseWhen(ctx => !excludedPrefixes.Any(ctx.Request.Path.StartsWithSegments), then => {
 	if (app.Environment.IsDevelopment()) {
-		// then.UseSpa(x => x.UseProxyToSpaDevelopmentServer("http://localhost:5173"));
-		then.UseWishlistsDevServer();
+		then.UseSpa(x => x.UseProxyToSpaDevelopmentServer("http://localhost:5173"));
+		// then.UseWishlistsDevServer();
 	} else {
 		// This isn't handling / for some reason
 		then.UseStaticFiles();
