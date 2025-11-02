@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UnMango.Wishlists.Api.Domain;
@@ -11,9 +12,11 @@ using UnMango.Wishlists.Api.Domain;
 namespace UnMango.Wishlists.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class WishlistsContextModelSnapshot : ModelSnapshot
+    [Migration("20251102221105_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

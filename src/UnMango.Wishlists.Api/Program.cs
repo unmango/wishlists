@@ -1,30 +1,32 @@
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using UnMango.Wishlists.Api.Domain;
-using UnMango.Wishlists.Api.Middleware;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.ConfigureHttpJsonOptions(options => options
 	.SerializerOptions.TypeInfoResolverChain
-	.Add(WishlistSerializationContext.Default));
+	.Add(AppSerializationContext.Default));
 
 builder.Services
+	.AddAuthorization()
 	.AddOpenApi()
-	.AddDbContext<WishlistsContext>((services, options) => {
-		var configuration = services.GetRequiredService<IConfiguration>();
-		options.UseNpgsql(
-			configuration.GetConnectionString("Wishlists"),
-			x => x.SetPostgresVersion(18, 0));
-	});
+	.AddDbContext<AppDbContext>(AppDbContext.Configure);
+
+builder.Services
+	.AddIdentityApiEndpoints<User>()
+	.AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 app.MapOpenApi();
+app.MapGroup("/users").MapIdentityApi<User>();
 
-var api = app.MapGroup("/api");
+var api = app.MapGroup("/api").RequireAuthorization();
+var me = api.MapGroup("/me");
+me.MapGet("/", () => Results.Ok(new User("Test")));
 var wishlists = api.MapGroup("/wishlists");
 wishlists.MapGet("/", () => Results.Ok(new[] { "Sample Wishlist 1", "Sample Wishlist 2" }));
 
-List<PathString> excludedPrefixes = ["/api", "/openapi"];
+List<PathString> excludedPrefixes = ["/api", "/openapi", "/users"];
 
 app.UseWhen(ctx => !excludedPrefixes.Any(ctx.Request.Path.StartsWithSegments), then => {
 	if (app.Environment.IsDevelopment()) {

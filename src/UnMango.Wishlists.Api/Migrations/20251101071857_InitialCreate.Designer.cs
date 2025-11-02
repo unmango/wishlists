@@ -11,7 +11,7 @@ using UnMango.Wishlists.Api.Domain;
 
 namespace UnMango.Wishlists.Api.Migrations
 {
-    [DbContext(typeof(WishlistsContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20251101071857_InitialCreate")]
     partial class InitialCreate
     {
