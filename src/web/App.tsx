@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
 import type { User } from './api';
 import * as api from './api';
+import * as auth from './auth';
 
 function App() {
   const [me, setMe] = useState<User | null>(null);
 
   useEffect(() => {
-    api.me().then(setMe).catch(console.error);
+    // api.me().then(setMe).catch(console.error);
   }, []);
+
+  function register() {
+    auth.register({ email: 'erik.rasmussen@tuta.io', password: 'Password1!' })
+      .then(() => console.log('Registered'))
+      .catch(console.error);
+  }
 
   return (
     <div className='h-svh w-svw flex flex-col gap-4 p-4 bg-linear-to-tr from-fuchsia-800 to-indigo-800'>
@@ -26,6 +33,12 @@ function App() {
           </div>
           <div className='h-full w-5/6 bg-black/25 rounded-xl p-2'>
             <p className='text-white'>Main Content</p>
+            <button
+              className='mt-4 px-4 py-2 bg-black/25 text-white rounded-full hover:bg-grey-800'
+              onClick={register}
+            >
+              Register
+            </button>
           </div>
         </div>
       </div>
