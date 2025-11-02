@@ -1,5 +1,6 @@
 {
   "typescript": {
+    "quoteStyle": "preferSingle"
   },
   "json": {
   },
@@ -10,6 +11,7 @@
   "dockerfile": {
   },
   "excludes": [
+    "**/.direnv",
     "**/node_modules",
     "**/*-lock.json"
   ],
