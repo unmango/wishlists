@@ -8,10 +8,10 @@ Create your own wishlist, share it with your group, and check off items from the
 C# ASP.NET Web API
 Create React App Static Web Application
 
-|Role|Location|
-|:---|:-------|
-|API|[`/api/UnMango.Wishlists.Api/`](./api/UnMango.Wishlists.Api/)|
-|Web App|[`/app/web/`](./app/web/)|
+| Role    | Location                                                      |
+| :------ | :------------------------------------------------------------ |
+| API     | [`/api/UnMango.Wishlists.Api/`](./api/UnMango.Wishlists.Api/) |
+| Web App | [`/app/web/`](./app/web/)                                     |
 
 ## API
 

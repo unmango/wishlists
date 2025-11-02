@@ -34,7 +34,7 @@ RUN dotnet publish \
     --configuration $CONFIGURATION \
     --output /out
 
-FROM --platform=$BUILDPLATFORM  mcr.microsoft.com/dotnet/runtime-deps:10.0-noble AS final
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/runtime-deps:10.0-noble AS final
 WORKDIR /app
 COPY --from=api /out ./
 ENTRYPOINT ["/app/UnMango.Wishlists.Api"]
