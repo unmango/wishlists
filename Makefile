@@ -42,6 +42,10 @@ dev:
 	$(DOTNET) ef database update --project ${API_PATH}
 	$(DOTNET) run --project ${API_PATH}
 
+migration:
+	read -p 'Migration name: ' name && \
+	$(DOTNET) ef migrations add "$$name" --project ${API_PATH}
+
 precompile-queries: # WIP
 	$(DOTNET) ef dbcontext optimize \
 	--project ${API_PATH} \
