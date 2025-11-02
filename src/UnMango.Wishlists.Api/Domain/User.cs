@@ -1,10 +1,12 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 namespace UnMango.Wishlists.Api.Domain;
 
-internal sealed record User(Guid Id, string Name);
+internal sealed class User : IdentityUser<Guid>
+{
+	public User() => Id = NewId();
 
-[JsonSourceGenerationOptions(JsonSerializerDefaults.Web)]
-[JsonSerializable(typeof(User))]
-internal partial class WishlistSerializationContext : JsonSerializerContext;
+	public User(string userName) : base(userName) => Id = NewId();
+
+	private static Guid NewId() => Guid.CreateVersion7();
+}
