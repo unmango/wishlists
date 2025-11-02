@@ -5,4 +5,5 @@ namespace UnMango.Wishlists.Api.Domain;
 
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web)]
 [JsonSerializable(typeof(User))]
+[JsonSerializable(typeof(HttpValidationProblemDetails))]
 internal partial class AppSerializationContext : JsonSerializerContext;

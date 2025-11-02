@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using UnMango.Wishlists.Api.Domain;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -18,7 +17,8 @@ builder.Services
 
 var app = builder.Build();
 app.MapOpenApi();
-app.MapGroup("/users").MapIdentityApi<User>();
+app.MapStaticAssets();
+app.MapGroup("/auth").MapIdentityApi<User>();
 
 var api = app.MapGroup("/api").RequireAuthorization();
 var me = api.MapGroup("/me");
@@ -37,10 +37,5 @@ app.UseWhen(ctx => !excludedPrefixes.Any(ctx.Request.Path.StartsWithSegments), t
 		then.UseStaticFiles();
 	}
 });
-
-// This just doesn't work
-if (app.Environment.IsProduction()) {
-	app.MapStaticAssets();
-}
 
 app.Run();
