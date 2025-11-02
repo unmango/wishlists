@@ -6,15 +6,17 @@ services:
       context: .
     ports:
       - '8080:8080'
-
   db:
     image: postgres:18.0-trixie
+    restart: always
+    shm_size: 128mb
     environment:
       POSTGRES_PASSWORD: mysecretpassword
     ports:
       - '5432:5432'
 
   adminer:
-    image: adminer
+    image: adminer:5.4.1
+    restart: always
     ports:
       - '8080:8000'
