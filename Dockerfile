@@ -18,23 +18,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
+COPY src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj .
 
 # https://github.com/dotnet/sdk/issues/40517
-COPY src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj .
-RUN dotnet restore \
-    --use-current-runtime \
-	-p:SelfContained=true
+RUN dotnet restore
 
 COPY src/UnMango.Wishlists.Api/ ./
 COPY --from=web /build/dist ./wwwroot
 
 RUN dotnet publish \
     --no-restore \
-    --use-current-runtime \
     --configuration $CONFIGURATION \
     --output /out
 
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/runtime-deps:10.0-noble AS final
+# TODO: EF Core AOT is borked
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/runtime-deps:10.0-noble AS sc
+WORKDIR /app
+COPY --from=api /out ./
+ENTRYPOINT ["/app/UnMango.Wishlists.Api"]
+
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:10.0-noble AS final
 WORKDIR /app
 COPY --from=api /out ./
 ENTRYPOINT ["/app/UnMango.Wishlists.Api"]
