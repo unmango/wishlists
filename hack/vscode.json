@@ -1,4 +1,8 @@
 {
+  "$schema": "vscode://schemas/settings/workspace",
+  "files.associations": {
+    "*.props": "xml"
+  },
   "[json]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
