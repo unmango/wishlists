@@ -4,7 +4,7 @@ import TextBox from './TextBox';
 
 export interface Props {
   client: Client;
-	onSignIn(): void;
+  onSignIn(): void;
 }
 
 interface State {

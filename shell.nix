@@ -3,6 +3,7 @@
 }:
 pkgs.mkShellNoCC {
   packages = with pkgs; [
+  	tmux
     git
     gnumake
     nixfmt-rfc-style

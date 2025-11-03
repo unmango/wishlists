@@ -61,12 +61,12 @@ function SignIn({ client, onLoginSuccess, onRegister }: Props): JSX.Element {
   const login = useCallback(() => {
     client.POST('/auth/login', {
       body: { email, password },
-	  credentials: 'include',
+      credentials: 'include',
     })
       .then(({ data, error }) => {
-		if (error) console.error(error);
-		else if (data) onLoginSuccess(data);
-	  })
+        if (error) console.error(error);
+        else if (data) onLoginSuccess(data);
+      })
       .catch(console.error);
   }, [client, email, onLoginSuccess, password]);
 

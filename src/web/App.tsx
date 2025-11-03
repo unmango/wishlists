@@ -25,11 +25,13 @@ function App() {
       </div>
       {me && <Editor me={me} />}
       {!me && register && <Register client={client} onSignIn={() => setRegister(false)} />}
-      {!me && !register && <SignIn
-        client={client}
-        onLoginSuccess={loginSuccess}
-        onRegister={() => setRegister(true)}
-      />}
+      {!me && !register && (
+        <SignIn
+          client={client}
+          onLoginSuccess={loginSuccess}
+          onRegister={() => setRegister(true)}
+        />
+      )}
     </div>
   );
 }

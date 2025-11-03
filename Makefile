@@ -5,15 +5,18 @@ DOTNET ?= dotnet
 DOCKER ?= docker
 DPRINT ?= dprint
 
-API_PATH ?= src/UnMango.Wishlists.Api
-WEB_PATH ?= src/web
+API_DIR   ?= src/UnMango.Wishlists.Api
+WEB_DIR   ?= src/web
+QUERY_DIR ?= ${API_DIR}/Generated
 
 CS_SRC   != find . -path '*.cs'
 TS_SRC   != find . \( -not -path './node_modules/*' \) -path '*.ts'
 TSX_SRC  != find . \( -not -path './node_modules/*' \) -path '*.tsx'
-PROJ_SRC := ${API_PATH}/UnMango.Wishlists.Api.csproj
+PROJ_SRC := ${API_DIR}/UnMango.Wishlists.Api.csproj
 API_SRC  := ${CS_SRC} ${PROJ_SRC}
 WEB_SRC  := ${TS_SRC} ${TSX_SRC}
+
+export COMPOSE_PROFILES ?= dev
 
 build: api web
 
@@ -39,24 +42,28 @@ eslint:
 dotnet-analyzers:
 	$(DOTNET) format analyzers
 
+start:
+	$(DOCKER) compose --profile run up --build --detach
+
 dev:
-	$(DOCKER) compose up --detach db
-	$(DOTNET) ef database update --project ${API_PATH}
-	$(DOTNET) run --project ${API_PATH}
+	$(DOCKER) compose up --build --detach
+	#$(DOTNET) ef database update --project ${API_DIR}
+
+stop:
+	$(DOCKER) compose --profile run --profile dev down
 
 migration:
 	read -p 'Migration name: ' name && \
-	$(DOTNET) ef migrations add "$$name" --project ${API_PATH}
+	$(DOTNET) ef migrations add "$$name" --project ${API_DIR}
 
 precompile-queries: # WIP
 	$(DOTNET) ef dbcontext optimize \
-	--project ${API_PATH} \
-	--output-dir Generated \
+	--project ${API_DIR} \
+	--output-dir $(notdir ${QUERY_DIR}) \
 	--precompile-queries
 
-bin/schema.json: api
-	cp ${API_PATH}/obj/UnMango.Wishlists.Api.json $@
-	@touch $@
+bin/schema.json:
+	$(DOTNET) build ${API_DIR} && cp ${API_DIR}/obj/UnMango.Wishlists.Api.json $@
 
 bin/image.tar: Dockerfile ${API_SRC} ${WEB_SRC}
 	mkdir -p ${@D} && $(DOCKER) build ${CURDIR} \
@@ -69,7 +76,6 @@ src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api: ${API_SRC}
 
 src/web/api/schema.d.ts: bin/schema.json
 	$(BUN)x openapi-typescript $< --output $@
-	@touch $@
 
 dist/index.html: bun.lock ${WEB_SRC}
 	$(BUN) run build
