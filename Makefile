@@ -20,6 +20,8 @@ build: api web
 api: src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api
 web: dist/index.html
 
+generate gen: src/web/api/schema.d.ts
+
 lint: eslint
 format fmt:
 	$(DPRINT) fmt
@@ -52,6 +54,10 @@ precompile-queries: # WIP
 	--output-dir Generated \
 	--precompile-queries
 
+bin/schema.json: api
+	cp ${API_PATH}/obj/UnMango.Wishlists.Api.json $@
+	@touch $@
+
 bin/image.tar: Dockerfile ${API_SRC} ${WEB_SRC}
 	mkdir -p ${@D} && $(DOCKER) build ${CURDIR} \
 	--output type=tar,dest=$@ \
@@ -60,6 +66,10 @@ bin/image.tar: Dockerfile ${API_SRC} ${WEB_SRC}
 
 src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api: ${API_SRC}
 	$(DOTNET) build
+
+src/web/api/schema.d.ts: bin/schema.json
+	$(BUN)x openapi-typescript $< --output $@
+	@touch $@
 
 dist/index.html: bun.lock ${WEB_SRC}
 	$(BUN) run build
