@@ -5,12 +5,6 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<InvariantGlobalization>true</InvariantGlobalization>
-		<PublishAot>true</PublishAot>
-		<JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-	</PropertyGroup>
-
-	<PropertyGroup>
-  		<InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.EntityFrameworkCore.GeneratedInterceptors</InterceptorsNamespaces>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,8 +14,16 @@
 		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="10.0.0-rc.2.25502.107" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0-rc.2.25502.107" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tasks" Version="10.0.0-rc.2.25502.107" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.0-rc.2.25502.107" PrivateAssets="all" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0-rc.2" />
 	</ItemGroup>
+
+	<!-- TODO: EF Core AOT is borked -->
+	<PropertyGroup>
+		<PublishAot>false</PublishAot>
+		<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+  		<!-- <InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.EntityFrameworkCore.GeneratedInterceptors</InterceptorsNamespaces> -->
+	</PropertyGroup>
 
 	<!-- https://github.com/advisories/GHSA-w3q9-fxm7-j8fq -->
 	<ItemGroup>
