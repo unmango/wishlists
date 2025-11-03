@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi;
 using UnMango.Wishlists.Api.Domain;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -9,7 +10,7 @@ builder.Services.ConfigureHttpJsonOptions(options => options
 
 builder.Services
 	.AddAuthorization()
-	.AddOpenApi()
+	.AddOpenApi(options => options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1)
 	.AddDbContext<AppDbContext>(AppDbContext.Configure);
 
 builder.Services
@@ -22,9 +23,9 @@ app.MapGroup("/auth").MapIdentityApi<User>();
 
 var api = app.MapGroup("/api").RequireAuthorization();
 var me = api.MapGroup("/me");
-me.MapGet("/", () => Results.Ok(new User("Test")));
+me.MapGet("/", () => TypedResults.Ok(new User("Test")));
 var wishlists = api.MapGroup("/wishlists");
-wishlists.MapGet("/", () => Results.Ok(new[] { "Sample Wishlist 1", "Sample Wishlist 2" }));
+wishlists.MapGet("/", () => TypedResults.Ok(new[] { "Sample Wishlist 1", "Sample Wishlist 2" }));
 
 List<PathString> excludedPrefixes = ["/api", "/auth", "/openapi"];
 
