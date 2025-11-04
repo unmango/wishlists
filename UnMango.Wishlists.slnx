@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/build/">
-    <File Path="docker-compose.yaml" />
+    <File Path="compose.yml" />
     <File Path="global.json" />
     <File Path="Makefile" />
     <File Path=".dockerignore" />

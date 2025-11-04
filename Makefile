@@ -62,7 +62,9 @@ precompile-queries: # WIP
 	--precompile-queries
 
 bin/schema.json:
-	$(DOTNET) build ${API_DIR} && mkdir -p ${@D} && cp ${API_DIR}/obj/UnMango.Wishlists.Api.json $@
+	$(DOTNET) build ${API_DIR}
+	mkdir -p ${@D}
+	cp ${API_DIR}/obj/UnMango.Wishlists.Api.json $@
 
 bin/image.tar: Dockerfile ${API_SRC} ${WEB_SRC}
 	mkdir -p ${@D} && $(DOCKER) build ${CURDIR} \
