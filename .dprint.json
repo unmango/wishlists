@@ -13,7 +13,8 @@
   "excludes": [
     "**/.direnv",
     "**/node_modules",
-    "**/*-lock.json"
+    "**/*-lock.json",
+    "**/schema.d.ts"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.95.12.wasm",
