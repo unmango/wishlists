@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi;
 using UnMango.Wishlists.Api.Domain;
 
@@ -22,30 +21,29 @@ builder.Services
 var app = builder.Build();
 app.MapOpenApi();
 app.MapGroup("/auth").MapIdentityApi<User>();
-
 var api = app.MapGroup("/api").RequireAuthorization();
+
 var me = api.MapGroup("/me");
 me.MapGet("/", () => TypedResults.Ok(new User("Test")));
+
 var wishlists = api.MapGroup("/wishlists");
 wishlists.MapGet("/", () => TypedResults.Ok(new[] { "Sample Wishlist 1", "Sample Wishlist 2" }));
 
-List<PathString> excludedPrefixes = ["/api", "/auth", "/openapi"];
+// This just doesn't seem to work
+if (app.Environment.IsProduction()) {
+	app.MapStaticAssets();
+}
 
+List<PathString> excludedPrefixes = ["/api", "/auth", "/openapi"];
 app.UseWhen(ctx => !excludedPrefixes.Any(ctx.Request.Path.StartsWithSegments), then => {
 	if (app.Environment.IsDevelopment()) {
 		var uri = app.Configuration.GetValue<string>("DevServerUri", "http://localhost:5173");
 		Console.WriteLine($"DevServer URI: {uri}");
 		then.UseSpa(x => x.UseProxyToSpaDevelopmentServer(uri));
-		// then.UseWishlistsDevServer();
 	} else {
 		// This isn't handling / for some reason
-		// then.UseStaticFiles();
+		then.UseStaticFiles();
 	}
 });
-
-// This just doesn't work
-if (app.Environment.IsProduction()) {
-	app.MapStaticAssets();
-}
 
 app.Run();
