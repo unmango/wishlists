@@ -47,7 +47,6 @@ start:
 
 dev:
 	$(DOCKER) compose up --build
-	#$(DOTNET) ef database update --project ${API_DIR}
 
 stop:
 	$(DOCKER) compose --profile run --profile dev down
@@ -63,7 +62,7 @@ precompile-queries: # WIP
 	--precompile-queries
 
 bin/schema.json:
-	$(DOTNET) build ${API_DIR} && cp ${API_DIR}/obj/UnMango.Wishlists.Api.json $@
+	$(DOTNET) build ${API_DIR} && mkdir -p ${@D} && cp ${API_DIR}/obj/UnMango.Wishlists.Api.json $@
 
 bin/image.tar: Dockerfile ${API_SRC} ${WEB_SRC}
 	mkdir -p ${@D} && $(DOCKER) build ${CURDIR} \

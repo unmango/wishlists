@@ -5,6 +5,7 @@ pkgs.mkShellNoCC {
   packages = with pkgs; [
   	tmux
     git
+	docker
     gnumake
     nixfmt-rfc-style
     nixfmt-tree
