@@ -1,8 +1,17 @@
 name: unmango-wishlists
 services:
   app:
-    build:
-      context: .
+    build: .
+    develop:
+      watch:
+        - path: src/UnMango.Wishlists.Api
+          action: rebuild
+        - path: src/web
+          action: rebuild
+        - path: package.json
+          action: rebuild
+        - path: bun.lock
+          action: rebuild
     ports:
       - '8080:8080'
     profiles: [ run ]

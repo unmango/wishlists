@@ -43,7 +43,7 @@ dotnet-analyzers:
 	$(DOTNET) format analyzers
 
 start:
-	$(DOCKER) compose --profile run up --build
+	$(DOCKER) compose --profile run up --build --watch
 
 dev:
 	$(DOCKER) compose up --build
