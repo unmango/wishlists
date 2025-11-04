@@ -43,10 +43,10 @@ dotnet-analyzers:
 	$(DOTNET) format analyzers
 
 start:
-	$(DOCKER) compose --profile run up --build --detach
+	$(DOCKER) compose --profile run up --build
 
 dev:
-	$(DOCKER) compose up --build --detach
+	$(DOCKER) compose up --build
 	#$(DOTNET) ef database update --project ${API_DIR}
 
 stop:

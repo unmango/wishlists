@@ -5,7 +5,6 @@ services:
       context: .
     ports:
       - '8080:8080'
-
     profiles: [ run ]
     depends_on:
       - db
@@ -20,24 +19,28 @@ services:
       - '5432:5432'
 
   web:
-    build:
-      context: .
-      target: web-src
-    entrypoint: [ bun, dev, --host, web ]
+    image: oven/bun:1.3.1-slim
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    entrypoint: [ bunx, vite, --host, web ]
     profiles: [ dev ]
 
   api:
-    build:
-      context: .
-      target: api-src
-      args:
-        CONFIGURATION: Debug
-    entrypoint: [ dotnet, run ]
+    image: mcr.microsoft.com/dotnet/sdk:10.0-noble
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    entrypoint:
+      - dotnet
+      - run
+      - --project
+      - src/UnMango.Wishlists.Api
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      HTTP_PORTS: '' # Annoying log message
       UNMANGO_DevServerUri: 'http://web:5173'
     ports:
-      - '5217:8080'
+      - '5217:5217'
     profiles: [ dev ]
     depends_on:
       - web
