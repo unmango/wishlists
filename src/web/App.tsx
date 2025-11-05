@@ -1,18 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
-import { type AccessTokenResponse, client, type User } from './api';
-import Editor from './components/Editor';
-import Register from './components/Register';
-import SignIn from './components/SignIn';
+import { type AccessTokenResponse, client, token, type User } from './api';
+import { Editor, Register, SignIn } from './components';
 
 function App() {
-  const [me] = useState<User | null>(null);
+  const [me, setMe] = useState<User | null>(null);
   const [register, setRegister] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const loginSuccess = useCallback((res: AccessTokenResponse) => {
-    console.log('Got here: %s', res.accessToken);
+    console.debug('setting access token');
+    token.set(res.accessToken);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
+    client.GET('/api/me')
+      .then(({ data, error }) => {
+        if (data) setMe(data);
+        else if (error) console.error(error);
+      });
     // api.me().then(setMe).catch(console.error);
   }, []);
 
@@ -23,6 +29,11 @@ function App() {
           <h1 className='text-xl text-white'>The Wishlists App</h1>
         </div>
       </div>
+      {loading && (
+        <div className='bg-black/25 rounded-full'>
+          <h2 className='text-white p-2'>Loading...</h2>
+        </div>
+      )}
       {me && <Editor me={me} />}
       {!me && register && <Register client={client} onSignIn={() => setRegister(false)} />}
       {!me && !register && (

@@ -32,6 +32,7 @@ var wishlists = api.MapGroup("/wishlists");
 wishlists.MapGet("/", () => TypedResults.Ok(new[] { "Sample Wishlist 1", "Sample Wishlist 2" }));
 
 if (app.Environment.IsDevelopment()) {
+	app.UseWebSockets();
 	app.UseViteDevelopmentServer(useMiddleware: true);
 } else {
 	app.UseStaticFiles();

@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM oven/bun:1.3.1-slim AS web
 
-WORKDIR /build
+WORKDIR /work
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
@@ -17,13 +17,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	clang zlib1g-dev \
 	&& rm -rf /var/lib/apt/lists/*
 
-WORKDIR /build
+WORKDIR /work
 COPY src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj .
 # TODO: https://github.com/dotnet/sdk/issues/40517
 RUN dotnet restore
 
 COPY src/UnMango.Wishlists.Api/ ./
-COPY --from=web /build/dist ./wwwroot
+COPY --from=web /work/dist ./wwwroot
 
 RUN dotnet publish \
     --no-restore \
@@ -35,3 +35,15 @@ RUN dotnet publish \
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:10.0-noble AS app
 COPY --from=api /out /app
 ENTRYPOINT ["/app/UnMango.Wishlists.Api"]
+
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0-noble AS tools
+WORKDIR /work
+COPY .config/ .
+RUN dotnet tool restore
+
+FROM tools AS scripts
+COPY src/UnMango.Wishlists.Api/*.csproj ./
+RUN dotnet restore
+COPY src/UnMango.Wishlists.Api/ ./
+RUN dotnet build --no-restore
+CMD [ "dotnet", "ef", "migrations", "script", "--idempotent", "--no-build" ]
