@@ -1,4 +1,16 @@
 # syntax=docker/dockerfile:1
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0-noble AS tools
+WORKDIR /work
+COPY .config/ .
+RUN dotnet tool restore
+
+FROM tools AS scripts
+COPY src/UnMango.Wishlists.Api/*.csproj ./
+RUN dotnet restore
+COPY src/UnMango.Wishlists.Api/ ./
+RUN dotnet build --no-restore
+CMD [ "dotnet", "ef", "migrations", "script", "--idempotent", "--no-build" ]
+
 FROM oven/bun:1.3.1-slim AS web
 
 WORKDIR /work
@@ -35,15 +47,3 @@ RUN dotnet publish \
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:10.0-noble AS app
 COPY --from=api /out /app
 ENTRYPOINT ["/app/UnMango.Wishlists.Api"]
-
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0-noble AS tools
-WORKDIR /work
-COPY .config/ .
-RUN dotnet tool restore
-
-FROM tools AS scripts
-COPY src/UnMango.Wishlists.Api/*.csproj ./
-RUN dotnet restore
-COPY src/UnMango.Wishlists.Api/ ./
-RUN dotnet build --no-restore
-CMD [ "dotnet", "ef", "migrations", "script", "--idempotent", "--no-build" ]

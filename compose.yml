@@ -1,7 +1,9 @@
 name: unmango-wishlists
 services:
   app:
-    build: .
+    build:
+      context: .
+      target: app
     develop:
       watch:
         - path: src/UnMango.Wishlists.Api
@@ -31,7 +33,7 @@ services:
     build:
       context: .
       target: scripts
-    profiles: [ run ]
+    profiles: [ deploy ]
 
   web:
     build:
