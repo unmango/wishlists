@@ -46,7 +46,7 @@ start:
 	$(DOCKER) compose --profile run up --build --watch
 
 dev:
-	$(DOCKER) compose up --build
+	$(DOCKER) compose up --build --watch
 
 stop:
 	$(DOCKER) compose --profile run --profile dev down

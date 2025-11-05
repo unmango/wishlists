@@ -28,29 +28,42 @@ services:
       - '5432:5432'
 
   web:
-    image: oven/bun:1.3.1-slim
-    working_dir: /workspace
-    volumes:
-      - ./:/workspace
-    entrypoint: [ bunx, vite, --host, web ]
+    build:
+      context: .
+      dockerfile: hack/Dockerfile
+      target: web
+    develop:
+      watch:
+        - path: src/web
+          target: /work/src/web
+          action: sync
+        - path: package.json
+          action: rebuild
+        - path: bun.lock
+          action: rebuild
+        - path: hack/Dockerfile
+          action: rebuild
     profiles: [ dev ]
+    command: [ bun, dev, --host, web ]
 
   api:
-    image: mcr.microsoft.com/dotnet/sdk:10.0-noble
-    working_dir: /workspace
-    volumes:
-      - ./:/workspace
-    entrypoint:
-      - dotnet
-      - run
-      - --project
-      - src/UnMango.Wishlists.Api
-      - --no-launch-profile
+    build:
+      context: .
+      dockerfile: hack/Dockerfile
+      target: api
+    develop:
+      watch:
+        - path: src/UnMango.Wishlists.Api
+          action: rebuild
+        - path: hack/Dockerfile
+          action: rebuild
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      UNMANGO_DevServerUri: 'http://web:5173'
+      Vite__Server__Host: web
+      ConnectionStrings__App: Server=db:5432;Database=initdb;User Id=postgres;Password=mysecretpassword
+    command: [ dotnet, run, --no-restore ]
     ports:
-      - '5217:8080'
+      - '8080:8080'
     profiles: [ dev ]
     depends_on:
       - web

@@ -7,6 +7,8 @@ namespace UnMango.Wishlists.Api.Domain;
 internal sealed class AppDbContext(DbContextOptions<AppDbContext> options)
 	: IdentityDbContext<User, IdentityRole<Guid>, Guid>(options)
 {
+	public const string ConnectionStringName = "App";
+
 	public DbSet<Wishlist> Wishlists { get; init; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -20,8 +22,9 @@ internal sealed class AppDbContext(DbContextOptions<AppDbContext> options)
 
 	public static void Configure(IServiceProvider services, DbContextOptionsBuilder options) {
 		var configuration = services.GetRequiredService<IConfiguration>();
+		Console.WriteLine("Got cstring: {0}", configuration.GetConnectionString(ConnectionStringName));
 		options.UseNpgsql(
-			configuration.GetConnectionString("Wishlists"),
+			configuration.GetConnectionString(ConnectionStringName),
 			x => x.SetPostgresVersion(18, 0));
 	}
 }
