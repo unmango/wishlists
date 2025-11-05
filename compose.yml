@@ -45,10 +45,12 @@ services:
       - run
       - --project
       - src/UnMango.Wishlists.Api
+      - --no-launch-profile
     environment:
+      ASPNETCORE_ENVIRONMENT: Development
       UNMANGO_DevServerUri: 'http://web:5173'
     ports:
-      - '5217:5217'
+      - '5217:8080'
     profiles: [ dev ]
     depends_on:
       - web

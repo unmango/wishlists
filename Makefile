@@ -32,7 +32,7 @@ format fmt:
 
 docker: bin/image.tar
 compose:
-	$(DOCKER) compose build
+	$(DOCKER) compose build app
 bake: # make bake lol
 	$(DOCKER) buildx bake
 
