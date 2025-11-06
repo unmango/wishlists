@@ -67,7 +67,6 @@ jobs:
 
       - uses: docker/build-push-action@v6
         with:
-          context: api/UnMango.Wishlists.Api
           provenance: true
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
