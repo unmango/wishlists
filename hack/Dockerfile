@@ -15,6 +15,7 @@ RUN bun run build
 FROM mcr.microsoft.com/dotnet/sdk:10.0-noble AS api
 
 WORKDIR /work
+COPY src/UnMango.Wishlists.Api/packages.lock.json ./
 COPY src/UnMango.Wishlists.Api/*.csproj ./
 RUN dotnet restore
 COPY --from=manifest /work/dist/.vite/manifest.json ./

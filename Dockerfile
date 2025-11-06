@@ -30,9 +30,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /work
-COPY src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj .
+COPY src/UnMango.Wishlists.Api/packages.lock.json .
+COPY src/UnMango.Wishlists.Api/*.csproj .
 # TODO: https://github.com/dotnet/sdk/issues/40517
-RUN dotnet restore
+RUN dotnet restore --locked-mode
 
 COPY src/UnMango.Wishlists.Api/ ./
 COPY --from=web /work/dist ./wwwroot
