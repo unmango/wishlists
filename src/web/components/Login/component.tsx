@@ -55,7 +55,7 @@ export function Login(
   return (
     <div className='w-1/3 p-8 flex flex-col gap-4 text-center rounded-xl bg-black/25'>
       <h2 className='text-white text-2xl'>
-        {signin ? 'Ready to get planning?' : 'Lets get planning!'}
+        {signin ? 'Ready to get planning?' : 'Let\'s get planning!'}
       </h2>
       <div className='flex flex-col gap-4'>
         <TextBox
