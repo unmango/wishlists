@@ -15,11 +15,15 @@ dist-ssr
 
 # User specific
 .vscode/*
-!.vscode/settings.json
 !.vscode/extensions.json
+.idea/
 .env*.local
 discord.xml
 protobuf.xml
 .next/
 *.local
 .vercel
+.DS_Store
+.envrc
+.direnv/
+*.user

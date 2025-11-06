@@ -1,13 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "github>UnstoppableMango/renovate-config"
   ],
   "ignorePaths": [
     "**/node_modules/**"
   ],
-	"packageRules": [
-		{
+  "packageRules": [
+    {
       "matchUpdateTypes": [
         "minor",
         "patch"
@@ -15,5 +15,5 @@
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     }
-	]
+  ]
 }

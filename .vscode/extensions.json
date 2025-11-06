@@ -1,11 +1,14 @@
 {
-	"recommendations": [
-		"ms-azuretools.vscode-docker",
-		"dbaeumer.vscode-eslint",
-		"esbenp.prettier-vscode",
-		"graphql.vscode-graphql-syntax",
-		"editorconfig.editorconfig",
-		"ms-vscode-remote.remote-containers",
-		"ms-dotnettools.csharp"
-	]
+  "recommendations": [
+    "mkhl.direnv",
+    "ms-azuretools.vscode-containers",
+    "dprint.dprint",
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "github.vscode-github-actions",
+    "jnoortheen.nix-ide",
+    "bradlc.vscode-tailwindcss",
+    "oven.bun-vscode",
+    "yzhang.markdown-all-in-one"
+  ]
 }
