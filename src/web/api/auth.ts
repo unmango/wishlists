@@ -2,8 +2,8 @@ import type { Middleware } from 'openapi-fetch';
 
 export const middleware = (token: string): Middleware => ({
   async onRequest({ request }): Promise<Request> {
-    if (!pathPrefix(request).startsWith('/api')) {
-      console.debug('setting auth header');
+    if (pathPrefix(request).startsWith('/api')) {
+      console.log('setting auth header');
       request.headers.set('Authorization', `Bearer ${token}`);
     }
 

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using UnMango.Wishlists.Api.Domain;
 using UnMango.Wishlists.Api.Extensions;
@@ -29,7 +30,15 @@ var me = api.MapGroup("/me");
 me.MapGet("/", () => TypedResults.Ok(new User("Test")));
 
 var wishlists = api.MapGroup("/wishlists");
-wishlists.MapGet("/", () => TypedResults.Ok(new[] { "Sample Wishlist 1", "Sample Wishlist 2" }));
+wishlists.MapGet("/",
+	async (AppDbContext context, CancellationToken cancellationToken) =>
+		TypedResults.Ok(await context.Wishlists.ToListAsync(cancellationToken)));
+
+wishlists.MapPost("/",
+	async (AppDbContext context, Wishlist.Create req, CancellationToken cancellationToken) => {
+		context.Wishlists.Add(Wishlist.From(req));
+		await context.SaveChangesAsync(cancellationToken);
+	});
 
 if (app.Environment.IsDevelopment()) {
 	app.UseWebSockets();

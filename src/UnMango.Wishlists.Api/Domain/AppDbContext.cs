@@ -22,7 +22,6 @@ internal sealed class AppDbContext(DbContextOptions<AppDbContext> options)
 
 	public static void Configure(IServiceProvider services, DbContextOptionsBuilder options) {
 		var configuration = services.GetRequiredService<IConfiguration>();
-		Console.WriteLine("Got cstring: {0}", configuration.GetConnectionString(ConnectionStringName));
 		options.UseNpgsql(
 			configuration.GetConnectionString(ConnectionStringName),
 			x => x.SetPostgresVersion(18, 0));

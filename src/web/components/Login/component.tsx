@@ -16,31 +16,47 @@ export function Login(
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signin, setSignin] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const login = useCallback(async () => {
+    setLoading(true);
     const { data, error } = await client.POST('/auth/login', {
       body: { email, password },
     });
 
+    setLoading(false);
     if (data && onLoginSuccess) {
       onLoginSuccess(data);
-    } else if (error && onLoginFailed) {
+    }
+    if (error && onLoginFailed) {
       onLoginFailed(error);
     }
   }, [client, email, onLoginFailed, onLoginSuccess, password]);
 
   const register = useCallback(async () => {
+    setLoading(true);
     const { error } = await client.POST('/auth/register', {
       body: { email, password },
     });
 
+    setLoading(false);
     if (onRegisterSuccess) onRegisterSuccess();
-    else if (error && onRegisterFailed) onRegisterFailed(error);
+    if (error && onRegisterFailed) onRegisterFailed(error);
   }, [client, email, onRegisterFailed, onRegisterSuccess, password]);
 
+  if (loading) {
+    return (
+      <div className='w-1/3 p-8 flex flex-col gap-4 text-center rounded-xl bg-black/25'>
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <div className='p-4 flex flex-col gap-4 text-center rounded-xl bg-black/25'>
-      <h2 className='text-white text-2xl'>Ready to get planning?</h2>
+    <div className='w-1/3 p-8 flex flex-col gap-4 text-center rounded-xl bg-black/25'>
+      <h2 className='text-white text-2xl'>
+        {signin ? 'Ready to get planning?' : 'Lets get planning!'}
+      </h2>
       <div className='flex flex-col gap-4'>
         <TextBox
           name='email'
