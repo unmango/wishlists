@@ -478,13 +478,36 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": string[];
+                        "application/json": components["schemas"]["Wishlist"][];
                     };
                 };
             };
         };
         put?: never;
-        post?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["Create"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Wishlist"];
+                    };
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -501,6 +524,10 @@ export interface components {
             /** Format: int64 */
             expiresIn: number | string;
             refreshToken: string;
+        };
+        Create: {
+            name: string;
+            owner: components["schemas"]["User"];
         };
         ForgotPasswordRequest: {
             email: string;
@@ -580,6 +607,12 @@ export interface components {
             lockoutEnabled?: boolean;
             /** Format: int32 */
             accessFailedCount?: number | string;
+        };
+        Wishlist: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            owner: components["schemas"]["User"];
         };
     };
     responses: never;

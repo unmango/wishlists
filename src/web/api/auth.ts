@@ -12,5 +12,5 @@ export const middleware = (token: string): Middleware => ({
 });
 
 function pathPrefix(req: Request): string {
-	return new URL(req.url).pathname;
+  return new URL(req.url).pathname;
 }

@@ -16,13 +16,13 @@ function Editor({ client }: Props): JSX.Element {
     });
   }, [client]);
 
-	if (error) {
-		return (
-			<div className='bg-red-500 rounded-full w-4/6'>
-				<pre>{JSON.stringify(error, null, 2)}</pre>
-			</div>
-		);
-	}
+  if (error) {
+    return (
+      <div className='bg-red-500 rounded-full w-4/6'>
+        <pre>{JSON.stringify(error, null, 2)}</pre>
+      </div>
+    );
+  }
 
   return (
     <div className='w-full h-full flex flex-col items-center gap-4'>

@@ -9,7 +9,7 @@ COPY src/UnMango.Wishlists.Api/*.csproj ./
 RUN dotnet restore
 COPY src/UnMango.Wishlists.Api/ ./
 RUN dotnet build --no-restore
-CMD [ "dotnet", "ef", "migrations", "script", "--idempotent", "--no-build" ]
+CMD ["dotnet", "ef", "migrations", "script", "--idempotent", "--no-build"]
 
 FROM oven/bun:1.3.1-slim AS web
 
