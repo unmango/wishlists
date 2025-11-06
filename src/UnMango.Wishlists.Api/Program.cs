@@ -21,10 +21,22 @@ builder.Services
 	.AddIdentityApiEndpoints<User>()
 	.AddEntityFrameworkStores<AppDbContext>();
 
+// TODO: https://github.com/openiddict/openiddict-samples/blob/dev/samples/Mimban/Mimban.Server/Program.cs
+// builder.Services.AddOpenIddict()
+// 	.AddClient(options => {
+// 		options.UseAspNetCore();
+// 		options.UseWebProviders()
+// 			.AddGitHub(gh => gh.SetClientId("unmango"));
+// 	});
+
 var app = builder.Build();
 app.MapOpenApi();
 app.MapGroup("/auth").MapIdentityApi<User>();
-var api = app.MapGroup("/api").RequireAuthorization();
+var api = app.MapGroup("/api");
+
+if (!app.Environment.IsOpenApiCodegen()) {
+	api.RequireAuthorization();
+}
 
 var me = api.MapGroup("/me");
 me.MapGet("/", () => TypedResults.Ok(new User("Test")));
@@ -36,8 +48,10 @@ wishlists.MapGet("/",
 
 wishlists.MapPost("/",
 	async (AppDbContext context, Wishlist.Create req, CancellationToken cancellationToken) => {
-		context.Wishlists.Add(Wishlist.From(req));
+		var wishlist = Wishlist.From(req);
+		context.Wishlists.Add(wishlist);
 		await context.SaveChangesAsync(cancellationToken);
+		return TypedResults.Ok(wishlist);
 	});
 
 if (app.Environment.IsDevelopment()) {
