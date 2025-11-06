@@ -1,26 +1,19 @@
-import { useCallback, useEffect, useState } from 'react';
-import { type AccessTokenResponse, client, token, type User } from './api';
-import { Editor, Register, SignIn } from './components';
+import { useCallback, useState } from 'react';
+import { type AccessTokenResponse, defaultClient, type ProblemDetails } from './api';
+import { Login } from './components';
 
 function App() {
-  const [me, setMe] = useState<User | null>(null);
-  const [register, setRegister] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loginError, setLoginError] = useState<ProblemDetails>();
+  const [registerError, setRegisterError] = useState<ProblemDetails>();
+  const [tokenResponse, setTokenResponse] = useState<AccessTokenResponse>();
 
-  const loginSuccess = useCallback((res: AccessTokenResponse) => {
-    console.debug('setting access token');
-    token.set(res.accessToken);
-    setLoading(false);
-  }, []);
+  const clearErrors = useCallback(() => {
+		setLoginError(undefined);
+		setRegisterError(undefined);
+	}, []);
 
-  useEffect(() => {
-    client.GET('/api/me')
-      .then(({ data, error }) => {
-        if (data) setMe(data);
-        else if (error) console.error(error);
-      });
-    // api.me().then(setMe).catch(console.error);
-  }, []);
+  const token = tokenResponse?.accessToken;
+  const error = loginError || registerError;
 
   return (
     <div className='h-svh w-svw flex flex-col gap-4 p-4 bg-linear-to-tr from-fuchsia-800 to-indigo-800'>
@@ -29,20 +22,28 @@ function App() {
           <h1 className='text-xl text-white'>The Wishlists App</h1>
         </div>
       </div>
-      {loading && (
-        <div className='bg-black/25 rounded-full'>
-          <h2 className='text-white p-2'>Loading...</h2>
-        </div>
-      )}
-      {me && <Editor me={me} />}
-      {!me && register && <Register client={client} onSignIn={() => setRegister(false)} />}
-      {!me && !register && (
-        <SignIn
-          client={client}
-          onLoginSuccess={loginSuccess}
-          onRegister={() => setRegister(true)}
-        />
-      )}
+
+      <div className='w-full h-full flex flex-col items-center justify-center'>
+        {error && (
+          <div className='bg-red-600/75 text-white p-4 rounded-lg'>
+            <h2 className='font-bold'>Error</h2>
+            <pre>{JSON.stringify(loginError, null, 2)}</pre>
+            <div className='p-2'>
+              <button className='bg-black/25 w-full rounded-full p-2 hover:bg-white/15' onClick={clearErrors}>
+                Try Again
+              </button>
+            </div>
+          </div>
+        )}
+        {!token && !error && (
+          <Login
+            client={defaultClient}
+            onLoginFailed={setLoginError}
+            onLoginSuccess={setTokenResponse}
+            onRegisterFailed={setRegisterError}
+          />
+        )}
+      </div>
     </div>
   );
 }
