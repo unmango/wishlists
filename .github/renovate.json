@@ -3,9 +3,9 @@
   "extends": [
     "github>UnstoppableMango/renovate-config"
   ],
-  "ignorePaths": [
-    "**/node_modules/**"
-  ],
+	"nix": {
+		"enabled": true
+	},
   "packageRules": [
     {
       "matchUpdateTypes": [
