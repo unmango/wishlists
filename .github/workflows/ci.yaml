@@ -53,8 +53,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/unstoppablemango/wishlists
-            docker.io/unstoppablemango/wishlists
+            ghcr.io/unmango/wishlists
+            unstoppablemango/wishlists
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
