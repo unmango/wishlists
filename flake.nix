@@ -15,17 +15,16 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
+        pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        formatter = nixpkgs.legacyPackages.${system}.nixfmt-tree;
+        formatter = pkgs.nixfmt-tree;
 
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             git
             gnumake
+            docker
             nixfmt-rfc-style
             nixfmt-tree
             shellcheck

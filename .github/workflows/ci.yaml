@@ -44,6 +44,17 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run build
 
+  nix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v31.8.2
+        with:
+          github_access_token: ${{ github.token }}
+
+      - run: nix flake check
+
   docker:
     runs-on: ubuntu-latest
     steps:

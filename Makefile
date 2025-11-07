@@ -4,6 +4,7 @@ BUN    ?= bun
 DOTNET ?= dotnet
 DOCKER ?= docker
 DPRINT ?= dprint
+NIX    ?= nix
 
 API_DIR   ?= src/UnMango.Wishlists.Api
 WEB_DIR   ?= src/web
@@ -29,6 +30,7 @@ lint: eslint
 format fmt:
 	$(DPRINT) fmt
 	$(DOTNET) format
+	$(NIX) fmt
 
 docker: bin/image.tar
 compose:
