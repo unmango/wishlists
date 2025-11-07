@@ -3,9 +3,9 @@
   "extends": [
     "github>UnstoppableMango/renovate-config"
   ],
-	"nix": {
-		"enabled": true
-	},
+  "nix": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "matchUpdateTypes": [

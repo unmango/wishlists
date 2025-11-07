@@ -24,7 +24,7 @@
           buildInputs = with pkgs; [
             git
             gnumake
-						docker
+            docker
             nixfmt-rfc-style
             nixfmt-tree
             shellcheck
