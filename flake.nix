@@ -23,15 +23,6 @@
         packages.default = pkgs.dockerTools.buildImage {
           name = "wishlists";
           tag = "latest";
-
-          copyToRoot = pkgs.buildEnv {
-            name = "image-root";
-            paths = [
-              ./src/UnMango.Wishlists.Api
-              ./src/web
-            ];
-            pathsToLink = [ "/bin" ];
-          };
         };
 
         devShells.default = import ./shell.nix { inherit pkgs; };
