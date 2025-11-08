@@ -20,20 +20,21 @@
       {
         formatter = pkgs.nixfmt-tree;
 
-        devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            git
-            gnumake
-            docker
-            nixfmt-rfc-style
-            nixfmt-tree
-            shellcheck
-            watchexec
-            dotnetCorePackages.sdk_10_0
-            nodejs # For JetBrains tools
-            bun
-          ];
+        packages.default = pkgs.dockerTools.buildImage {
+          name = "wishlists";
+          tag = "latest";
+
+          copyToRoot = pkgs.buildEnv {
+            name = "image-root";
+            paths = [
+              ./src/UnMango.Wishlists.Api
+              ./src/web
+            ];
+            pathsToLink = [ "/bin" ];
+          };
         };
+
+        devShells.default = import ./shell.nix { inherit pkgs; };
       }
     );
 }
