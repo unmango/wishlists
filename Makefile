@@ -26,11 +26,8 @@ web: dist/index.html
 
 generate gen: src/web/api/schema.d.ts
 
-lint: eslint
-format fmt:
-	$(DPRINT) fmt
-	$(DOTNET) format
-	$(NIX) fmt
+lint: .make/bun-lint .make/nix-flake-check
+format fmt: .make/nix-fmt .make/dprint-fmt .make/dotnet-format
 
 docker: bin/image.tar
 compose:
@@ -38,17 +35,14 @@ compose:
 bake: # make bake lol
 	$(DOCKER) buildx bake
 
-eslint:
-	$(BUN) run lint
-
 dotnet-analyzers:
 	$(DOTNET) format analyzers
 
-start:
-	$(DOCKER) compose --profile run up --build --watch
-
 dev:
 	$(DOCKER) compose up --build --watch
+
+start:
+	$(DOCKER) compose --profile run up --build --watch
 
 stop:
 	$(DOCKER) compose --profile run --profile dev down
@@ -89,3 +83,15 @@ bun.lock: package.json
 
 .vscode/settings.json: hack/vscode.json
 	mkdir -p ${@D} && cp $< $@
+
+.make/dprint-fmt:
+	$(DPRINT) fmt
+.make/nix-fmt:
+	$(NIX) fmt
+.make/dotnet-format:
+	$(DOTNET) format
+
+.make/bun-lint:
+	$(BUN) run lint
+.make/nix-flake-check:
+	$(NIX) flake check --all-systems

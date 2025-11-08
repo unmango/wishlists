@@ -20,20 +20,12 @@
       {
         formatter = pkgs.nixfmt-tree;
 
-        devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            git
-            gnumake
-            docker
-            nixfmt-rfc-style
-            nixfmt-tree
-            shellcheck
-            watchexec
-            dotnetCorePackages.sdk_10_0
-            nodejs # For JetBrains tools
-            bun
-          ];
+        packages.default = pkgs.dockerTools.buildImage {
+          name = "wishlists";
+          tag = "latest";
         };
+
+        devShells.default = import ./shell.nix { inherit pkgs; };
       }
     );
 }
