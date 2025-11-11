@@ -3,29 +3,37 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    {
+    inputs@{
       self,
       nixpkgs,
-      flake-utils,
+      flake-parts,
+      treefmt-nix,
     }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-      {
-        formatter = pkgs.nixfmt-tree;
-
-        packages.default = pkgs.dockerTools.buildImage {
-          name = "wishlists";
-          tag = "latest";
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      imports = [
+        treefmt-nix.flakeModule
+      ];
+      perSystem =
+        { pkgs, ... }:
+        {
+          treefmt = {
+            programs.actionlint.enable = true;
+            programs.nixfmt.enable = true;
+          };
         };
-
-        devShells.default = import ./shell.nix { inherit pkgs; };
-      }
-    );
+    };
 }

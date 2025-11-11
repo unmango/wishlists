@@ -7,7 +7,6 @@ pkgs.mkShell {
     gnumake
     docker
     nixfmt-rfc-style
-    nixfmt-tree
     shellcheck
     watchexec
     dotnetCorePackages.sdk_10_0

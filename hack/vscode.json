@@ -3,6 +3,15 @@
   "files.associations": {
     "*.props": "xml"
   },
+	"nix.enableLanguageServer": true,
+	"nix.serverPath": "nixd",
+	"nix.serverSettings": {
+		"nixd": {
+			"formatter": {
+				"command": "nixfmt"
+			}
+		}
+	},
   "[dockerfile]": {
     "editor.defaultFormatter": "dprint.dprint"
   },

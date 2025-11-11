@@ -90,8 +90,12 @@ bun.lock: package.json
 	$(NIX) fmt
 .make/dotnet-format:
 	$(DOTNET) format
+.make/jb-cleanupcode:
+	$(DOTNET) jb cleanupcode UnMango.Wishlists.slnx
 
 .make/bun-lint:
 	$(BUN) run lint
 .make/nix-flake-check:
 	$(NIX) flake check --all-systems
+.make/jb-inspectcode:
+	$(DOTNET) jb inspectcode UnMango.Wishlists.slnx
