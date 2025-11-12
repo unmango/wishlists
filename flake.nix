@@ -29,7 +29,13 @@
       ];
       perSystem =
         { pkgs, ... }:
+        let
+          api = pkgs.callPackage ./default.nix { inherit pkgs; };
+        in
         {
+          packages.api = api;
+          packages.default = api;
+
           treefmt = {
             programs.actionlint.enable = true;
             programs.nixfmt.enable = true;

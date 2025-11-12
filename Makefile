@@ -24,6 +24,7 @@ build: api web
 api: src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api
 web: dist/index.html
 
+deps: ${API_DIR}/nix-deps.json
 generate gen: src/web/api/schema.d.ts
 
 lint: .make/bun-lint .make/nix-flake-check
@@ -62,12 +63,17 @@ bin/schema.json:
 	mkdir -p ${@D}
 	cp ${API_DIR}/obj/UnMango.Wishlists.Api.json $@
 
+bin/fetch-deps.sh: default.nix flake.nix ${API_DIR}/UnMango.Wishlists.Api.csproj
+	$(NIX) build .#api.fetch-deps --out-link $@
+
 bin/image.tar: Dockerfile ${API_SRC} ${WEB_SRC}
 	mkdir -p ${@D} && $(DOCKER) build ${CURDIR} \
 	--output type=tar,dest=$@ \
 	--tag ${IMAGE} \
 	--load
 
+src/UnMango.Wishlists.Api/nix-deps.json: bin/fetch-deps.sh
+	$< $@
 src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api: ${API_SRC}
 	$(DOTNET) build
 

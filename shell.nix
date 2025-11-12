@@ -12,5 +12,7 @@ pkgs.mkShell {
     dotnetCorePackages.sdk_10_0
     nodejs # For JetBrains tools
     bun
+    nuget-to-json
+    nixd
   ];
 }
