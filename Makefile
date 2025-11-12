@@ -1,10 +1,11 @@
 IMAGE ?= wishlists:dev
 
-BUN    ?= bun
-DOTNET ?= dotnet
-DOCKER ?= docker
-DPRINT ?= dprint
-NIX    ?= nix
+BUN     ?= bun
+BUN2NIX ?= bun2nix
+DOTNET  ?= dotnet
+DOCKER  ?= docker
+DPRINT  ?= dprint
+NIX     ?= nix
 
 API_DIR   ?= src/UnMango.Wishlists.Api
 WEB_DIR   ?= src/web
@@ -24,7 +25,7 @@ build: api web
 api: src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api
 web: dist/index.html
 
-deps: ${API_DIR}/nix-deps.json
+deps: ${API_DIR}/nix-deps.json ${WEB_DIR}/bun.nix
 generate gen: src/web/api/schema.d.ts
 
 lint: .make/bun-lint .make/nix-flake-check
@@ -77,6 +78,8 @@ src/UnMango.Wishlists.Api/nix-deps.json: bin/fetch-deps.sh
 src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api: ${API_SRC}
 	$(DOTNET) build
 
+src/web/bun.nix: bun.lock
+	$(BUN2NIX) --lock-file $< --output-file $@
 src/web/api/schema.d.ts: bin/schema.json
 	$(BUN)x openapi-typescript $< --output $@
 
