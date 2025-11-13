@@ -1,7 +1,9 @@
 import { useCallback, useState } from 'react';
 import type { AccessTokenResponse, ProblemDetails } from './api';
 import * as api from './api';
-import { Editor, Login } from './components';
+import { Login } from './components';
+import { ApiProvider } from './hooks';
+import Landing from './components/Landing';
 
 function App() {
   const [loginError, setLoginError] = useState<ProblemDetails>();
@@ -44,7 +46,6 @@ function App() {
             </div>
           </div>
         )}
-        {token && <Editor client={api.client(token)} />}
         {!token && !error && (
           <Login
             client={api.defaultClient}
@@ -53,6 +54,11 @@ function App() {
             onRegisterFailed={setRegisterError}
             onRegisterSuccess={handleRegisterSuccess}
           />
+        )}
+        {token && (
+          <ApiProvider value={api.client(token)}>
+						<Landing />
+          </ApiProvider>
         )}
       </div>
     </div>
