@@ -1,3 +1,3 @@
-import { Plan } from './component';
+import { Component } from './component';
 
-export default Plan;
+export default Component;

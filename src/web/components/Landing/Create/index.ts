@@ -1,3 +1,3 @@
-import { Create } from './component';
+import { Component } from './component';
 
-export default Create;
+export default Component;

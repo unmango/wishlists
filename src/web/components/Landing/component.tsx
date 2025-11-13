@@ -2,7 +2,7 @@ import { type ButtonHTMLAttributes, type JSX, useState } from 'react';
 import Create from './Create';
 import Plan from './Plan';
 
-export function Landing(): JSX.Element {
+export function Component(): JSX.Element {
   // Poor man's router
   const [page, setPage] = useState<'select' | 'create' | 'plan'>('select');
 

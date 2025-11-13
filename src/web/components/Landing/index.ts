@@ -1,3 +1,3 @@
-import { Landing } from "./component";
+import { Component } from "./component";
 
-export default Landing;
+export default Component;
