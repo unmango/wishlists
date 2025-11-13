@@ -45,9 +45,6 @@ let
       inherit (sharedMeta) license maintainers;
     };
   };
-in
-{
-  inherit web api;
   app = pkgs.buildEnv {
     name = "wishlists";
     paths = [
@@ -55,4 +52,26 @@ in
       api
     ];
   };
+  docker = pkgs.dockerTools.buildImage {
+    name = "wishlists-docker";
+    tag = "latest";
+    copyToRoot = app;
+
+    config = {
+      Cmd = [ "/bin/UnMango.Wishlists.Api" ];
+    };
+
+    meta = {
+      description = "Docker image for the Wishlists application";
+      inherit (sharedMeta) license maintainers;
+    };
+  };
+in
+{
+  inherit
+    api
+    app
+    docker
+    web
+    ;
 }

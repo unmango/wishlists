@@ -31,10 +31,12 @@
           };
         in
         {
+          # TODO: Clean up
           packages.web = build.web;
           packages.api = build.api;
           packages.wishlists = build.app;
-          packages.default = build.app;
+          packages.docker = build.docker;
+          packages.default = build.docker;
 
           devShells.default = pkgs.callPackage ./shell.nix {
             inherit pkgs;
