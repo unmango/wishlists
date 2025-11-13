@@ -20,7 +20,9 @@
         "DavidAnson.vscode-markdownlint",
         "bradlc.vscode-tailwindcss",
         "redhat.vscode-yaml",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "Tim-Koehler.helm-intellisense",
+        "ms-kubernetes-tools.vscode-kubernetes-tools"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",

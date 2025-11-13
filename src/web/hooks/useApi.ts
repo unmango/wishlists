@@ -1,10 +1,10 @@
-import { createContext, useContext } from "react";
-import { defaultClient, type Client } from "../api";
+import { createContext, useContext } from 'react';
+import { type Client, defaultClient } from '../api';
 
 const Context = createContext<Client>(defaultClient);
 
 export function useApi(): Client {
-	return useContext(Context);
+  return useContext(Context);
 }
 
 export const ApiProvider = Context.Provider;

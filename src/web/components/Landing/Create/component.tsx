@@ -1,3 +1,5 @@
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { JSX } from 'react';
 
 export interface Props {
@@ -6,9 +8,9 @@ export interface Props {
 
 export function Component({ onBack }: Props): JSX.Element {
   return (
-    <div className='w-full h-full flex items-center justify-center text-white'>
-      <button className='w-sm aspect-square bg-black/25' onClick={onBack}>
-        Back
+    <div className='w-full h-full flex'>
+      <button className='w-10 h-10 rounded-full bg-black/25' onClick={onBack}>
+        <FontAwesomeIcon icon={faChevronLeft} color='white' />
       </button>
     </div>
   );

@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 import type { AccessTokenResponse, ProblemDetails } from './api';
 import * as api from './api';
 import { Login } from './components';
-import { ApiProvider } from './hooks';
 import Component from './components/Landing';
+import { ApiProvider } from './hooks';
 
 function App() {
   const [loginError, setLoginError] = useState<ProblemDetails>();
@@ -57,7 +57,7 @@ function App() {
         )}
         {token && (
           <ApiProvider value={api.client(token)}>
-						<Component />
+            <Component />
           </ApiProvider>
         )}
       </div>
