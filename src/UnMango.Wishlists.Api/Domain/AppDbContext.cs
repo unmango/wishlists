@@ -11,6 +11,8 @@ internal sealed class AppDbContext(DbContextOptions<AppDbContext> options)
 
 	public DbSet<Wishlist> Wishlists { get; init; }
 
+	public DbSet<Item> Items { get; init; }
+
 	protected override void OnModelCreating(ModelBuilder modelBuilder) {
 		base.OnModelCreating(modelBuilder);
 
