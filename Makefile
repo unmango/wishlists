@@ -53,6 +53,9 @@ migration:
 	read -p 'Migration name: ' name && \
 	$(DOTNET) ef migrations add "$$name" --project ${API_DIR}
 
+clean:
+	rm -rf bin dist $(wildcard result*)
+
 precompile-queries: # WIP
 	$(DOTNET) ef dbcontext optimize \
 	--project ${API_DIR} \
