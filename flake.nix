@@ -26,19 +26,20 @@
         { pkgs, system, ... }:
         let
           build = pkgs.callPackage ./default.nix {
-						inherit pkgs;
-						inherit (inputs.bun2nix.lib.${system}) mkBunDerivation;
-					};
+            inherit pkgs;
+            inherit (inputs.bun2nix.lib.${system}) mkBunDerivation;
+          };
         in
         {
-					packages.web = build.web;
+          packages.web = build.web;
           packages.api = build.api;
-          packages.default = build.api;
+          packages.wishlists = build.app;
+          packages.default = build.app;
 
           devShells.default = pkgs.callPackage ./shell.nix {
-						inherit pkgs;
-						bun2nix = inputs.bun2nix.packages.${system}.default;
-					};
+            inherit pkgs;
+            bun2nix = inputs.bun2nix.packages.${system}.default;
+          };
 
           treefmt = {
             programs.actionlint.enable = true;
