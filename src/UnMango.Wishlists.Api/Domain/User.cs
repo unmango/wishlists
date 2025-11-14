@@ -4,9 +4,9 @@ namespace UnMango.Wishlists.Api.Domain;
 
 internal sealed class User : IdentityUser<Guid>
 {
-	public User() => Id = NewId();
+	public User() => Id = Entity.NewId();
 
-	public User(string userName) : base(userName) => Id = NewId();
+	public User(string userName) : base(userName) => Id = Entity.NewId();
 
-	private static Guid NewId() => Guid.CreateVersion7();
+	public IReadOnlyCollection<Wishlist> Wishlists { get; init; } = [];
 }

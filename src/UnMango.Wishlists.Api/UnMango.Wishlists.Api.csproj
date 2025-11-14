@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CliWrap" Version="3.9.0" />
+		<PackageReference Include="LanguageExt.Core" Version="4.4.9" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0-rc.2.25502.107" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.2.25502.107" />
 		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="10.0.0-rc.2.25502.107" />

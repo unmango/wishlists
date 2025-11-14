@@ -1,12 +1,21 @@
+using LanguageExt.Common;
+
 namespace UnMango.Wishlists.Api.Domain;
 
-internal sealed record Wishlist
+internal sealed record Wishlist : Entity
 {
-	public required Guid Id { get; init; }
+	private readonly List<Item> _items = [];
 
 	public required string Name { get; init; }
 
 	public required User Owner { get; init; }
+
+	public IReadOnlyCollection<Item> Items => _items;
+
+	public Result<Added> Add(Item item) {
+		_items.Add(item);
+		return new Added(item);
+	}
 
 	public static Wishlist From(Create req) => new() {
 		Id = Guid.CreateVersion7(),
@@ -15,4 +24,5 @@ internal sealed record Wishlist
 	};
 
 	public record Create(string Name, User Owner);
+	public record Added(Item Item);
 }
