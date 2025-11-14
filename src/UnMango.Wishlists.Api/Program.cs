@@ -1,6 +1,5 @@
 using Marten;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi;
 using UnMango.Wishlists.Api;
 using UnMango.Wishlists.Api.Configuration;

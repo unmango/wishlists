@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using LanguageExt;
 using Marten;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -23,19 +24,21 @@ internal static class Http
 	}
 
 	private static void MapWishlistsCore(RouteGroupBuilder builder) {
-		builder.MapGet("/",
-			async ([FromServices] IDocumentSession session, CancellationToken cancellationToken) =>
-			TypedResults.Ok(await Wishlist.List(session, cancellationToken)));
+		builder.MapGet("/", async (
+			[FromServices] IDocumentSession session,
+			CancellationToken cancellationToken
+		) => TypedResults.Ok(await Wishlist.List(session, cancellationToken)));
 
-		builder.MapPost("/",
-			async Task<Results<Ok<Guid>, ProblemHttpResult>> (
-					[FromServices] IDocumentSession session,
-					CreateWishlist req,
-					CancellationToken cancellationToken) =>
-				TypedResults.Ok(await Wishlist.Create(session, req.Name, cancellationToken)));
+		builder.MapPost("/", async Task<Results<Ok<Guid>, ProblemHttpResult>> (
+			[FromServices] IDocumentSession session,
+			CreateWishlist req,
+			CancellationToken cancellationToken
+		) => TypedResults.Ok(await Wishlist.Create(session, req.Name, cancellationToken)));
 
-		builder.MapGet("/{id:Guid}",
-			async ([FromServices] IDocumentSession session, [FromRoute] Guid id, CancellationToken cancellationToken) =>
-			TypedResults.Ok(await Wishlist.Get(session, id, cancellationToken)));
+		builder.MapGet("/{id:Guid}", async (
+			[FromServices] IDocumentSession session,
+			[FromRoute] Guid id,
+			CancellationToken cancellationToken
+		) => TypedResults.Ok(await Wishlist.Get(session, id, cancellationToken)));
 	}
 }
