@@ -8,6 +8,9 @@ namespace UnMango.Wishlists.Api;
 
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web)]
 [JsonSerializable(typeof(HttpValidationProblemDetails))]
+[JsonSerializable(typeof(Wishlist))]
+[JsonSerializable(typeof(Item))]
+[JsonSerializable(typeof(User))]
 internal partial class AppSerializationContext : JsonSerializerContext;
 
 internal static class Http
@@ -22,10 +25,13 @@ internal static class Http
 	private static void MapWishlistsCore(RouteGroupBuilder builder) {
 		builder.MapGet("/",
 			async ([FromServices] IDocumentSession session, CancellationToken cancellationToken) =>
-				TypedResults.Ok(await Wishlist.List(session, cancellationToken)));
+			TypedResults.Ok(await Wishlist.List(session, cancellationToken)));
 
 		builder.MapPost("/",
-			async Task<Results<Ok<Guid>, ProblemHttpResult>> ([FromServices] IDocumentSession session, CreateWishlist req, CancellationToken cancellationToken) =>
+			async Task<Results<Ok<Guid>, ProblemHttpResult>> (
+					[FromServices] IDocumentSession session,
+					CreateWishlist req,
+					CancellationToken cancellationToken) =>
 				TypedResults.Ok(await Wishlist.Create(session, req.Name, cancellationToken)));
 
 		builder.MapGet("/{id:Guid}",
