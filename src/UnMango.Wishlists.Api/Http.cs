@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Marten;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UnMango.Wishlists.Api;
@@ -24,7 +25,7 @@ internal static class Http
 				TypedResults.Ok(await Wishlist.List(session, cancellationToken)));
 
 		builder.MapPost("/",
-			async ([FromServices] IDocumentSession session, CreateWishlist req, CancellationToken cancellationToken) =>
+			async Task<Results<Ok<Guid>, ProblemHttpResult>> ([FromServices] IDocumentSession session, CreateWishlist req, CancellationToken cancellationToken) =>
 				TypedResults.Ok(await Wishlist.Create(session, req.Name, cancellationToken)));
 
 		builder.MapGet("/{id:Guid}",

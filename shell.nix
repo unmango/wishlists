@@ -6,12 +6,19 @@ pkgs.mkShell {
     git
     gnumake
     docker
+    nixd
     nixfmt-rfc-style
     nixfmt-tree
     shellcheck
     watchexec
-    dotnetCorePackages.sdk_10_0
     nodejs # For JetBrains tools
     bun
+    (
+      with dotnetCorePackages;
+      combinePackages [
+        sdk_9_0
+        sdk_10_0
+      ]
+    )
   ];
 }

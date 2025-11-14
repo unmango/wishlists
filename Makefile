@@ -51,13 +51,16 @@ migration:
 	read -p 'Migration name: ' name && \
 	$(DOTNET) ef migrations add "$$name" --project ${API_DIR}
 
+list-secrets:
+	$(DOTNET) user-secrets list --project ${API_DIR}
+
 precompile-queries: # WIP
 	$(DOTNET) ef dbcontext optimize \
 	--project ${API_DIR} \
 	--output-dir $(notdir ${QUERY_DIR}) \
 	--precompile-queries
 
-bin/schema.json:
+bin/schema.json: ${CS_SRC}
 	$(DOTNET) build ${API_DIR}
 	mkdir -p ${@D}
 	cp ${API_DIR}/obj/UnMango.Wishlists.Api.json $@
