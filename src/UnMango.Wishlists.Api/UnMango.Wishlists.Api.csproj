@@ -11,13 +11,10 @@
 	<ItemGroup>
 		<PackageReference Include="CliWrap" Version="3.9.0" />
 		<PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0-rc.2.25502.107" />
+		<PackageReference Include="Marten" Version="8.15.2" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.2.25502.107" />
 		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="10.0.0-rc.2.25502.107" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0-rc.2.25502.107" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tasks" Version="10.0.0-rc.2.25502.107" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.0-rc.2.25502.107" PrivateAssets="all" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0-rc.2" />
 		<PackageReference Include="OpenIddict.Client.AspNetCore" Version="7.1.0" />
 		<PackageReference Include="OpenIddict.Client.WebIntegration" Version="7.1.0" />
 		<PackageReference Include="Vite.AspNetCore" Version="2.4.1" />

@@ -552,6 +552,14 @@ export interface components {
             email: string;
             isEmailConfirmed: boolean;
         };
+        Item: {
+            name: string;
+            note: null | string;
+            purchased: boolean;
+            wishlist: components["schemas"]["Wishlist"];
+            /** Format: uuid */
+            id?: string;
+        };
         LoginRequest: {
             email: string;
             password: string;
@@ -589,6 +597,7 @@ export interface components {
             isMachineRemembered: boolean;
         };
         User: {
+            wishlists?: components["schemas"]["Wishlist"][];
             /** Format: uuid */
             id?: string;
             userName?: null | string;
@@ -609,10 +618,11 @@ export interface components {
             accessFailedCount?: number | string;
         };
         Wishlist: {
-            /** Format: uuid */
-            id: string;
             name: string;
             owner: components["schemas"]["User"];
+            items?: null | components["schemas"]["Item"][];
+            /** Format: uuid */
+            id?: string;
         };
     };
     responses: never;

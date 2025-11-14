@@ -29,25 +29,6 @@ services:
     ports:
       - '5432:5432'
 
-  eventstore:
-    image: docker.kurrent.io/kurrent-latest/kurrentdb:latest
-    environment:
-      - KURRENTDB_CLUSTER_SIZE=1
-      - KURRENTDB_RUN_PROJECTIONS=All
-      - KURRENTDB_START_STANDARD_PROJECTIONS=true
-      - KURRENTDB_NODE_PORT=2113
-      - KURRENTDB_INSECURE=true
-      - KURRENTDB_ENABLE_ATOM_PUB_OVER_HTTP=true
-    ports:
-      - "2113:2113"
-    volumes:
-      - type: volume
-        source: kurrentdb-volume-data
-        target: /var/lib/kurrentdb
-      - type: volume
-        source: kurrentdb-volume-logs
-        target: /var/log/kurrentdb
-
   migration-scripts:
     build:
       context: .
@@ -104,7 +85,3 @@ services:
       - '8000:8080'
     depends_on:
       - db
-
-volumes:
-  kurrentdb-volume-data:
-  kurrentdb-volume-logs:
