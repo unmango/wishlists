@@ -1,4 +1,3 @@
-using LanguageExt;
 using Marten;
 
 namespace UnMango.Wishlists.Api;
@@ -17,14 +16,6 @@ internal static class Store
 			await session.SaveChangesAsync(cancellationToken);
 			return stream.Id;
 		}
-
-		public static Eff<Guid> Create2(IDocumentSession session, string name, CancellationToken cancellationToken) =>
-			Eff<Guid>.LiftIO(async _ => {
-				var created = Wishlist.Create(name);
-				var stream = session.Events.StartStream<Wishlist>(created);
-				await session.SaveChangesAsync(cancellationToken);
-				return stream.Id;
-			});
 
 		public static Task<IReadOnlyList<Wishlist>> List(IDocumentSession session, CancellationToken cancellationToken)
 			=> session.Query<Wishlist>().ToListAsync(cancellationToken);

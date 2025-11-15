@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LanguageExt;
@@ -21,6 +22,9 @@ internal static class Http
 	extension(IEndpointRouteBuilder app)
 	{
 		public void MapWishlists() => MapWishlistsCore(app.MapGroup("/wishlists"));
+
+		public RouteHandlerBuilder MapPost<T>([StringSyntax("Route")] string pattern, Func<HttpContext, IO<T>> handler)
+			=> app.MapPost(pattern, Lift(handler));
 	}
 
 	private static void MapWishlistsCore(RouteGroupBuilder builder) {
@@ -41,4 +45,7 @@ internal static class Http
 			CancellationToken cancellationToken
 		) => TypedResults.Ok(await Wishlist.Get(session, id, cancellationToken)));
 	}
+
+	private static Func<HttpContext, Task<T>> Lift<T>(Func<HttpContext, IO<T>> del) =>
+		context => IO.pure(context).Bind(del).RunAsync().AsTask();
 }
