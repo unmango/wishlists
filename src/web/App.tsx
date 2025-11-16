@@ -17,6 +17,18 @@ function App() {
     return <div>Loading...</div>;
   }
 
+  if (auth.error) {
+    return <div>Oops... {auth.error.name} caused {auth.error.message}</div>;
+  }
+
+  if (auth.isAuthenticated) {
+    return (
+      <div>
+        Hello {auth.user?.profile.sub} <button onClick={() => void auth.removeUser()}>Log out</button>
+      </div>
+    );
+  }
+
   return (
     <div className='h-svh w-svw flex flex-col gap-4 p-4 bg-linear-to-tr from-fuchsia-800 to-indigo-800'>
       <div className='w-full flex justify-center'>
@@ -26,7 +38,8 @@ function App() {
       </div>
 
       <div className='w-full h-full flex flex-col items-center justify-center'>
-        {/* {error && (
+        {
+          /* {error && (
           <div className='bg-red-600/75 text-white p-4 rounded-lg'>
             <h2 className='font-bold'>Error</h2>
             <pre>{JSON.stringify(error, null, 2)}</pre>
@@ -36,8 +49,10 @@ function App() {
               </button>
             </div>
           </div>
-        )} */}
-        {/* {!token && !error && (
+        )} */
+        }
+        {
+          /* {!token && !error && (
           <Login
             client={api.defaultClient}
             onLoginFailed={setLoginError}
@@ -45,7 +60,9 @@ function App() {
             onRegisterFailed={setRegisterError}
             onRegisterSuccess={handleRegisterSuccess}
           />
-        )} */}
+        )} */
+        }
+        {!auth.user && <button onClick={() => void auth.signinRedirect()}>Log in</button>}
         {auth.user && (
           <ApiProvider value={api.client(auth.user.access_token)}>
             <Landing />

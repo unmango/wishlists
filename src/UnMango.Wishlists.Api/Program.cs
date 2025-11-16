@@ -1,5 +1,6 @@
 using Marten;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using UnMango.Wishlists.Api;
 using UnMango.Wishlists.Api.Configuration;
@@ -9,6 +10,7 @@ using Vite.AspNetCore;
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables("UNMANGO_");
+
 builder.Services.ConfigureHttpJsonOptions(options => options
 	.SerializerOptions.TypeInfoResolverChain
 	.Add(AppSerializationContext.Default));
@@ -21,14 +23,22 @@ builder.Services
 _ = builder.Configuration.GetConnectionString("App") switch {
 	null or "" => builder.Services,
 	{ } connectionString => builder.Services
+		.AddDbContext<AppDbContext>(options => {
+			options.UseNpgsql(connectionString);
+			options.UseOpenIddict();
+		})
 		.AddMarten(x => x.Connection(connectionString))
 		.UseLightweightSessions()
-		.Services
+		.Services,
 };
 
 // builder.Services.AddIdentityApiEndpoints<IdentityUser>();
 // TODO: https://github.com/openiddict/openiddict-samples/blob/dev/samples/Mimban/Mimban.Server/Program.cs
 builder.Services.AddOpenIddict()
+	.AddCore(options => {
+		options.UseEntityFrameworkCore()
+			.UseDbContext<AppDbContext>();
+	})
 	.AddClient(options => {
 		options.AllowAuthorizationCodeFlow();
 
@@ -36,12 +46,12 @@ builder.Services.AddOpenIddict()
 			.AddDevelopmentSigningCertificate();
 
 		options.UseAspNetCore();
-		options.UseSystemNetHttp().SetProductInformation(typeof(Program).Assembly);
+		options.UseSystemNetHttp()
+			.SetProductInformation(typeof(Program).Assembly);
 
 		options.UseWebProviders()
 			.AddGitHub(gh => {
 				var (clientId, clientSecret) = GitHub.Bind(builder.Configuration.GetSection("GitHub"));
-				Console.WriteLine($"ClientSecret: {clientSecret}");
 				gh.SetClientId(clientId).SetClientSecret(clientSecret).SetRedirectUri("callback/login/github");
 			});
 	})
@@ -54,7 +64,8 @@ builder.Services.AddOpenIddict()
 		options.AddDevelopmentEncryptionCertificate()
 			.AddDevelopmentSigningCertificate();
 
-		options.UseAspNetCore();
+		options.UseAspNetCore()
+			.DisableTransportSecurityRequirement();
 	});
 
 
@@ -86,7 +97,9 @@ if (app.Environment.IsDevelopment()) {
 }
 
 if (!app.Environment.IsOpenApiCodegen() && app.Environment.IsDevelopment()) {
-	// app.Migrate<AppDbContext>();
+	await using var scope = app.Services.CreateAsyncScope();
+	var context =  scope.ServiceProvider.GetRequiredService<AppDbContext>();
+	await context.Database.MigrateAsync();
 }
 
 app.Run();

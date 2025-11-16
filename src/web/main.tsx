@@ -10,7 +10,14 @@ const signinCallback = (): void => {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider onSigninCallback={signinCallback}>
+    <AuthProvider
+      authority={import.meta.env.VITE_OIDC_AUTHORITY || 'http://localhost:8080'}
+      scope='openid offline_access api'
+      client_id='spa'
+      redirect_uri={window.location.origin + '/callback/login/github'}
+      response_type='code'
+      onSigninCallback={signinCallback}
+    >
       <App />
     </AuthProvider>
   </StrictMode>,

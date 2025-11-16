@@ -65,6 +65,8 @@ services:
           action: rebuild
         - path: hack/Dockerfile
           action: rebuild
+    volumes:
+      - '~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro'
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       Vite__Server__Host: web
