@@ -15,7 +15,7 @@ export function client(authToken: string): Client {
   return client;
 }
 
-export type ProblemDetails = components['schemas']['HttpValidationProblemDetails'];
-export type AccessTokenResponse = components['schemas']['AccessTokenResponse'];
+// export type ProblemDetails = components['schemas']['HttpValidationProblemDetails'];
+// export type AccessTokenResponse = components['schemas']['AccessTokenResponse'];
 export type User = components['schemas']['User'];
 export { auth, token };

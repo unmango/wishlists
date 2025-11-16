@@ -1,30 +1,21 @@
-import { useCallback, useState } from 'react';
-import type { AccessTokenResponse, ProblemDetails } from './api';
+import { useAuth } from 'react-oidc-context';
 import * as api from './api';
-import { Login } from './components';
-import Component from './components/Landing';
+import { Landing } from './components';
 import { ApiProvider } from './hooks';
 
 function App() {
-  const [loginError, setLoginError] = useState<ProblemDetails>();
-  const [registerError, setRegisterError] = useState<ProblemDetails>();
-  const [token, setToken] = useState(api.token.get);
+  const auth = useAuth();
 
-  const clearErrors = useCallback(() => {
-    setLoginError(undefined);
-    setRegisterError(undefined);
-  }, []);
+  switch (auth.activeNavigator) {
+    case 'signinSilent':
+      return <div>Signing you in...</div>;
+    case 'signoutRedirect':
+      return <div>Signing you out...</div>;
+  }
 
-  const handleLoginSuccess = useCallback((res: AccessTokenResponse) => {
-    setToken(res.accessToken);
-    api.token.set(res.accessToken);
-  }, []);
-
-  const handleRegisterSuccess = useCallback(() => {
-    clearErrors();
-  }, [clearErrors]);
-
-  const error = loginError ?? registerError;
+  if (auth.isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='h-svh w-svw flex flex-col gap-4 p-4 bg-linear-to-tr from-fuchsia-800 to-indigo-800'>
@@ -35,7 +26,7 @@ function App() {
       </div>
 
       <div className='w-full h-full flex flex-col items-center justify-center'>
-        {error && (
+        {/* {error && (
           <div className='bg-red-600/75 text-white p-4 rounded-lg'>
             <h2 className='font-bold'>Error</h2>
             <pre>{JSON.stringify(error, null, 2)}</pre>
@@ -45,8 +36,8 @@ function App() {
               </button>
             </div>
           </div>
-        )}
-        {!token && !error && (
+        )} */}
+        {/* {!token && !error && (
           <Login
             client={api.defaultClient}
             onLoginFailed={setLoginError}
@@ -54,10 +45,10 @@ function App() {
             onRegisterFailed={setRegisterError}
             onRegisterSuccess={handleRegisterSuccess}
           />
-        )}
-        {token && (
-          <ApiProvider value={api.client(token)}>
-            <Component />
+        )} */}
+        {auth.user && (
+          <ApiProvider value={api.client(auth.user.access_token)}>
+            <Landing />
           </ApiProvider>
         )}
       </div>

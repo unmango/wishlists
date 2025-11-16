@@ -4,9 +4,13 @@ import { AuthProvider } from 'react-oidc-context';
 import './index.css';
 import App from './App.tsx';
 
+const signinCallback = (): void => {
+  window.history.replaceState({}, document.title, window.location.pathname);
+};
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
+    <AuthProvider onSigninCallback={signinCallback}>
       <App />
     </AuthProvider>
   </StrictMode>,
