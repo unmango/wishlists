@@ -1,7 +1,6 @@
 import createClient from 'openapi-fetch';
 import * as auth from './auth';
 import type { components, paths } from './schema';
-import * as token from './token';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL || '/';
 
@@ -16,6 +15,5 @@ export function client(authToken: string): Client {
 }
 
 // export type ProblemDetails = components['schemas']['HttpValidationProblemDetails'];
-// export type AccessTokenResponse = components['schemas']['AccessTokenResponse'];
 export type User = components['schemas']['User'];
-export { auth, token };
+export { auth };
