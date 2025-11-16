@@ -77,11 +77,17 @@ services:
       - web
       - db
 
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.13.0
+    environment:
+      OAUTH2_PROXY_CLIENT_ID: your-client-id
+      OAUTH2_PROXY_CLIENT_SECRET: your-client
+
   adminer:
-    profiles: [ dev ]
     image: adminer:5.4.1
     restart: always
     ports:
       - '8000:8080'
+    profiles: [ dev ]
     depends_on:
       - db
