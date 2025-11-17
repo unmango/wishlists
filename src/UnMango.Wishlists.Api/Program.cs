@@ -35,7 +35,7 @@ app.MapOpenApi();
 app.MapGroup("/auth").MapIdentityApi<User>();
 var api = app.MapGroup("/api");
 
-if (!app.Environment.IsOpenApiCodegen()) {
+if (!app.Environment.IsDevelopment() && !app.Environment.IsOpenApiCodegen()) {
 	api.RequireAuthorization();
 }
 

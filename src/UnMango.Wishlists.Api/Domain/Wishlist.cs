@@ -25,17 +25,21 @@ internal static class WishlistApi
 	extension(IEndpointRouteBuilder endpoints)
 	{
 		public void MapWishlists() {
-			endpoints.MapGet("/",
-				async ([FromServices] AppDbContext context, CancellationToken cancellationToken) =>
-					TypedResults.Ok(await context.Wishlists.ToListAsync(cancellationToken)));
+			endpoints.MapGet("/", async (
+				[FromServices] AppDbContext context,
+				CancellationToken cancellationToken
+			) => TypedResults.Ok(await context.Wishlists.ToListAsync(cancellationToken)));
 
-			endpoints.MapPost("/",
-				async ([FromServices] AppDbContext context, [FromBody] Wishlist.Create req, CancellationToken cancellationToken) => {
-					var wishlist = Wishlist.From(req);
-					context.Wishlists.Add(wishlist);
-					await context.SaveChangesAsync(cancellationToken);
-					return TypedResults.Ok(wishlist);
-				});
+			endpoints.MapPost("/", async (
+				[FromServices] AppDbContext context,
+				[FromBody] Wishlist.Create req,
+				CancellationToken cancellationToken
+			) => {
+				var wishlist = Wishlist.From(req);
+				context.Wishlists.Add(wishlist);
+				await context.SaveChangesAsync(cancellationToken);
+				return TypedResults.Ok(wishlist);
+			});
 		}
 	}
 }
