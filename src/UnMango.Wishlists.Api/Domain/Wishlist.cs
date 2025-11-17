@@ -11,17 +11,13 @@ internal sealed record Wishlist
 
 	public required User Owner { get; init; }
 
-	public static Wishlist From(Create req) => new() {
-		Id = Guid.CreateVersion7(),
-		Name = req.Name,
-		Owner = req.Owner,
-	};
-
-	public record Create(string Name, User Owner);
+	public record Created(Guid WishlistId, string Name);
 }
 
 internal static class WishlistApi
 {
+	public record Create(string Name, User Owner);
+
 	extension(IEndpointRouteBuilder endpoints)
 	{
 		public void MapWishlists() {
@@ -32,10 +28,15 @@ internal static class WishlistApi
 
 			endpoints.MapPost("/", async (
 				[FromServices] AppDbContext context,
-				[FromBody] Wishlist.Create req,
+				[FromBody] Create req,
 				CancellationToken cancellationToken
 			) => {
-				var wishlist = Wishlist.From(req);
+				var wishlist = new Wishlist {
+					Id = Guid.CreateVersion7(),
+					Name = req.Name,
+					Owner = req.Owner,
+				};
+
 				context.Wishlists.Add(wishlist);
 				await context.SaveChangesAsync(cancellationToken);
 				return TypedResults.Ok(wishlist);
