@@ -24,11 +24,11 @@ if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connecti
 			x => x.SetPostgresVersion(18, 0)))
 		.AddMarten(options => options.Connection(connectionString))
 		.UseLightweightSessions();
-
-	builder.Services
-		.AddIdentityApiEndpoints<User>()
-		.AddEntityFrameworkStores<AppDbContext>();
 }
+
+builder.Services
+	.AddIdentityApiEndpoints<User>()
+	.AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 app.MapOpenApi();
