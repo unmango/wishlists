@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UnMango.Wishlists.Api.Domain;
 
-internal sealed record Wishlist(Guid Id, string Name, Guid OwnerId)
+public sealed record Wishlist(Guid Id, string Name, Guid OwnerId)
 {
 	public record Created(Guid WishlistId, string Name, Guid OwnerId);
 
@@ -19,14 +19,21 @@ internal static class WishlistApi
 	extension(IEndpointRouteBuilder endpoints)
 	{
 		public void MapWishlists() {
-			endpoints.MapGet("/", async Task<Ok<IEnumerable<Wishlist>>> (
+			endpoints.MapGet("/", async Task<Results<Ok<IEnumerable<Wishlist>>, InternalServerError>> (
 				[FromServices] IDocumentSession session,
+				ILogger<Wishlist> logger,
 				CancellationToken cancellationToken
 			) => {
-				var wishlists = await session.Query<Wishlist>()
-					.ToListAsync(cancellationToken);
+				try {
+					var wishlists = await session.Query<Wishlist>()
+						.ToListAsync(cancellationToken);
 
-				return TypedResults.Ok<IEnumerable<Wishlist>>(wishlists);
+					return TypedResults.Ok<IEnumerable<Wishlist>>(wishlists);
+				}
+				catch (InvalidOperationException ex) {
+					logger.LogError(ex, "Heck");
+					return TypedResults.InternalServerError();
+				}
 			});
 
 			endpoints.MapGet("/{id:Guid}", async Task<Ok<Wishlist>> (
