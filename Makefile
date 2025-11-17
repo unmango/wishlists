@@ -76,6 +76,7 @@ bin/image.tar: Dockerfile ${API_SRC} ${WEB_SRC}
 	--tag ${IMAGE} \
 	--load
 
+.PHONY: src/UnMango.Wishlists.Api/nix-deps.json
 src/UnMango.Wishlists.Api/nix-deps.json: bin/fetch-deps.sh
 	$< $@
 src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api: ${API_SRC}

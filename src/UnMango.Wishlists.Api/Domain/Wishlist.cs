@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 namespace UnMango.Wishlists.Api.Domain;
 
 internal sealed record Wishlist
@@ -8,11 +11,36 @@ internal sealed record Wishlist
 
 	public required User Owner { get; init; }
 
-	public static Wishlist From(Create req) => new() {
-		Id = Guid.CreateVersion7(),
-		Name = req.Name,
-		Owner = req.Owner,
-	};
+	public record Created(Guid WishlistId, string Name);
+}
 
+internal static class WishlistApi
+{
 	public record Create(string Name, User Owner);
+
+	extension(IEndpointRouteBuilder endpoints)
+	{
+		public void MapWishlists() {
+			endpoints.MapGet("/", async (
+				[FromServices] AppDbContext context,
+				CancellationToken cancellationToken
+			) => TypedResults.Ok(await context.Wishlists.ToListAsync(cancellationToken)));
+
+			endpoints.MapPost("/", async (
+				[FromServices] AppDbContext context,
+				[FromBody] Create req,
+				CancellationToken cancellationToken
+			) => {
+				var wishlist = new Wishlist {
+					Id = Guid.CreateVersion7(),
+					Name = req.Name,
+					Owner = req.Owner,
+				};
+
+				context.Wishlists.Add(wishlist);
+				await context.SaveChangesAsync(cancellationToken);
+				return TypedResults.Ok(wishlist);
+			});
+		}
+	}
 }
