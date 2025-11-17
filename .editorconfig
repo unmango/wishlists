@@ -12,3 +12,6 @@ indent_size = 2
 [*.cs]
 csharp_new_line_before_open_brace = types
 csharp_new_line_before_else = false
+
+[*.nix]
+indent_style = space

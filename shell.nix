@@ -4,7 +4,7 @@
 }:
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
-		gh
+    gh
     git
     gnumake
     docker
