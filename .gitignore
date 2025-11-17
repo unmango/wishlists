@@ -12,7 +12,7 @@ next-env.d.ts
 /coverage
 dist
 dist-ssr
-result
+/result*
 
 # User specific
 .vscode/*

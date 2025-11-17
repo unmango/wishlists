@@ -1,10 +1,11 @@
 IMAGE ?= wishlists:dev
 
-BUN    ?= bun
-DOTNET ?= dotnet
-DOCKER ?= docker
-DPRINT ?= dprint
-NIX    ?= nix
+BUN     ?= bun
+BUN2NIX ?= bun2nix
+DOTNET  ?= dotnet
+DOCKER  ?= docker
+DPRINT  ?= dprint
+NIX     ?= nix
 
 API_DIR   ?= src/UnMango.Wishlists.Api
 WEB_DIR   ?= src/web
@@ -24,6 +25,7 @@ build: api web
 api: src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api
 web: dist/index.html
 
+deps: ${API_DIR}/nix-deps.json ${WEB_DIR}/bun.nix
 generate gen: src/web/api/schema.d.ts
 
 lint: .make/bun-lint .make/nix-flake-check
@@ -51,6 +53,9 @@ migration:
 	read -p 'Migration name: ' name && \
 	$(DOTNET) ef migrations add "$$name" --project ${API_DIR}
 
+clean:
+	rm -rf bin dist $(wildcard result*)
+
 precompile-queries: # WIP
 	$(DOTNET) ef dbcontext optimize \
 	--project ${API_DIR} \
@@ -62,15 +67,22 @@ bin/schema.json:
 	mkdir -p ${@D}
 	cp ${API_DIR}/obj/UnMango.Wishlists.Api.json $@
 
+bin/fetch-deps.sh: default.nix flake.nix ${API_DIR}/UnMango.Wishlists.Api.csproj
+	$(NIX) build .#api.fetch-deps --out-link $@
+
 bin/image.tar: Dockerfile ${API_SRC} ${WEB_SRC}
 	mkdir -p ${@D} && $(DOCKER) build ${CURDIR} \
 	--output type=tar,dest=$@ \
 	--tag ${IMAGE} \
 	--load
 
+src/UnMango.Wishlists.Api/nix-deps.json: bin/fetch-deps.sh
+	$< $@
 src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api: ${API_SRC}
 	$(DOTNET) build
 
+src/web/bun.nix: bun.lock
+	$(BUN2NIX) --lock-file $< --output-file $@
 src/web/api/schema.d.ts: bin/schema.json
 	$(BUN)x openapi-typescript $< --output $@
 
@@ -90,8 +102,12 @@ bun.lock: package.json
 	$(NIX) fmt
 .make/dotnet-format:
 	$(DOTNET) format
+.make/jb-cleanupcode:
+	$(DOTNET) jb cleanupcode UnMango.Wishlists.slnx
 
 .make/bun-lint:
 	$(BUN) run lint
 .make/nix-flake-check:
 	$(NIX) flake check --all-systems
+.make/jb-inspectcode:
+	$(DOTNET) jb inspectcode UnMango.Wishlists.slnx
