@@ -512,6 +512,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/wishlists/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Wishlist"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -525,7 +562,8 @@ export interface components {
         };
         Create: {
             name: string;
-            owner: components["schemas"]["User"];
+            /** Format: uuid */
+            ownerId: string;
         };
         ForgotPasswordRequest: {
             email: string;
@@ -610,7 +648,8 @@ export interface components {
             /** Format: uuid */
             id: string;
             name: string;
-            owner: components["schemas"]["User"];
+            /** Format: uuid */
+            ownerId: string;
         };
     };
     responses: never;
