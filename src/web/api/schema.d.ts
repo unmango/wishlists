@@ -481,6 +481,13 @@ export interface paths {
                         "application/json": components["schemas"]["Wishlist"][];
                     };
                 };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
             };
         };
         put?: never;
@@ -497,6 +504,39 @@ export interface paths {
                 };
             };
             responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/wishlists/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
                 /** @description OK */
                 200: {
                     headers: {
@@ -508,6 +548,8 @@ export interface paths {
                 };
             };
         };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -527,7 +569,8 @@ export interface components {
         };
         Create: {
             name: string;
-            owner: components["schemas"]["User"];
+            /** Format: uuid */
+            ownerId: string;
         };
         ForgotPasswordRequest: {
             email: string;
@@ -612,7 +655,8 @@ export interface components {
             /** Format: uuid */
             id: string;
             name: string;
-            owner: components["schemas"]["User"];
+            /** Format: uuid */
+            ownerId: string;
         };
     };
     responses: never;

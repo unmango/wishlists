@@ -1,45 +1,60 @@
+using Marten;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace UnMango.Wishlists.Api.Domain;
 
-internal sealed record Wishlist
+public sealed record Wishlist(Guid Id, string Name, Guid OwnerId)
 {
-	public required Guid Id { get; init; }
+	public record Created(Guid WishlistId, string Name, Guid OwnerId);
 
-	public required string Name { get; init; }
-
-	public required User Owner { get; init; }
-
-	public record Created(Guid WishlistId, string Name);
+	public static Wishlist Create(Created created) =>
+		new(created.WishlistId, created.Name, created.OwnerId);
 }
 
 internal static class WishlistApi
 {
-	public record Create(string Name, User Owner);
+	public record Create(string Name, Guid OwnerId);
 
 	extension(IEndpointRouteBuilder endpoints)
 	{
 		public void MapWishlists() {
-			endpoints.MapGet("/", async (
-				[FromServices] AppDbContext context,
+			endpoints.MapGet("/", async Task<Results<Ok<IEnumerable<Wishlist>>, InternalServerError>> (
+				[FromServices] IDocumentSession session,
+				ILogger<Wishlist> logger,
 				CancellationToken cancellationToken
-			) => TypedResults.Ok(await context.Wishlists.ToListAsync(cancellationToken)));
+			) => {
+				try {
+					var wishlists = await session.Query<Wishlist>()
+						.ToListAsync(cancellationToken);
 
-			endpoints.MapPost("/", async (
-				[FromServices] AppDbContext context,
+					return TypedResults.Ok<IEnumerable<Wishlist>>(wishlists);
+				}
+				catch (InvalidOperationException ex) {
+					logger.LogError(ex, "Heck");
+					return TypedResults.InternalServerError();
+				}
+			});
+
+			endpoints.MapGet("/{id:Guid}", async Task<Ok<Wishlist>> (
+				[FromServices] IDocumentSession session,
+				[FromRoute] Guid id,
+				CancellationToken cancellationToken
+			) => {
+				var wishlist = await session.Events.AggregateStreamAsync<Wishlist>(id, token: cancellationToken);
+				return TypedResults.Ok(wishlist);
+			});
+
+			endpoints.MapPost("/", async Task<Created> (
+				[FromServices] IDocumentSession session,
 				[FromBody] Create req,
 				CancellationToken cancellationToken
 			) => {
-				var wishlist = new Wishlist {
-					Id = Guid.CreateVersion7(),
-					Name = req.Name,
-					Owner = req.Owner,
-				};
-
-				context.Wishlists.Add(wishlist);
-				await context.SaveChangesAsync(cancellationToken);
-				return TypedResults.Ok(wishlist);
+				var id = Guid.CreateVersion7();
+				var created = new Wishlist.Created(id, req.Name, req.OwnerId);
+				session.Events.StartStream<Wishlist>(id, created);
+				await session.SaveChangesAsync(cancellationToken);
+				return TypedResults.Created($"/{id}");
 			});
 		}
 	}

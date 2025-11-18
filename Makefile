@@ -26,7 +26,7 @@ api: src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api
 web: dist/index.html
 
 deps: ${API_DIR}/nix-deps.json ${WEB_DIR}/bun.nix
-generate gen: src/web/api/schema.d.ts
+generate gen schema: src/web/api/schema.d.ts
 
 lint: .make/bun-lint .make/nix-flake-check
 format fmt: .make/nix-fmt .make/dprint-fmt .make/dotnet-format
