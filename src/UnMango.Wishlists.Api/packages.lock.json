@@ -10,9 +10,9 @@
       },
       "LanguageExt.Core": {
         "type": "Direct",
-        "requested": "[5.0.0-beta-20, )",
-        "resolved": "5.0.0-beta-20",
-        "contentHash": "Zbgsb2rcCu/zoaO441GI70/sW3zAjtG7asROAii0zZ5GnDcaQZd9EG6EbqU/NZnroEnK7HHfFpij0BR5WUOICA=="
+        "requested": "[5.0.0-beta-57, )",
+        "resolved": "5.0.0-beta-57",
+        "contentHash": "KrHgcX29HMjL0DqukgKc/K+BBDw0hephfh+t1TO9dertTuf+PBzIwIhKqR1h7urkrU+/Ihn6M7Ad1SM4465NKA=="
       },
       "Marten": {
         "type": "Direct",
