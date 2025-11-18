@@ -1717,6 +1717,15 @@
     url = "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz";
     hash = "sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==";
   };
+  "uuid" = {
+    out_path = "uuid";
+    binaries = {
+      "uuid" = "../uuid/dist-node/bin/uuid";
+    };
+    name = "uuid@13.0.0";
+    url = "https://registry.npmjs.org/uuid/-/uuid-13.0.0.tgz";
+    hash = "sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==";
+  };
   "vite" = {
     out_path = "vite";
     binaries = {
