@@ -481,6 +481,13 @@ export interface paths {
                         "application/json": components["schemas"]["Wishlist"][];
                     };
                 };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
             };
         };
         put?: never;
