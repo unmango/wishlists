@@ -1,7 +1,7 @@
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { JSX } from 'react';
-import { useQuery } from '../../../api';
+import { useQuery } from '../../api';
 
 export interface Props {
   onBack: () => void;
@@ -21,7 +21,6 @@ export function Component({ onBack }: Props): JSX.Element {
       <button className='w-10 h-10 rounded-full bg-black/25' onClick={onBack}>
         <FontAwesomeIcon icon={faChevronLeft} color='white' />
       </button>
-      {data?.length && <pre>{JSON.stringify(data)}</pre>}
       {!data?.length && <pre>{JSON.stringify(data)}</pre>}
       <div className='w-12 bg-red-500'>A</div>
     </div>

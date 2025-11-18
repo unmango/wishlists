@@ -1,18 +1,15 @@
-import { type ButtonHTMLAttributes, type JSX, useState } from 'react';
-import Create from './Create';
-import Plan from './Plan';
+import { type ButtonHTMLAttributes, type JSX } from 'react';
 
-export function Component(): JSX.Element {
-  // Poor man's router
-  const [page, setPage] = useState<'select' | 'create' | 'plan'>('select');
+export interface Props {
+	onCreate(): void;
+	onPlan(): void;
+}
 
-  if (page === 'create') return <Create onBack={() => setPage('select')} />;
-  if (page === 'plan') return <Plan onBack={() => setPage('select')} />;
-
+export function Component({ onCreate, onPlan }: Props): JSX.Element {
   return (
     <div className='w-full h-full flex items-center justify-evenly text-white'>
-      <Button onClick={() => setPage('create')}>Create</Button>
-      <Button onClick={() => setPage('plan')}>Plan</Button>
+      <Button onClick={onCreate}>Create</Button>
+      <Button onClick={onPlan}>Plan</Button>
     </div>
   );
 }
