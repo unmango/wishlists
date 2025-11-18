@@ -5,4 +5,4 @@ import NoWishlists from './NoWishlists';
 import Plan from './Plan';
 import Workspace from './Workspace';
 
-export { Create, Editor, Landing, Plan, Workspace, NoWishlists };
+export { Create, Editor, Landing, NoWishlists, Plan, Workspace };

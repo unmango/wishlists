@@ -19,8 +19,8 @@ export function Component({ onBack }: Props): JSX.Element {
         <FontAwesomeIcon icon={faChevronLeft} color='white' />
       </button>
       <div className='w-full bg-black/20 bg-clip-padding backdrop-filter backdrop-blur backdrop-saturate-100 backdrop-contrast-100 rounded-xl p-4 ml-4'>
-				{!data?.length && <EmptyList />}
-			</div>
+        {!data?.length && <EmptyList />}
+      </div>
     </div>
   );
 }

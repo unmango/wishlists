@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
+import { v7 as uuid } from 'uuid';
 import { NoWishlists, Workspace } from './components';
 import { useWishlists } from './hooks';
-import { v7 as uuid } from 'uuid'
 
 function App() {
   const { data, error, isLoading, create } = useWishlists();
