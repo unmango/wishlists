@@ -103,3 +103,15 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           sbom: ${{ github.event_name != 'pull_request' }}
           provenance: ${{ github.event_name != 'pull_request' }}
+
+  dprint:
+    runs-on: ubuntu-latest
+    env:
+      # renovate: datasource=github-releases depName=dprint/dprint
+      DPRINT_VERSION: 0.50.2
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: dprint/check@v2.3
+        with:
+          dprint-version: ${{ env.DPRINT_VERSION }}
