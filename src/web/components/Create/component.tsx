@@ -13,16 +13,23 @@ export function Component({ onBack }: Props): JSX.Element {
   if (isLoading) return <p className='text-white'>Loading...</p>;
   if (error) return <p className='text-red-500'>Error: {String(error)}</p>;
 
-	// if (data?.length) console.log('heheheheh');
-	if (!data?.length) console.log('heheheheh');
-
   return (
     <div className='w-full h-full flex'>
       <button className='w-10 h-10 rounded-full bg-black/25' onClick={onBack}>
         <FontAwesomeIcon icon={faChevronLeft} color='white' />
       </button>
-      {!data?.length && <pre>{JSON.stringify(data)}</pre>}
-      <div className='w-12 bg-red-500'>A</div>
+      <div className='w-full bg-black/20 bg-clip-padding backdrop-filter backdrop-blur backdrop-saturate-100 backdrop-contrast-100 rounded-xl p-4 ml-4'>
+				{!data?.length && <EmptyList />}
+			</div>
+    </div>
+  );
+}
+
+function EmptyList(): JSX.Element {
+  return (
+    <div className='w-full h-full flex flex-col items-center justify-center text-white'>
+      <h2 className='text-4xl mb-4'>No wishlists found</h2>
+      <p className='text-lg'>Click "Create" to make your first wishlist!</p>
     </div>
   );
 }

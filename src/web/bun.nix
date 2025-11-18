@@ -597,6 +597,12 @@
     url = "https://registry.npmjs.org/@types/babel__traverse/-/babel__traverse-7.28.0.tgz";
     hash = "sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==";
   };
+  "@types/bun" = {
+    out_path = "@types/bun";
+    name = "@types/bun@1.3.2";
+    url = "https://registry.npmjs.org/@types/bun/-/bun-1.3.2.tgz";
+    hash = "sha512-t15P7k5UIgHKkxwnMNkJbWlh/617rkDGEdSsDbu+qNHTaz9SKf7aC8fiIlUdD5RPpH6GEkP0cK7WlvmrEBRtWg==";
+  };
   "@types/estree" = {
     out_path = "@types/estree";
     name = "@types/estree@1.0.8";
@@ -800,6 +806,12 @@
     name = "browserslist@4.27.0";
     url = "https://registry.npmjs.org/browserslist/-/browserslist-4.27.0.tgz";
     hash = "sha512-AXVQwdhot1eqLihwasPElhX2tAZiBjWdJ9i/Zcj2S6QYIjkx62OKSfnobkriB81C3l4w0rVy3Nt4jaTBltYEpw==";
+  };
+  "bun-types" = {
+    out_path = "bun-types";
+    name = "bun-types@1.3.2";
+    url = "https://registry.npmjs.org/bun-types/-/bun-types-1.3.2.tgz";
+    hash = "sha512-i/Gln4tbzKNuxP70OWhJRZz1MRfvqExowP7U6JKoI8cntFrtxg7RJK3jvz7wQW54UuvNC8tbKHHri5fy74FVqg==";
   };
   "callsites" = {
     out_path = "callsites";
