@@ -11,7 +11,7 @@ COPY src/UnMango.Wishlists.Api/ ./
 RUN dotnet build --no-restore
 CMD ["dotnet", "ef", "migrations", "script", "--idempotent", "--no-build"]
 
-FROM oven/bun:1.3.2-slim AS web
+FROM oven/bun:1.3.3-slim AS web
 
 WORKDIR /work
 COPY package.json bun.lock ./
