@@ -23,14 +23,36 @@
         inputs.treefmt-nix.flakeModule
       ];
       perSystem =
-        { pkgs, system, ... }:
+        {
+          pkgs,
+          lib,
+          system,
+          ...
+        }:
         let
           build = pkgs.callPackage ./default.nix {
             inherit pkgs;
             inherit (inputs.bun2nix.lib.${system}) mkBunDerivation;
           };
+          # chart-releaser = pkgs.callPackage ./hack/chart-releaser.nix {
+          #   inherit pkgs lib;
+          # };
+          chart-releaser = pkgs.buildGoModule rec {
+            pname = "chart-releaser";
+            version = "1.8.1";
+
+            src = pkgs.fetchFromGitHub {
+              owner = "helm";
+              repo = "chart-releaser";
+              tag = "v${version}";
+              sha256 = "sha256-";
+            };
+
+            vendorHash = lib.fakeSha256;
+          };
         in
         {
+          packages.chart-releaser = chart-releaser;
           # TODO: Clean up
           packages.web = build.web;
           packages.api = build.api;
@@ -52,6 +74,7 @@
           devShells.default = pkgs.callPackage ./shell.nix {
             inherit pkgs;
             bun2nix = inputs.bun2nix.packages.${system}.default;
+            chart-releaser = chart-releaser;
           };
 
           treefmt = {
