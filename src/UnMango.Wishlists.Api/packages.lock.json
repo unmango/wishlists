@@ -81,13 +81,13 @@
       },
       "Npgsql.EntityFrameworkCore.PostgreSQL": {
         "type": "Direct",
-        "requested": "[10.0.0-rc.2, )",
-        "resolved": "10.0.0-rc.2",
-        "contentHash": "2GE99lO5bNeFd66B6HUvMCNDpCV9Dyw4pt1GlQYA9MqnsVd/s0poFL6v3x4osV8znwevZhxjg5itVpmVirW7QQ==",
+        "requested": "[10.0.0, )",
+        "resolved": "10.0.0",
+        "contentHash": "E2+uSWxSB8LdsUVwPaqRWOcGOP92biry2JEwc0KJMdLJF+aZdczeIdEXVwEyv4nSVMQJH0o8tLhyAMiR6VF0lw==",
         "dependencies": {
-          "Microsoft.EntityFrameworkCore": "[10.0.0-rc.2.25502.107]",
-          "Microsoft.EntityFrameworkCore.Relational": "[10.0.0-rc.2.25502.107]",
-          "Npgsql": "10.0.0-rc.1"
+          "Microsoft.EntityFrameworkCore": "[10.0.0, 11.0.0)",
+          "Microsoft.EntityFrameworkCore.Relational": "[10.0.0, 11.0.0)",
+          "Npgsql": "10.0.0"
         }
       },
       "OpenIddict.Client.AspNetCore": {
@@ -544,8 +544,8 @@
       },
       "Npgsql": {
         "type": "Transitive",
-        "resolved": "10.0.0-rc.1",
-        "contentHash": "kORndN04os9mv9l1MtEBoXydufX2TINDR5wgcmh7vsn+0x7AwfrCgOKana3Sz/WlRQ9KsaWHWPnFQ7ZKF+ck7Q=="
+        "resolved": "10.0.0",
+        "contentHash": "xZAYhPOU2rUIFpV48xsqhCx9vXs6Y+0jX2LCoSEfDFYMw9jtAOUk3iQsCnDLrFIv9NT3JGMihn7nnuZsPKqJmA=="
       },
       "Npgsql.Json.NET": {
         "type": "Transitive",
