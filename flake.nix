@@ -29,8 +29,10 @@
             inherit pkgs;
             inherit (inputs.bun2nix.lib.${system}) mkBunDerivation;
           };
+          cr = pkgs.callPackage ./hack/chart-releaser.nix { };
         in
         {
+          packages.cr = cr;
           # TODO: Clean up
           packages.web = build.web;
           packages.api = build.api;
