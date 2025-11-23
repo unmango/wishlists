@@ -37,6 +37,7 @@ let
     src = pkgs.lib.cleanSource ./.;
 
     dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0;
+    dotnet-runtime = pkgs.dotnetCorePackages.aspnetcore_10_0;
     projectFile = "src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj";
     nugetDeps = ./src/UnMango.Wishlists.Api/nix-deps.json;
 

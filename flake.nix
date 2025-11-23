@@ -38,6 +38,15 @@
           packages.docker = build.docker;
           packages.default = build.docker;
 
+          apps.api = {
+            type = "app";
+            program = "${build.api}/bin/UnMango.Wishlists.Api";
+          };
+          apps.wishlists = {
+            type = "app";
+            program = "${build.app}/bin/UnMango.Wishlists.Api";
+          };
+
           devShells.default = pkgs.callPackage ./shell.nix {
             inherit pkgs;
             bun2nix = inputs.bun2nix.packages.${system}.default;
