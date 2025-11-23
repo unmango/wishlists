@@ -22,6 +22,9 @@ export COMPOSE_PROFILES ?= dev
 
 build: api web
 
+nix:
+	$(NIX) build .#api .#web .#wishlists .#docker
+
 api: src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api
 web: dist/index.html
 
