@@ -1,6 +1,7 @@
 {
   pkgs ? import <nixpkgs> { },
   bun2nix,
+  chart-releaser,
 }:
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
@@ -21,6 +22,7 @@ pkgs.mkShell {
 
   BUN = pkgs.bun + "/bin/bun";
   BUN2NIX = bun2nix + "/bin/bun2nix";
+  # CR = chart-releaser + "/bin/cr";
   CT = pkgs.chart-testing + "/bin/ct";
   DOTNET = pkgs.dotnetCorePackages.sdk_10_0 + "/bin/dotnet";
   NIXFMT = pkgs.nixfmt-rfc-style + "/bin/nixfmt";
