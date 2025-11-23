@@ -16,13 +16,13 @@
       },
       "Marten": {
         "type": "Direct",
-        "requested": "[8.15.4, )",
-        "resolved": "8.15.4",
-        "contentHash": "LWeCdUQg9ha5CqJJdYAVraJsH+bsQ0CfXMQ5pMMs7qPJgmgXGwwV9zRfUGbhmRsDZC/Ks7bWUP5vq2w44AVWMw==",
+        "requested": "[8.16.1, )",
+        "resolved": "8.16.1",
+        "contentHash": "wdNoK5dorQR/tgtDy+FDoHEYiibaAZMSitHXUYZNwLafE3ekCxnKPDY4oAcWOizkRERPBpHwKWYZ0+ZRvt+svQ==",
         "dependencies": {
           "FSharp.Core": "9.0.100",
-          "JasperFx": "1.10.0",
-          "JasperFx.Events": "1.12.0",
+          "JasperFx": "1.10.1",
+          "JasperFx.Events": "1.12.1",
           "JasperFx.RuntimeCompiler": "4.2.0",
           "Newtonsoft.Json": "13.0.3",
           "Npgsql.Json.NET": "9.0.2",
@@ -137,22 +137,22 @@
       },
       "JasperFx": {
         "type": "Transitive",
-        "resolved": "1.10.0",
-        "contentHash": "dtAM1Fc4zntBDIs6VZZ53zbtVl8QSHsqyI2kh1CFuNIqT0xHiaWLX+KW43XCJgH4AXfD/RyX/4c5EHQWy83uiA==",
+        "resolved": "1.10.1",
+        "contentHash": "Wxecme4HWjdXbqBKs1v2xyPrGG1Nm22IkulvrPKNGhtlX+cNBsV3e/Mv475Z35t1ca2/XkSC/mKqMo1vcaUuxw==",
         "dependencies": {
           "FastExpressionCompiler": "5.1.1",
           "ImTools": "4.0.0",
           "Microsoft.Bcl.TimeProvider": "8.0.1",
           "Polly.Core": "8.5.2",
-          "Spectre.Console": "0.50.0"
+          "Spectre.Console": "0.53.0"
         }
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "1.12.0",
-        "contentHash": "cXXhE67hWlfPhHHeoXXABh82wJHPtap3XuT+hOGD7ls5cJfdBUbN/kdEZR5+S5RPvyP1vgt6/xcgS2Zo7/LCxg==",
+        "resolved": "1.12.1",
+        "contentHash": "QMo1X1kz1ymfp7NUuvGabn56jwffaeV7JNIvGeSvUBpgIG0BPr3rkXvYmITIH6ik+XMkEhpg8VifrIbhiKOemQ==",
         "dependencies": {
-          "JasperFx": "1.10.0"
+          "JasperFx": "1.10.1"
         }
       },
       "JasperFx.RuntimeCompiler": {
@@ -630,8 +630,8 @@
       },
       "Spectre.Console": {
         "type": "Transitive",
-        "resolved": "0.50.0",
-        "contentHash": "gkwYncFqMjlPF6Yz8KeVsKWpdfv15sr6uKm+vXVa/8Q4tvx52LPzMQOO5m+bXwI3AGGFeY3cok3ZJbguYizswg=="
+        "resolved": "0.53.0",
+        "contentHash": "m2iv8Egfywp7FaNLKCmCFHbSf36D4ctzZKvlAK9NXMyGLh6L+CnrZWK8o+LOYsoAS1jtoHn0W1BT0W8vuq/FUw=="
       },
       "System.CodeDom": {
         "type": "Transitive",
