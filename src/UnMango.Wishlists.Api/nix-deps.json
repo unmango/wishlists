@@ -1,8 +1,8 @@
 [
   {
     "pname": "CliWrap",
-    "version": "3.9.0",
-    "hash": "sha256-WC1bX8uy+8VZkrV6eK8nJ24Uy81Bj4Aao27OsP1sGyE="
+    "version": "3.10.0",
+    "hash": "sha256-XMGTr0gkZxSOC72hrCjpIChpN0c0A19X3TqOAdBtgb4="
   },
   {
     "pname": "dotnet-ef",
@@ -35,9 +35,14 @@
     "hash": "sha256-Frzfh0utO5cRnnnwwRFxLX71gtaYmq9DuiOowrYJRQs="
   },
   {
+    "pname": "JasperFx",
+    "version": "1.10.1",
+    "hash": "sha256-jvpPkAX2QQXy8MGLNA1/6QRxuy769EBwqcREom2VMMA="
+  },
+  {
     "pname": "JasperFx.Events",
-    "version": "1.12.0",
-    "hash": "sha256-3HoFe7JqcROjmbpVjGfF6/9c/IqX1/QIFxrTaXXkpV4="
+    "version": "1.12.1",
+    "hash": "sha256-3XNFQ2geSFePOpuho5485fq2jURwSrh/tb4xs1duihg="
   },
   {
     "pname": "JasperFx.RuntimeCompiler",
@@ -56,8 +61,8 @@
   },
   {
     "pname": "Marten",
-    "version": "8.15.4",
-    "hash": "sha256-stDNHaQqtVVIOMfEwFn7rkriIlTx+ykjFn8yYdX/6Ik="
+    "version": "8.16.1",
+    "hash": "sha256-l1FpVgSeMrIhB2dLFoeu5MtIko5X1WSLnVF7n/NCDQU="
   },
   {
     "pname": "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
@@ -205,11 +210,6 @@
     "hash": "sha256-vOP2CE5YA551BlpbOuIy6RuAiAEPEpCVS1cEE33/zN4="
   },
   {
-    "pname": "Microsoft.EntityFrameworkCore.Relational",
-    "version": "10.0.0-rc.2.25502.107",
-    "hash": "sha256-RMx+NHMOhwEFhA6Fr29ihzESCk5iXgVvdOsIuwSE9Uc="
-  },
-  {
     "pname": "Microsoft.EntityFrameworkCore.Tasks",
     "version": "10.0.0",
     "hash": "sha256-VoYyUfTGIr9nwr/n+fscfznHMzwyxblGLaQwCF6PRlI="
@@ -346,8 +346,8 @@
   },
   {
     "pname": "Npgsql",
-    "version": "10.0.0-rc.1",
-    "hash": "sha256-J+jCLhLJeb4FkTPYo74H8IklaixjojlPHB/IoFLd6lk="
+    "version": "10.0.0",
+    "hash": "sha256-UVKz9dH/rVCCbMyFdqA31RYpht1XgDRLIqUy0Dp9ACQ="
   },
   {
     "pname": "Npgsql",
@@ -356,8 +356,8 @@
   },
   {
     "pname": "Npgsql.EntityFrameworkCore.PostgreSQL",
-    "version": "10.0.0-rc.2",
-    "hash": "sha256-7Ev0B6yZU1xtvMoXgaRUl5rtsSPOEGCc21ST8FZ4Os8="
+    "version": "10.0.0",
+    "hash": "sha256-XIJxnTMektQVP1qtslEIGbmBGrIQsvjQjCMRTs9UIbg="
   },
   {
     "pname": "Npgsql.Json.NET",
@@ -431,8 +431,8 @@
   },
   {
     "pname": "Spectre.Console",
-    "version": "0.50.0",
-    "hash": "sha256-3MNgumQSXzuXVGj7kLb5FMkTH/LoFohMvUjAZ7nyHfo="
+    "version": "0.53.0",
+    "hash": "sha256-XnzZoDD32DZqK/tmPVaXaclJJzb25SyMLzQ7xX3XLQw="
   },
   {
     "pname": "System.CodeDom",
