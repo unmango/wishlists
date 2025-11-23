@@ -69,6 +69,11 @@
             program = "${build.app}/bin/UnMango.Wishlists.Api";
           };
 
+          apps.cr = {
+            type = "app";
+            program = "${chart-releaser}/bin/cr";
+          };
+
           devShells.default = pkgs.callPackage ./shell.nix {
             inherit pkgs;
             bun2nix = inputs.bun2nix.packages.${system}.default;
