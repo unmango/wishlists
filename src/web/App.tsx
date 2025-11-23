@@ -13,7 +13,7 @@ function App() {
       <Workspace onBack={back}>
         {isLoading && <p className='text-white'>Loading...</p>}
         {error && <p className='text-red-500'>Error: {String(error)}</p>}
-        {!data?.length && <NoWishlists onCreate={() => create('Test', uuid())} />}
+        {!isLoading && !data?.length && <NoWishlists onCreate={() => create('Test', uuid())} />}
       </Workspace>
     </div>
   );
