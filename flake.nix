@@ -6,7 +6,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
-    bun2nix.url = "github:baileyluTCD/bun2nix";
+    bun2nix.url = "github:baileyluTCD/bun2nix?ref=1.5.2";
     bun2nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
