@@ -29,10 +29,8 @@
             inherit pkgs;
             inherit (inputs.bun2nix.lib.${system}) mkBunDerivation;
           };
-          cr = pkgs.callPackage ./hack/chart-releaser.nix { };
         in
         {
-          packages.cr = cr;
           # TODO: Clean up
           packages.web = build.web;
           packages.api = build.api;
@@ -43,10 +41,12 @@
           apps.api = {
             type = "app";
             program = "${build.api}/bin/UnMango.Wishlists.Api";
+            meta.description = "Wishlists API";
           };
           apps.wishlists = {
             type = "app";
             program = "${build.app}/bin/UnMango.Wishlists.Api";
+            meta.description = "Wishlists Application";
           };
 
           devShells.default = pkgs.callPackage ./shell.nix {
