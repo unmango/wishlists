@@ -34,22 +34,22 @@
             inherit pkgs;
             inherit (inputs.bun2nix.lib.${system}) mkBunDerivation;
           };
-          # chart-releaser = pkgs.callPackage ./hack/chart-releaser.nix {
-          #   inherit pkgs lib;
-          # };
-          chart-releaser = pkgs.buildGoModule rec {
-            pname = "chart-releaser";
-            version = "1.8.1";
-
-            src = pkgs.fetchFromGitHub {
-              owner = "helm";
-              repo = "chart-releaser";
-              tag = "v${version}";
-              sha256 = "sha256-";
-            };
-
-            vendorHash = lib.fakeSha256;
+          chart-releaser = pkgs.callPackage ./hack/chart-releaser.nix {
+            inherit pkgs lib;
           };
+          # chart-releaser = pkgs.buildGoModule rec {
+          #   pname = "chart-releaser";
+          #   version = "1.8.1";
+
+          #   src = pkgs.fetchFromGitHub {
+          #     owner = "helm";
+          #     repo = "chart-releaser";
+          #     tag = "v${version}";
+          #     sha256 = "sha256-";
+          #   };
+
+          #   vendorHash = lib.fakeSha256;
+          # };
         in
         {
           packages.chart-releaser = chart-releaser;
