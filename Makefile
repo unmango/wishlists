@@ -67,7 +67,7 @@ clean:
 cluster: NAME := unmango-wishlists
 cluster: bin/image.tar
 	$(KIND) create cluster --config hack/kind-config.yml --name ${NAME} || true
-	$(KIND) load image-archive $< --name ${NAME}
+	$(KIND) load docker-image ${IMAGE} --name ${NAME}
 
 precompile-queries: # WIP
 	$(DOTNET) ef dbcontext optimize \
