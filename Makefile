@@ -1,4 +1,5 @@
-IMAGE ?= wishlists:dev
+IMAGE   ?= wishlists:dev
+VERSION ?= 0.0.1
 
 BUN     ?= bun
 BUN2NIX ?= bun2nix
@@ -7,6 +8,7 @@ DOTNET  ?= dotnet
 DOCKER  ?= docker
 DPRINT  ?= dprint
 HELM    ?= helm
+KIND    ?= kind
 NIX     ?= nix
 
 API_DIR   ?= src/UnMango.Wishlists.Api
@@ -29,6 +31,7 @@ nix:
 
 api: src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api
 web: dist/index.html
+chart: bin/wishlists-${VERSION}.tgz
 
 deps: ${API_DIR}/nix-deps.json ${WEB_DIR}/bun.nix
 generate gen schema: src/web/api/schema.d.ts
@@ -61,11 +64,19 @@ migration:
 clean:
 	rm -rf bin dist $(wildcard result*)
 
+cluster: NAME := unmango-wishlists
+cluster: bin/image.tar
+	$(KIND) create cluster --config hack/kind-config.yml --name ${NAME} || true
+	$(KIND) load image-archive $< --name ${NAME}
+
 precompile-queries: # WIP
 	$(DOTNET) ef dbcontext optimize \
 	--project ${API_DIR} \
 	--output-dir $(notdir ${QUERY_DIR}) \
 	--precompile-queries
+
+bin/wishlists-${VERSION}.tgz: $(wildcard charts/wishlists/* charts/wishlists/templates/*)
+	$(HELM) package charts/wishlists --destination ${@D} --version ${VERSION} --app-version ${VERSION}
 
 bin/schema.json:
 	$(DOTNET) build ${API_DIR}
