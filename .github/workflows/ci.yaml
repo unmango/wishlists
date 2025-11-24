@@ -104,6 +104,57 @@ jobs:
           sbom: ${{ github.event_name != 'pull_request' }}
           provenance: ${{ github.event_name != 'pull_request' }}
 
+  helm:
+    name: ${{ github.event_name == 'push' && 'Helm Publish' || 'Helm Package' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: charts/wishlists
+    env:
+      HELM_EXPERIMENTAL_OCI: '1'
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          filter: tree:0
+
+      - name: Setup helm
+        uses: azure/setup-helm@v4.3.1
+        with:
+          version: '3.19.1'
+
+      - run: helm lint
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - run: dotnet tool restore
+
+      - id: version
+        run: echo "version=$(minver -t v)" >> "$GITHUB_OUTPUT"
+
+      - name: Helm Login
+        if: github.event_name == 'push'
+        run: echo '${{ github.token }}' | helm registry login -u '${{ github.repository_owner }}' --password-stdin ghcr.io
+
+      - name: Helm Package
+        run: |
+          helm package . \
+            --dependency-update \
+            --version ${{ steps.version.outputs.version }} \
+            --app-version ${{ steps.version.outputs.version }}
+
+      - name: Helm Push
+        if: github.event_name == 'push'
+        run: helm push wishlists-${{ steps.version.outputs.version }}.tgz "oci://ghcr.io/${REPOSITORY,,}"
+        env:
+          REPOSITORY: ${{ github.repository }}
+
+      - name: Helm Logout
+        if: github.event_name == 'push'
+        run: helm registry logout ghcr.io
+
   dprint:
     runs-on: ubuntu-latest
     env:
