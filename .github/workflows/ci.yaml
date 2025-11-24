@@ -63,6 +63,8 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
+    outputs:
+      image-tags: ${{ steps.meta.outputs.tags }}
     steps:
       - uses: docker/setup-buildx-action@v3
 
@@ -103,6 +105,96 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           sbom: ${{ github.event_name != 'pull_request' }}
           provenance: ${{ github.event_name != 'pull_request' }}
+
+  helm:
+    name: ${{ github.event_name == 'push' && 'Helm Publish' || 'Helm Package' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: charts/wishlists
+    env:
+      HELM_EXPERIMENTAL_OCI: "1"
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          filter: tree:0
+
+      - name: Setup helm
+        uses: azure/setup-helm@v4.3.1
+        with:
+          version: "3.19.1"
+
+      - run: helm lint
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - run: dotnet tool restore
+
+      - id: version
+        run: echo "version=$(dotnet minver -t v)" >> "$GITHUB_OUTPUT"
+
+      - name: Helm Login
+        if: github.event_name == 'push'
+        run: echo '${{ github.token }}' | helm registry login -u '${{ github.repository_owner }}' --password-stdin ghcr.io
+
+      - name: Helm Package
+        run: |
+          helm package . \
+            --dependency-update \
+            --version ${{ steps.version.outputs.version }} \
+            --app-version ${{ steps.version.outputs.version }}
+
+      - name: Helm Push
+        if: github.event_name == 'push'
+        run: helm push wishlists-${{ steps.version.outputs.version }}.tgz "oci://ghcr.io/${REPOSITORY,,}"
+        env:
+          REPOSITORY: ${{ github.repository }}
+
+      - name: Helm Logout
+        if: github.event_name == 'push'
+        run: helm registry logout ghcr.io
+
+  ct:
+    # TODO
+    if: false
+    runs-on: ubuntu-latest
+    needs: [docker]
+    steps:
+      - uses: actions/checkout@v6.0.0
+        with:
+          fetch-depth: 0
+
+      - uses: azure/setup-helm@v4.3.1
+
+      - uses: actions/setup-python@v6.0.0
+        with:
+          python-version: "3.x"
+          check-latest: true
+
+      - uses: helm/chart-testing-action@v2.8.0
+
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }})
+          if [[ -n "$changed" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run chart-testing (lint)
+        if: steps.list-changed.outputs.changed == 'true'
+        run: ct lint --target-branch ${{ github.event.repository.default_branch }} --github-groups
+
+      - name: Create kind cluster
+        if: steps.list-changed.outputs.changed == 'true'
+        uses: helm/kind-action@v1.12.0
+
+      - name: Run chart-testing (install)
+        if: steps.list-changed.outputs.changed == 'true'
+        run: ct install --target-branch ${{ github.event.repository.default_branch }} --github-groups
 
   dprint:
     runs-on: ubuntu-latest

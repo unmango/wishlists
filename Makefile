@@ -2,9 +2,11 @@ IMAGE ?= wishlists:dev
 
 BUN     ?= bun
 BUN2NIX ?= bun2nix
+CT      ?= ct
 DOTNET  ?= dotnet
 DOCKER  ?= docker
 DPRINT  ?= dprint
+HELM    ?= helm
 NIX     ?= nix
 
 API_DIR   ?= src/UnMango.Wishlists.Api
@@ -31,7 +33,7 @@ web: dist/index.html
 deps: ${API_DIR}/nix-deps.json ${WEB_DIR}/bun.nix
 generate gen schema: src/web/api/schema.d.ts
 
-lint: .make/bun-lint .make/nix-flake-check
+lint: .make/bun-lint .make/ct-lint .make/helm-lint .make/nix-flake-check
 format fmt: .make/nix-fmt .make/dprint-fmt .make/dotnet-format
 
 docker: bin/image.tar
@@ -96,6 +98,8 @@ dist/index.html: bun.lock ${WEB_SRC}
 bun.lock: package.json
 	$(BUN) install
 	@touch $@
+charts/wishlists/Chart.lock: charts/wishlists/Chart.yaml
+	$(HELM) dependency update ${@D}
 
 .vscode/settings.json: hack/vscode.json
 	mkdir -p ${@D} && cp $< $@
@@ -111,6 +115,10 @@ bun.lock: package.json
 
 .make/bun-lint:
 	$(BUN) run lint
+.make/ct-lint:
+	$(CT) lint
+.make/helm-lint:
+	$(HELM) lint charts/wishlists
 .make/nix-flake-check:
 	$(NIX) flake check --all-systems
 .make/jb-inspectcode:

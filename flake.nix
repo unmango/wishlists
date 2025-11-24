@@ -41,10 +41,12 @@
           apps.api = {
             type = "app";
             program = "${build.api}/bin/UnMango.Wishlists.Api";
+            meta.description = "Wishlists API";
           };
           apps.wishlists = {
             type = "app";
             program = "${build.app}/bin/UnMango.Wishlists.Api";
+            meta.description = "Wishlists Application";
           };
 
           devShells.default = pkgs.callPackage ./shell.nix {
