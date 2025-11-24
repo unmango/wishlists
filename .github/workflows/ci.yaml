@@ -63,6 +63,8 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
+    outputs:
+      image-tags: ${{ steps.meta.outputs.tags }}
     steps:
       - uses: docker/setup-buildx-action@v3
 
@@ -100,18 +102,20 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,mode=max
           cache-to: type=gha,mode=max
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           sbom: ${{ github.event_name != 'pull_request' }}
           provenance: ${{ github.event_name != 'pull_request' }}
 
   helm:
+    # TODO
+    if: false
     name: ${{ github.event_name == 'push' && 'Helm Publish' || 'Helm Package' }}
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: charts/wishlists
     env:
-      HELM_EXPERIMENTAL_OCI: '1'
+      HELM_EXPERIMENTAL_OCI: "1"
     steps:
       - uses: actions/checkout@v6
         with:
@@ -121,7 +125,7 @@ jobs:
       - name: Setup helm
         uses: azure/setup-helm@v4.3.1
         with:
-          version: '3.19.1'
+          version: "3.19.1"
 
       - run: helm lint
 
@@ -155,8 +159,9 @@ jobs:
         if: github.event_name == 'push'
         run: helm registry logout ghcr.io
 
-  lint-test:
+  ct:
     runs-on: ubuntu-latest
+    needs: [docker]
     steps:
       - uses: actions/checkout@v6.0.0
         with:
@@ -166,7 +171,7 @@ jobs:
 
       - uses: actions/setup-python@v6.0.0
         with:
-          python-version: '3.x'
+          python-version: "3.x"
           check-latest: true
 
       - uses: helm/chart-testing-action@v2.8.0
@@ -181,7 +186,7 @@ jobs:
 
       - name: Run chart-testing (lint)
         if: steps.list-changed.outputs.changed == 'true'
-        run: ct lint --target-branch ${{ github.event.repository.default_branch }}
+        run: ct lint --target-branch ${{ github.event.repository.default_branch }} --github-groups
 
       - name: Create kind cluster
         if: steps.list-changed.outputs.changed == 'true'
@@ -189,7 +194,7 @@ jobs:
 
       - name: Run chart-testing (install)
         if: steps.list-changed.outputs.changed == 'true'
-        run: ct install --target-branch ${{ github.event.repository.default_branch }}
+        run: ct install --target-branch ${{ github.event.repository.default_branch }} --github-groups
 
   dprint:
     runs-on: ubuntu-latest
