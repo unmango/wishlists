@@ -107,8 +107,6 @@ jobs:
           provenance: ${{ github.event_name != 'pull_request' }}
 
   helm:
-    # TODO
-    if: false
     name: ${{ github.event_name == 'push' && 'Helm Publish' || 'Helm Package' }}
     runs-on: ubuntu-latest
     defaults:
@@ -160,6 +158,8 @@ jobs:
         run: helm registry logout ghcr.io
 
   ct:
+    # TODO
+    if: false
     runs-on: ubuntu-latest
     needs: [docker]
     steps:
