@@ -1,6 +1,5 @@
 # Packages
 node_modules/
-charts/
 
 # Build Artifacts
 bin/

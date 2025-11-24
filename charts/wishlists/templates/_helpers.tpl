@@ -1,13 +1,62 @@
-{{/* vim: set filetype=mustache: */}}
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "wishlists.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
-{{- define "wishlists.v1.api.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.api.image "global" .Values.global) }}
-{{- end -}}
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "wishlists.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
 
-{{- define "wishlists.v1.web.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.web.image "global" .Values.global) }}
-{{- end -}}
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "wishlists.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
-{{- define "wishlsits.v1.api.svc.headless" -}}
-{{- printf "%s-hl" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{/*
+Common labels
+*/}}
+{{- define "wishlists.labels" -}}
+helm.sh/chart: {{ include "wishlists.chart" . }}
+{{ include "wishlists.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "wishlists.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "wishlists.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "wishlists.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "wishlists.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
