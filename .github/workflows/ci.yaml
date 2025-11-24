@@ -132,7 +132,7 @@ jobs:
       - run: dotnet tool restore
 
       - id: version
-        run: echo "version=$(minver -t v)" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(dotnet minver -t v)" >> "$GITHUB_OUTPUT"
 
       - name: Helm Login
         if: github.event_name == 'push'
