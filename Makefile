@@ -33,7 +33,7 @@ web: dist/index.html
 deps: ${API_DIR}/nix-deps.json ${WEB_DIR}/bun.nix
 generate gen schema: src/web/api/schema.d.ts
 
-lint: .make/bun-lint .make/helm-lint .make/nix-flake-check
+lint: .make/bun-lint .make/ct-lint .make/helm-lint .make/nix-flake-check
 format fmt: .make/nix-fmt .make/dprint-fmt .make/dotnet-format
 
 docker: bin/image.tar
@@ -115,6 +115,8 @@ charts/wishlists/Chart.lock: charts/wishlists/Chart.yaml
 
 .make/bun-lint:
 	$(BUN) run lint
+.make/ct-lint:
+	$(CT) lint
 .make/helm-lint:
 	$(HELM) lint charts/wishlists
 .make/nix-flake-check:

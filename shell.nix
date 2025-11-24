@@ -12,6 +12,7 @@ pkgs.mkShell {
     gh
     git
     gnumake
+    kind
     kubernetes-helm
     nixd
     nixfmt-rfc-style
