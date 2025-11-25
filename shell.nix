@@ -8,7 +8,13 @@ pkgs.mkShell {
     bun2nix
     chart-testing
     docker
-    dotnetCorePackages.sdk_10_0
+    (
+      with dotnetCorePackages;
+      combinePackages [
+        sdk_9_0
+        sdk_10_0
+      ]
+    )
     gh
     git
     gnumake

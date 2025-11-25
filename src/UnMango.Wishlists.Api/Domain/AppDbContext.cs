@@ -5,4 +5,4 @@ using Microsoft.EntityFrameworkCore;
 namespace UnMango.Wishlists.Api.Domain;
 
 internal sealed class AppDbContext(DbContextOptions<AppDbContext> options)
-	: IdentityDbContext<User, IdentityRole<Guid>, Guid>(options);
+	: IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>(options);

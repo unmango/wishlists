@@ -4,17 +4,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UnMango.Wishlists.Api.Domain;
 
-public sealed record Wishlist(Guid Id, string Name, Guid OwnerId)
+internal sealed record Wishlist(Guid Id, string Name, Guid OwnerId)
 {
 	public record Created(Guid WishlistId, string Name, Guid OwnerId);
 
 	public static Wishlist Create(Created created) =>
 		new(created.WishlistId, created.Name, created.OwnerId);
+
+	public static Wishlist From(WishlistCreated created, Guid ownerId) =>
+		new(created.WishlistId, created.Name, ownerId);
 }
 
 internal static class WishlistApi
 {
 	public record Create(string Name, Guid OwnerId);
+
+	extension(StoreOptions options)
+	{
+		public void UseWishlists() {
+			// options.Projections.
+		}
+	}
 
 	extension(IEndpointRouteBuilder endpoints)
 	{

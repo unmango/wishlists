@@ -1,12 +1,13 @@
-using Microsoft.AspNetCore.Identity;
+using System.Collections.Immutable;
 
 namespace UnMango.Wishlists.Api.Domain;
 
-internal sealed class User : IdentityUser<Guid>
+public record WishlistCreated(Guid WishlistId, string Name);
+
+internal sealed record User(Guid Id, IImmutableList<Wishlist> Wishlists)
 {
-	public User() => Id = NewId();
 
-	public User(string userName) : base(userName) => Id = NewId();
-
-	private static Guid NewId() => Guid.CreateVersion7();
+	public static User Apply(WishlistCreated created, User user) => user with {
+		Wishlists = user.Wishlists.Add(Wishlist.From(created, user.Id)),
+	};
 }
