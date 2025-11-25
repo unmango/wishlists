@@ -4,6 +4,8 @@ using UnMango.Wishlists.Api.Domain;
 using UnMango.Wishlists.Api.Extensions;
 using Vite.AspNetCore;
 using Marten;
+using JasperFx.Events.Daemon;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -23,16 +25,17 @@ if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connecti
 			connectionString,
 			x => x.SetPostgresVersion(18, 0)))
 		.AddMarten(options => options.Connection(connectionString))
+		.AddAsyncDaemon(DaemonMode.Solo)
 		.UseLightweightSessions();
 }
 
 builder.Services
-	.AddIdentityApiEndpoints<User>()
+	.AddIdentityApiEndpoints<IdentityUser<Guid>>()
 	.AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 app.MapOpenApi();
-app.MapGroup("/auth").MapIdentityApi<User>();
+app.MapGroup("/auth").MapIdentityApi<IdentityUser<Guid>>();
 var api = app.MapGroup("/api");
 
 if (!app.Environment.IsDevelopment() && !app.Environment.IsOpenApiCodegen()) {
@@ -40,7 +43,7 @@ if (!app.Environment.IsDevelopment() && !app.Environment.IsOpenApiCodegen()) {
 }
 
 var me = api.MapGroup("/me");
-me.MapGet("/", () => TypedResults.Ok(new User("Test")));
+// me.MapGet("/", () => TypedResults.Ok(new User("Test")));
 api.MapGroup("/wishlists").MapWishlists();
 
 if (app.Environment.IsDevelopment()) {
