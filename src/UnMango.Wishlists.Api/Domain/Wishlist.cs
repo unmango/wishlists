@@ -10,9 +10,6 @@ internal sealed record Wishlist(Guid Id, string Name, Guid OwnerId)
 
 	public static Wishlist Create(Created created) =>
 		new(created.WishlistId, created.Name, created.OwnerId);
-
-	public static Wishlist From(WishlistCreated created, Guid ownerId) =>
-		new(created.WishlistId, created.Name, ownerId);
 }
 
 internal static class WishlistApi
