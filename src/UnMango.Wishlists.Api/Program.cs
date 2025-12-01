@@ -14,8 +14,14 @@ builder.Services.ConfigureHttpJsonOptions(options => options
 
 builder.Services
 	.AddAuthorization()
-	.AddViteServices()
-	.AddOpenApi(options => options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1);
+	.AddViteServices(options => {
+		options.Server.AutoRun = true;
+		options.Server.Https = true;
+		options.Server.UseReactRefresh = true;
+	})
+	.AddOpenApi(options => {
+		options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
+	});
 
 if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connectionString) {
 	builder.Services
@@ -31,10 +37,23 @@ builder.Services
 	.AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
+
+if (!app.Environment.IsDevelopment()) {
+	app.UseHsts();
+
+	if (!app.Environment.IsOpenApiCodegen()) {
+		app.UseHttpsRedirection();
+		app.UseStaticFiles();
+	}
+}
+
+app.UseRouting();
+
+app.MapStaticAssets();
 app.MapOpenApi();
 app.MapGroup("/auth").MapIdentityApi<User>();
-var api = app.MapGroup("/api");
 
+var api = app.MapGroup("/api");
 if (!app.Environment.IsDevelopment() && !app.Environment.IsOpenApiCodegen()) {
 	api.RequireAuthorization();
 }
@@ -46,8 +65,6 @@ api.MapGroup("/wishlists").MapWishlists();
 if (app.Environment.IsDevelopment()) {
 	app.UseWebSockets();
 	app.UseViteDevelopmentServer(useMiddleware: true);
-} else if (!app.Environment.IsOpenApiCodegen()) {
-	app.UseStaticFiles();
 }
 
 if (!app.Environment.IsOpenApiCodegen() && app.Environment.IsDevelopment()) {
