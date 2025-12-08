@@ -8,6 +8,13 @@ DPRINT  ?= dprint
 HELM    ?= helm
 NIX     ?= nix
 
+apphost: bin/apphost
+deps: src/apphost/deps.nix
+
+bin/apphost:
+	$(NIX) build .#apphost --out-link $@
+src/apphost/deps.nix: bin/apphost-deps.sh
+	$< $@
 bin/apphost-deps.sh: $(addprefix src/apphost/,apphost.csproj default.nix)
 	$(NIX) build .#apphost.fetch-deps --out-link $@
 
