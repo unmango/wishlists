@@ -19,10 +19,16 @@
           description = "UnMango Wishlists AppHost";
           license = licenses.mit;
           maintainers = [ maintainers.UnstoppableMango ];
+          mainProgram = "apphost";
         };
       };
     in
     {
+      apps.apphost = {
+        type = "app";
+        program = apphost;
+      };
+
       packages.apphost = apphost;
       legacyPackages.apphost = apphost;
     };
