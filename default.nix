@@ -31,13 +31,14 @@
         meta = with lib; {
           description = "Wishlists UnstoppableMango style";
           licenses = [ licenses.mit ];
+          mainProgram = "wishlists";
         };
       };
     in
     {
       apps.wishlists = {
         type = "app";
-        package = wishlists;
+        program = wishlists;
       };
 
       packages.wishlists = wishlists;
