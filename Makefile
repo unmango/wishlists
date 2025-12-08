@@ -11,14 +11,26 @@ HELM      ?= helm
 NIX       ?= nix
 
 build: bin/wishlists
+docker: bin/docker.tar
 apphost: bin/apphost
-deps: src/apphost/deps.nix
+deps: src/apphost/deps.nix gomod2nix.toml
+
+dev:
+	$(DOTNET) run --project ${CURDIR}/src/apphost
+
+bun.nix: bun.lock package.json
+	$(BUN2NIX) --lock-file $< -o $@
 
 gomod2nix.toml: go.mod go.sum
 	$(GOMOD2NIX)
 
-bin/wishlists:
-	$(GO) build -o $@
+bin/wishlists: | result/bin/wishlists
+	ln -s $$(readlink -f $|) $@
+
+result/bin/wishlists: default.nix flake.* main.go
+	$(NIX) build .#wishlists
+bin/docker.tar: Dockerfile go.mod go.sum main.go package.json bun.lock $(wildcard src/web/*)
+	$(DOCKER) build ${CURDIR} -o type=tar,dest=$@ -t ${IMAGE} --load
 
 bin/apphost:
 	$(NIX) build .#apphost --out-link $@
