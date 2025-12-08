@@ -1,6 +1,17 @@
 {
   description = "Wishlists UnstoppableMango style";
 
+  nixConfig = {
+    extra-substituters = [
+      "https://cache.nixos.org"
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     systems.url = "github:nix-systems/default";
@@ -9,7 +20,7 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    bun2nix.url = "github:baileyluTCD/bun2nix?ref=1.5.2";
+    bun2nix.url = "github:nix-community/bun2nix";
     bun2nix.inputs.nixpkgs.follows = "nixpkgs";
 
     gomod2nix.url = "github:nix-community/gomod2nix";
@@ -37,6 +48,7 @@
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
             overlays = [
+              inputs.bun2nix.overlays.default
               inputs.gomod2nix.overlays.default
             ];
           };
@@ -44,6 +56,7 @@
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               bun
+              bun2nix
               docker
               dotnet
               dprint
@@ -51,12 +64,14 @@
               gnumake
               go
               gomod2nix
+              jq
               nil
               nixfmt-rfc-style
               nuget-to-json
             ];
 
             BUN = pkgs.bun + "/bin/bun";
+            BUN2NIX = pkgs.bun2nix + "/bin/bun2nix";
             DOCKER = pkgs.docker + "/bin/docker";
             DOTNET = dotnet + "/bin/dotnet";
             DPRINT = pkgs.dprint + "/bin/dprint";
