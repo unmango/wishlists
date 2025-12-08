@@ -10,6 +10,7 @@
         pname = "apphost";
         src = lib.cleanSource ./.;
         projectFile = ./apphost.csproj;
+        nugetDeps = ./deps.json;
         dotnet-sdk = sdk;
 
         meta = with lib; {
