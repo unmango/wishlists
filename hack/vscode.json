@@ -12,6 +12,9 @@
       }
     }
   },
+	"[csharp]": {
+		"editor.defaultFormatter": "ms-dotnettools.csharp"
+	},
   "[dockerfile]": {
     "editor.defaultFormatter": "dprint.dprint"
   },

@@ -9,6 +9,7 @@
     "jnoortheen.nix-ide",
     "bradlc.vscode-tailwindcss",
     "oven.bun-vscode",
-    "yzhang.markdown-all-in-one"
+    "yzhang.markdown-all-in-one",
+    "microsoft-aspire.aspire-vscode"
   ]
 }
