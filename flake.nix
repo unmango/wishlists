@@ -51,6 +51,7 @@
               gnumake
               nil
               nixfmt-rfc-style
+              nuget-to-json
             ];
 
             BUN = pkgs.bun + "/bin/bun";

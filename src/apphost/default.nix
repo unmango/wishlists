@@ -4,11 +4,12 @@
     let
       sdk = pkgs.dotnetCorePackages.sdk_10_0_1xx;
       version = "0.0.1";
+
       apphost = pkgs.buildDotnetModule {
+        pname = "apphost";
         inherit version;
 
-        pname = "apphost";
-        src = lib.cleanSource ./.;
+        src = ./.;
         projectFile = ./apphost.csproj;
         nugetDeps = ./deps.json;
         dotnet-sdk = sdk;
