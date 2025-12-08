@@ -6,12 +6,9 @@
   "nix.enableLanguageServer": true,
   "nix.serverPath": "nixd",
   "nix.serverSettings": {
-    "nixd": {
-      "nixpkgs": {
-        "expr": "import (builtins.getFlake (builtins.toString ./.)).inputs.nixpkgs { }"
-      },
+    "nil": {
       "formatting": {
-        "command": "nixfmt"
+        "command": ["nixfmt"]
       }
     }
   },

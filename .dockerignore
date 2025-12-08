@@ -1,18 +1,1 @@
-**/node_modules/
-**/bin/
-**/obj/
-.devcontainer/
-.github/
-dist/
-hack/
 
-**/Dockerfile
-.dockerignore
-*compose.ya?ml
-**/*.http
-**/launchSettings.json
-.envrc
-global.json
-LICENSE
-README.md
-*.nix
