@@ -4,7 +4,7 @@
     "*.props": "xml"
   },
   "nix.enableLanguageServer": true,
-  "nix.serverPath": "nixd",
+  "nix.serverPath": "nil",
   "nix.serverSettings": {
     "nil": {
       "formatting": {

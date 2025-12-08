@@ -7,7 +7,7 @@ obj/
 build/
 coverage/
 __generated__/
-/out/
+out/
 next-env.d.ts
 /coverage
 dist
