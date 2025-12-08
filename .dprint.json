@@ -15,7 +15,8 @@
     "**/node_modules",
     "**/*-lock.json",
     "**/*.lock.json",
-    "**/schema.d.ts"
+    "**/schema.d.ts",
+		"gomod2nix.toml"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.95.12.wasm",

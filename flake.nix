@@ -11,6 +11,9 @@
 
     bun2nix.url = "github:baileyluTCD/bun2nix?ref=1.5.2";
     bun2nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    gomod2nix.url = "github:nix-community/gomod2nix";
+    gomod2nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -21,15 +24,23 @@
       imports = [
         inputs.treefmt-nix.flakeModule
         ./src/apphost
+        ./default.nix
       ];
 
       perSystem =
-        { pkgs, ... }:
+        { pkgs, system, ... }:
         let
           dotnet = pkgs.dotnetCorePackages.sdk_10_0_1xx;
           nixfmt = pkgs.nixfmt-rfc-style;
         in
         {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              inputs.gomod2nix.overlays.default
+            ];
+          };
+
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               bun
@@ -38,6 +49,8 @@
               dprint
               git
               gnumake
+              go
+              gomod2nix
               nil
               nixfmt-rfc-style
               nuget-to-json
@@ -47,6 +60,8 @@
             DOCKER = pkgs.docker + "/bin/docker";
             DOTNET = dotnet + "/bin/dotnet";
             DPRINT = pkgs.dprint + "/bin/dprint";
+            GO = pkgs.go + "/bin/go";
+            GOMOD2NIX = pkgs.gomod2nix + "/bin/gomod2nix";
             NIXFMT = nixfmt + "/bin/nixfmt";
           };
 
