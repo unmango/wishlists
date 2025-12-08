@@ -20,6 +20,7 @@
 
       imports = [
         inputs.treefmt-nix.flakeModule
+        ./src/apphost
       ];
 
       perSystem =
