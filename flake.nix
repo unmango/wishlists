@@ -3,9 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    systems.url = "github:nix-systems/default";
     flake-parts.url = "github:hercules-ci/flake-parts";
+
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+
     bun2nix.url = "github:baileyluTCD/bun2nix?ref=1.5.2";
     bun2nix.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -13,45 +16,36 @@
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+      systems = import inputs.systems;
+
       imports = [
         inputs.treefmt-nix.flakeModule
       ];
+
       perSystem =
-        { pkgs, system, ... }:
+        { pkgs, ... }:
         let
-          build = pkgs.callPackage ./default.nix {
-            inherit pkgs;
-            inherit (inputs.bun2nix.lib.${system}) mkBunDerivation;
-          };
+          dotnet = pkgs.dotnetCorePackages.sdk_10_0_1xx;
+          nixfmt = pkgs.nixfmt-rfc-style;
         in
         {
-          # TODO: Clean up
-          packages.web = build.web;
-          packages.api = build.api;
-          packages.wishlists = build.app;
-          packages.docker = build.docker;
-          packages.default = build.docker;
+          devShells.default = pkgs.mkShellNoCC {
+            packages = with pkgs; [
+              bun
+              docker
+              dotnet
+              dprint
+              git
+              gnumake
+              nil
+              nixfmt-rfc-style
+            ];
 
-          apps.api = {
-            type = "app";
-            program = "${build.api}/bin/UnMango.Wishlists.Api";
-            meta.description = "Wishlists API";
-          };
-          apps.wishlists = {
-            type = "app";
-            program = "${build.app}/bin/UnMango.Wishlists.Api";
-            meta.description = "Wishlists Application";
-          };
-
-          devShells.default = pkgs.callPackage ./shell.nix {
-            inherit pkgs;
-            bun2nix = inputs.bun2nix.packages.${system}.default;
+            BUN = pkgs.bun + "/bin/bun";
+            DOCKER = pkgs.docker + "/bin/docker";
+            DOTNET = dotnet + "/bin/dotnet";
+            DPRINT = pkgs.dprint + "/bin/dprint";
+            NIXFMT = nixfmt + "/bin/nixfmt";
           };
 
           treefmt = {
