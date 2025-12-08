@@ -33,33 +33,30 @@
           ...
         }:
         let
+          dotnet = pkgs.dotnetCorePackages.sdk_10_0_1xx;
           build = pkgs.callPackage ./default.nix {
             inherit pkgs;
             inherit (inputs'.bun2nix.packages) bun2nix;
           };
         in
         {
-          # TODO: Clean up
-          packages.web = build.web;
-          packages.api = build.api;
-          packages.wishlists = build.app;
-          packages.docker = build.docker;
-          packages.default = build.docker;
+          devShells.default = pkgs.mkShellNoCC {
+            packages = with pkgs; [
+              bun
+              docker
+              dotnet
+              dprint
+              git
+              gnumake
+              nil
+              nixfmt-rfc-style
+            ];
 
-          apps.api = {
-            type = "app";
-            program = "${build.api}/bin/UnMango.Wishlists.Api";
-            meta.description = "Wishlists API";
-          };
-          apps.wishlists = {
-            type = "app";
-            program = "${build.app}/bin/UnMango.Wishlists.Api";
-            meta.description = "Wishlists Application";
-          };
-
-          devShells.default = pkgs.callPackage ./shell.nix {
-            inherit pkgs;
-            bun2nix = inputs.bun2nix.packages.${system}.default;
+            BUN = pkgs.bun + "/bin/bun";
+            DOCKER = pkgs.docker + "/bin/docker";
+            DOTNET = dotnet + "/bin/dotnet";
+            DPRINT = pkgs.dprint + "/bin/dprint";
+            NIXFMT = nixfmt + "/bin/nixfmt";
           };
 
           treefmt = {
