@@ -24,6 +24,7 @@
       imports = [
         inputs.treefmt-nix.flakeModule
         ./src/apphost
+        ./default.nix
       ];
 
       perSystem =
@@ -41,6 +42,13 @@
           };
         in
         {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              inputs.gomod2nix.overlays.default
+            ];
+          };
+
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               bun
@@ -49,6 +57,8 @@
               dprint
               git
               gnumake
+              go
+              gomod2nix
               nil
               nixfmt-rfc-style
               nuget-to-json
@@ -58,6 +68,8 @@
             DOCKER = pkgs.docker + "/bin/docker";
             DOTNET = dotnet + "/bin/dotnet";
             DPRINT = pkgs.dprint + "/bin/dprint";
+            GO = pkgs.go + "/bin/go";
+            GOMOD2NIX = pkgs.gomod2nix + "/bin/gomod2nix";
             NIXFMT = nixfmt + "/bin/nixfmt";
           };
 

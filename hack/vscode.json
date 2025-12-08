@@ -1,5 +1,6 @@
 {
-  "$schema": "vscode://schemas/settings/workspace",
+	"$schema": "vscode://schemas/settings/workspace",
+	"dotnet.previewSolution-freeWorkspaceMode": true,
   "files.associations": {
     "*.props": "xml"
   },
