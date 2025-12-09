@@ -8,7 +8,7 @@
         pname = "apphost";
         version = "0.0.1";
 
-        src = ./.;
+        src = lib.cleanSource ./.;
         projectFile = "./apphost.csproj";
         nugetDeps = ./deps.json;
         dotnet-sdk = sdk;
@@ -23,11 +23,6 @@
       };
     in
     {
-      apps.apphost = {
-        type = "app";
-        program = apphost;
-      };
-
       packages.apphost = apphost;
       legacyPackages.apphost = apphost;
     };

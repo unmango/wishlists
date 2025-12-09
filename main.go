@@ -41,7 +41,7 @@ var cmd = &cobra.Command{
 }
 
 func init() {
-	cmd.Flags().BoolVar(&isDev, "dev", true, "Development mode")
+	cmd.Flags().BoolVar(&isDev, "dev", false, "Development mode")
 }
 
 func main() {
