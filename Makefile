@@ -13,7 +13,7 @@ NIX       ?= nix
 build: bin/wishlists
 docker: bin/docker.tar
 apphost: bin/apphost
-deps: src/apphost/deps.nix gomod2nix.toml
+deps: src/apphost/deps.json gomod2nix.toml
 
 dev:
 	$(DOTNET) run --project ${CURDIR}/src/apphost
@@ -34,7 +34,7 @@ bin/docker.tar: Dockerfile go.mod go.sum main.go package.json bun.lock $(wildcar
 
 bin/apphost:
 	$(NIX) build .#apphost --out-link $@
-src/apphost/deps.nix: bin/apphost-deps.sh
+src/apphost/deps.json: bin/apphost-deps.sh
 	$< $@
 bin/apphost-deps.sh: $(addprefix src/apphost/,apphost.csproj default.nix)
 	$(NIX) build .#apphost.fetch-deps --out-link $@
