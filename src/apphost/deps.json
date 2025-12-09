@@ -1,5 +1,10 @@
 [
   {
+    "pname": "Aspire.AppHost.Sdk",
+    "version": "13.0.2",
+    "hash": "sha256-QS9YEIQBQYaD647HWdIVi6H7JGJgnntRTALGy9jUASI="
+  },
+  {
     "pname": "Aspire.Dashboard.Sdk.linux-x64",
     "version": "13.0.2",
     "hash": "sha256-o9eRkfLRSvxiC/TeYJKWHElC7T+D7doI8T1f2AXkoUA="
