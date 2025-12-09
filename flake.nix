@@ -39,7 +39,7 @@
       ];
 
       perSystem =
-        { pkgs, system, ... }:
+        { self', pkgs, system, ... }:
         let
           dotnet = pkgs.dotnetCorePackages.sdk_10_0_1xx;
           nixfmt = pkgs.nixfmt-rfc-style;
@@ -51,6 +51,11 @@
               inputs.bun2nix.overlays.default
               inputs.gomod2nix.overlays.default
             ];
+          };
+
+          apps.default = {
+            type = "app";
+            program = self'.packages.wishlists;
           };
 
           devShells.default = pkgs.mkShellNoCC {
@@ -70,6 +75,7 @@
               nuget-to-json
             ];
 
+            ASPIRE_DASHBOARD_TELEMETRY_OPTOUT = true;
             BUN = pkgs.bun + "/bin/bun";
             BUN2NIX = pkgs.bun2nix + "/bin/bun2nix";
             DOCKER = pkgs.docker + "/bin/docker";
