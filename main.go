@@ -8,18 +8,20 @@ import (
 	"github.com/charmbracelet/log"
 	"github.com/olivere/vite"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/unmango/go/cli"
 )
-
-var isDev bool
 
 var cmd = &cobra.Command{
 	Use:   "wishlists",
 	Short: "Wishlists UnstoppableMango style",
 	Run: func(cmd *cobra.Command, args []string) {
+		assets := viper.GetString("assets")
+		log.Info("Assets", "path", assets)
+
 		v, err := vite.NewHandler(vite.Config{
-			FS:    os.DirFS("./src/web"),
-			IsDev: isDev,
+			FS:    os.DirFS(assets),
+			IsDev: viper.GetBool("dev"),
 		})
 		if err != nil {
 			cli.Fail(err)
@@ -28,12 +30,12 @@ var cmd = &cobra.Command{
 		srv := http.NewServeMux()
 		srv.Handle("/", v)
 
-		lis, err := net.Listen("tcp", ":8080")
+		lis, err := net.Listen("tcp", viper.GetString("listen_address"))
 		if err != nil {
 			cli.Fail(err)
 		}
 
-		log.Info("Serving on :8080")
+		log.Info("Serving", "addr", lis.Addr())
 		if err = http.Serve(lis, srv); err != nil {
 			cli.Fail(err)
 		}
@@ -41,7 +43,19 @@ var cmd = &cobra.Command{
 }
 
 func init() {
-	cmd.Flags().BoolVar(&isDev, "dev", true, "Development mode")
+	viper.SetEnvPrefix("wish")
+	viper.BindEnv("dev")
+	viper.BindEnv("assets")
+	viper.BindEnv("listen_address")
+
+	cmd.Flags().Bool("dev", false, "Development mode")
+	viper.BindPFlag("dev", cmd.Flags().Lookup("dev"))
+
+	cmd.Flags().String("assets", "/wwwroot", "Static assets path")
+	viper.BindPFlag("assets", cmd.Flags().Lookup("assets"))
+
+	cmd.Flags().String("addr", ":8080", "Listen address")
+	viper.BindPFlag("listen_address", cmd.Flags().Lookup("addr"))
 }
 
 func main() {

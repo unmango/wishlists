@@ -4,7 +4,7 @@ FROM --platform=$BUILDPLATFORM oven/bun:1.3.4 AS web
 WORKDIR /src
 
 COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
+RUN bun install --frozen-lockfile --ignore-scripts
 
 COPY src/web ./src/web
 COPY index.html tsconfig.* vite.config.ts ./

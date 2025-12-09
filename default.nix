@@ -21,8 +21,7 @@
         '';
 
         postInstall = ''
-          mkdir -p $out/wwwroot
-          cp -r ./dist/* $out/wwwroot
+          cp -r ./dist $out/wwwroot
         '';
 
         src = lib.cleanSource ./.;
