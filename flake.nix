@@ -53,9 +53,11 @@
             ];
           };
 
+          packages.default = self'.packages.wishlists;
+
           apps.default = {
             type = "app";
-            program = self'.packages.wishlists;
+            program = self'.packages.default;
           };
 
           devShells.default = pkgs.mkShellNoCC {
