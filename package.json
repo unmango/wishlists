@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+		"aspire": "vite . --clearScreen=false --debug --config vite.config.ts",
+    "dev": "vite .",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",

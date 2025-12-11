@@ -13,7 +13,7 @@ NIX       ?= nix
 build: bin/wishlists
 docker: bin/docker.tar
 apphost: bin/apphost
-deps: src/apphost/deps.json gomod2nix.toml
+deps: src/apphost/deps.json gomod2nix.toml bun.nix
 
 dev:
 	$(DOTNET) run --project ${CURDIR}/src/apphost

@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/unmango/go/cli"
+	"github.com/unmango/wishlists/pkg/health"
 )
 
 var cmd = &cobra.Command{
@@ -19,9 +20,12 @@ var cmd = &cobra.Command{
 		assets := viper.GetString("assets")
 		log.Info("Assets", "path", assets)
 
+		// TODO: This isn't using index.html
 		v, err := vite.NewHandler(vite.Config{
-			FS:    os.DirFS(assets),
-			IsDev: viper.GetBool("dev"),
+			FS:        os.DirFS(assets),
+			IsDev:     viper.GetBool("dev"),
+			ViteURL:   viper.GetString("vite_url"),
+			ViteEntry: "src/web/main.tsx",
 		})
 		if err != nil {
 			cli.Fail(err)
@@ -29,8 +33,11 @@ var cmd = &cobra.Command{
 
 		srv := http.NewServeMux()
 		srv.Handle("/", v)
+		srv.HandleFunc("/healthz", health.Handler)
 
-		lis, err := net.Listen("tcp", viper.GetString("listen_address"))
+		port := viper.GetString("port")
+		addr := net.JoinHostPort("", port)
+		lis, err := net.Listen("tcp", addr)
 		if err != nil {
 			cli.Fail(err)
 		}
@@ -46,7 +53,8 @@ func init() {
 	viper.SetEnvPrefix("wish")
 	viper.BindEnv("dev")
 	viper.BindEnv("assets")
-	viper.BindEnv("listen_address")
+	viper.BindEnv("port")
+	viper.BindEnv("vite_url", "VITE_URL")
 
 	cmd.Flags().Bool("dev", false, "Development mode")
 	viper.BindPFlag("dev", cmd.Flags().Lookup("dev"))
@@ -54,8 +62,8 @@ func init() {
 	cmd.Flags().String("assets", "/wwwroot", "Static assets path")
 	viper.BindPFlag("assets", cmd.Flags().Lookup("assets"))
 
-	cmd.Flags().String("addr", ":8080", "Listen address")
-	viper.BindPFlag("listen_address", cmd.Flags().Lookup("addr"))
+	cmd.Flags().String("port", "8080", "Listen port")
+	viper.BindPFlag("port", cmd.Flags().Lookup("port"))
 }
 
 func main() {

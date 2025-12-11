@@ -1,9 +1,27 @@
+using Microsoft.Extensions.Hosting;
+
 var builder = DistributedApplication.CreateBuilder(args);
+var root = Path.GetFullPath("../..", builder.AppHostDirectory);
 
-var root = Path.Join(builder.AppHostDirectory, "../..");
+if (builder.Environment.IsDevelopment()) {
+	var web = builder.AddBunApp("web", root, entryPoint: "aspire")
+		.WithBunPackageInstallation()
+		.WithHttpEndpoint(5173, env: "VITE_PORT", name: "http")
+		.WithHttpHealthCheck("/", 200, "http");
 
-builder.AddDockerfile("wishlists", root)
-	.WithEndpoint(8080, 8080, "http")
-	.WithExternalHttpEndpoints();
+	builder.AddGolangApp("api", root)
+		.WaitFor(web)
+		.WithEnvironment("WISH_DEV", "true")
+		.WithEnvironment("WISH_ASSETS", root)
+		.WithEnvironment("VITE_URL", web.GetEndpoint("http"))
+		.WithHttpEndpoint(8080, env: "WISH_PORT", name: "http")
+		.WithHttpHealthCheck("/", 200, "http")
+		.WithHttpHealthCheck("/healthz", 200)
+		.WithExternalHttpEndpoints();
+} else {
+	builder.AddDockerfile("wishlists", root)
+		.WithEndpoint(8080)
+		.WithExternalHttpEndpoints();
+}
 
 builder.Build().Run();
