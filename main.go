@@ -6,10 +6,12 @@ import (
 	"os"
 
 	"github.com/charmbracelet/log"
+	"github.com/go-chi/chi/v5"
 	"github.com/olivere/vite"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/unmango/go/cli"
+	"github.com/unmango/wishlists/pkg/api"
 	"github.com/unmango/wishlists/pkg/health"
 )
 
@@ -31,9 +33,15 @@ var cmd = &cobra.Command{
 			cli.Fail(err)
 		}
 
-		srv := http.NewServeMux()
-		srv.Handle("/", v)
-		srv.HandleFunc("/healthz", health.Handler)
+		app := chi.NewRouter()
+		app.Handle("/", v)
+		app.HandleFunc("/healthz", health.Handler)
+
+		if api, err := api.Router(); err != nil {
+			cli.Fail(err)
+		} else {
+			app.Mount("/api", api)
+		}
 
 		port := viper.GetString("port")
 		addr := net.JoinHostPort("", port)
@@ -43,7 +51,7 @@ var cmd = &cobra.Command{
 		}
 
 		log.Info("Serving", "addr", lis.Addr())
-		if err = http.Serve(lis, srv); err != nil {
+		if err = http.Serve(lis, app); err != nil {
 			cli.Fail(err)
 		}
 	},
@@ -55,6 +63,7 @@ func init() {
 	viper.BindEnv("assets")
 	viper.BindEnv("port")
 	viper.BindEnv("vite_url", "VITE_URL")
+	viper.BindEnv("nats", "NATS_URI")
 
 	cmd.Flags().Bool("dev", false, "Development mode")
 	viper.BindPFlag("dev", cmd.Flags().Lookup("dev"))
@@ -64,6 +73,9 @@ func init() {
 
 	cmd.Flags().String("port", "8080", "Listen port")
 	viper.BindPFlag("port", cmd.Flags().Lookup("port"))
+
+	cmd.Flags().String("nats", "", "NATS Uri")
+	viper.BindPFlag("nats", cmd.Flags().Lookup("nats"))
 }
 
 func main() {
