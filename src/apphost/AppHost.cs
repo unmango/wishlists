@@ -13,7 +13,7 @@ if (builder.Environment.IsDevelopment()) {
 		.WaitFor(web)
 		.WithEnvironment("WISH_DEV", "true")
 		.WithEnvironment("WISH_ASSETS", root)
-		.WithEnvironment("VITE_URL", web.GetEndpoint("http"))
+		.WithEnvironment("VITE_URL", web.GetEndpoint("http")) // Fuckin love this
 		.WithHttpEndpoint(8080, env: "WISH_PORT", name: "http")
 		.WithHttpHealthCheck("/", 200, "http")
 		.WithHttpHealthCheck("/healthz", 200)
