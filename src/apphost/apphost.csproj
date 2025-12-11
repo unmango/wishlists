@@ -8,4 +8,10 @@
     <UserSecretsId>4d376e98-0238-403d-8b3f-b7674f08d4a0</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Bun" Version="13.0.0" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Golang" Version="13.0.0" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.9.0" />
+  </ItemGroup>
+
 </Project>

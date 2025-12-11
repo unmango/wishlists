@@ -28,3 +28,4 @@ protobuf.xml
 .envrc
 .direnv/
 *.user
+.aspire/

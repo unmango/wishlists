@@ -62,6 +62,7 @@
 
           devShells.default = pkgs.mkShellNoCC {
             packages = with pkgs; [
+              arion
               bun
               bun2nix
               docker
