@@ -3,6 +3,8 @@ using Microsoft.Extensions.Hosting;
 var builder = DistributedApplication.CreateBuilder(args);
 var root = Path.GetFullPath("../..", builder.AppHostDirectory);
 
+var nats = builder.AddNats("nats");
+
 if (builder.Environment.IsDevelopment()) {
 	var web = builder.AddBunApp("web", root, entryPoint: "aspire")
 		.WithBunPackageInstallation()
@@ -11,6 +13,7 @@ if (builder.Environment.IsDevelopment()) {
 
 	builder.AddGolangApp("api", root)
 		.WaitFor(web)
+		.WithReference(nats)
 		.WithEnvironment("WISH_DEV", "true")
 		.WithEnvironment("WISH_ASSETS", root)
 		.WithEnvironment("VITE_URL", web.GetEndpoint("http")) // Fuckin love this

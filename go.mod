@@ -6,8 +6,12 @@ tool github.com/nix-community/gomod2nix
 
 require (
 	github.com/charmbracelet/log v0.4.2
+	github.com/go-andiamo/chioas v1.19.0
+	github.com/go-chi/chi/v5 v5.2.3
+	github.com/nats-io/nats.go v1.47.0
 	github.com/olivere/vite v0.1.0
 	github.com/spf13/cobra v1.9.1
+	github.com/spf13/viper v1.21.0
 	github.com/unmango/go v0.10.2
 )
 
@@ -20,13 +24,18 @@ require (
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
+	github.com/go-andiamo/splitter v1.2.5 // indirect
+	github.com/go-andiamo/urit v1.2.1 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
+	github.com/nats-io/nkeys v0.4.11 // indirect
+	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/nix-community/go-nix v0.0.0-20220612195009-5f5614f7ca47 // indirect
 	github.com/nix-community/gomod2nix v1.7.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
@@ -37,13 +46,16 @@ require (
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
-	github.com/spf13/viper v1.21.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
+	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/exp v0.0.0-20250606033433-dcc06ee1d476 // indirect
+	golang.org/x/crypto v0.37.0 // indirect
+	golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b // indirect
 	golang.org/x/mod v0.29.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.30.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+	sigs.k8s.io/yaml v1.6.0 // indirect
 )
