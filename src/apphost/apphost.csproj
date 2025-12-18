@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.0.2">
+<Project Sdk="Aspire.AppHost.Sdk/13.1.0">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.Nats" Version="13.0.2" />
+    <PackageReference Include="Aspire.Hosting.Nats" Version="13.1.0" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.Bun" Version="13.0.0" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.Golang" Version="13.0.0" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.9.0" />
