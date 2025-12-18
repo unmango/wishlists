@@ -22,9 +22,14 @@ if (builder.Environment.IsDevelopment()) {
 		.WithHttpHealthCheck("/healthz", 200)
 		.WithExternalHttpEndpoints();
 } else {
+	var registry = builder.AddContainerRegistry("ghcr", "ghcr.io/unmango/wishlists");
+
 	builder.AddDockerfile("wishlists", root)
 		.WithEndpoint(8080)
-		.WithExternalHttpEndpoints();
+		.WithExternalHttpEndpoints()
+		.WithContainerRegistry(registry);
+
+	builder.AddKubernetesEnvironment("k8s");
 }
 
 builder.Build().Run();
