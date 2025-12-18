@@ -25,6 +25,7 @@ if (builder.Environment.IsDevelopment()) {
 	var registry = builder.AddContainerRegistry("ghcr", "ghcr.io/unmango/wishlists");
 
 	builder.AddDockerfile("wishlists", root)
+		.WithReference(nats)
 		.WithEndpoint(8080)
 		.WithExternalHttpEndpoints()
 		.WithContainerRegistry(registry);
