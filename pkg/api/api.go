@@ -1,8 +1,6 @@
 package api
 
 import (
-	"net/http"
-
 	"github.com/go-andiamo/chioas"
 	"github.com/go-chi/chi/v5"
 	"github.com/unmango/wishlists/pkg/wishlists"
@@ -25,17 +23,14 @@ func AsYaml() ([]byte, error) {
 	return api.AsYaml()
 }
 
+func Path() chioas.Path {
+	return chioas.Path{
+		Paths: api.Paths,
+	}
+}
+
 var api = chioas.Definition{
 	Paths: chioas.Paths{
-		"/wishlists": {
-			Methods: chioas.Methods{
-				http.MethodGet: {
-					Handler: wishlists.List,
-				},
-				http.MethodPost: {
-					Handler: wishlists.Create,
-				},
-			},
-		},
+		"/wishlists": wishlists.Path(),
 	},
 }
