@@ -15,7 +15,7 @@ pkgs.mkShell {
     kind
     kubernetes-helm
     nixd
-    nixfmt-rfc-style
+    nixfmt
     nodejs # For JetBrains tools
     shellcheck
     watchexec
