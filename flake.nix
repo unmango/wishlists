@@ -26,7 +26,12 @@
       ];
 
       perSystem =
-        { pkgs, system, inputs', ... }:
+        {
+          pkgs,
+          system,
+          inputs',
+          ...
+        }:
         let
           build = pkgs.callPackage ./default.nix {
             inherit pkgs;
