@@ -1,6 +1,6 @@
 {
   pkgs ? import <nixpkgs> { },
-  mkBunDerivation,
+  bun2nix,
 }:
 let
   sharedMeta = with pkgs.lib; {
@@ -12,10 +12,12 @@ let
       }
     ];
   };
-  web = mkBunDerivation {
+  web = bun2nix.mkDerivation {
     packageJson = ./package.json;
     src = pkgs.lib.cleanSource ./.;
-    bunNix = ./src/web/bun.nix;
+    bunDeps = bun2nix.fetchBunDeps {
+      bunNix = ./src/web/bun.nix;
+    };
 
     buildPhase = ''
       bun run build

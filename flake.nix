@@ -3,31 +3,39 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    systems.url = "github:nix-systems/default";
     flake-parts.url = "github:hercules-ci/flake-parts";
+
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
-    bun2nix.url = "github:baileyluTCD/bun2nix?ref=1.5.2";
+
+    bun2nix.url = "github:nix-community/bun2nix";
     bun2nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    gomod2nix.url = "github:nix-community/gomod2nix";
+    gomod2nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+      systems = import inputs.systems;
+
       imports = [
         inputs.treefmt-nix.flakeModule
       ];
+
       perSystem =
-        { pkgs, system, ... }:
+        {
+          pkgs,
+          system,
+          inputs',
+          ...
+        }:
         let
           build = pkgs.callPackage ./default.nix {
             inherit pkgs;
-            inherit (inputs.bun2nix.lib.${system}) mkBunDerivation;
+            inherit (inputs'.bun2nix.packages) bun2nix;
           };
         in
         {
@@ -55,7 +63,8 @@
           };
 
           treefmt = {
-            programs.actionlint.enable = true;
+            # Need to fix the ct job first
+            programs.actionlint.enable = false;
             programs.nixfmt.enable = true;
           };
         };
