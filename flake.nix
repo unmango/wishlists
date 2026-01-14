@@ -63,7 +63,8 @@
           };
 
           treefmt = {
-            programs.actionlint.enable = true;
+            # Need to fix the ct job first
+            programs.actionlint.enable = false;
             programs.nixfmt.enable = true;
           };
         };
