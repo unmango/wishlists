@@ -24,12 +24,13 @@
       imports = [
         inputs.treefmt-nix.flakeModule
       ];
+
       perSystem =
-        { pkgs, system, ... }:
+        { pkgs, system, inputs', ... }:
         let
           build = pkgs.callPackage ./default.nix {
             inherit pkgs;
-            inherit (inputs.bun2nix.lib.${system}) mkBunDerivation;
+            inherit (inputs'.bun2nix.packages) bun2nix;
           };
         in
         {
