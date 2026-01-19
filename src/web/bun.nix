@@ -393,6 +393,10 @@
     url = "https://registry.npmjs.org/@types/node/-/node-24.9.1.tgz";
     hash = "sha512-QoiaXANRkSXK6p0Duvt56W208du4P9Uye9hWLWgGMDTEoKPhuenzNcC4vGUmrNkiOKTlIrBoyNQYNpSwfEZXSg==";
   };
+  "@types/node@25.0.9" = fetchurl {
+    url = "https://registry.npmjs.org/@types/node/-/node-25.0.9.tgz";
+    hash = "sha512-/rpCXHlCWeqClNBwUhDcusJxXYDjZTyE8v5oTO7WbL8eij2nKhUeU89/6xgjU7N4/Vh3He0BtyhJdQbDyhiXAw==";
+  };
   "@types/react-dom@19.2.2" = fetchurl {
     url = "https://registry.npmjs.org/@types/react-dom/-/react-dom-19.2.2.tgz";
     hash = "sha512-9KQPoO6mZCi7jcIStSnlOWn2nEF3mNmyr3rIAsGnAbQKYbRLyqmeSc39EVgtxXVia+LMT8j3knZLAZAh+xLmrw==";
