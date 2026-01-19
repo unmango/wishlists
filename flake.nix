@@ -32,6 +32,7 @@
           pkgs,
           system,
           inputs',
+          self',
           ...
         }:
         let
@@ -83,7 +84,7 @@
             DPRINT = pkgs.dprint + "/bin/dprint";
             GO = pkgs.go + "/bin/go";
             GOMOD2NIX = pkgs.gomod2nix + "/bin/gomod2nix";
-            NIXFMT = nixfmt + "/bin/nixfmt";
+            NIXFMT = pkgs.nixfmt + "/bin/nixfmt";
           };
 
           treefmt = {
