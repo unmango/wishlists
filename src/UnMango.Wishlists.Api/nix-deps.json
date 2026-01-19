@@ -301,8 +301,8 @@
   },
   {
     "pname": "minver-cli",
-    "version": "6.1.0",
-    "hash": "sha256-LzMX1lsxkhk1JslvZRfEX/AB6xwZajVPtdu+jmD2VwY="
+    "version": "7.0.0",
+    "hash": "sha256-qkCEEOkF377Q2lLSCvVyEoKWjLvJONX46/pQ/lsr1/g="
   },
   {
     "pname": "Mono.TextTemplating",
