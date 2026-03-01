@@ -79,7 +79,7 @@ services:
 
   adminer:
     profiles: [ dev ]
-    image: adminer:5.4.1
+    image: adminer:5.4.2
     restart: always
     ports:
       - '8000:8080'
