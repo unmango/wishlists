@@ -11,7 +11,7 @@
 	<ItemGroup>
 		<PackageReference Include="CliWrap" Version="3.10.1" />
 		<PackageReference Include="LanguageExt.Core" Version="5.0.0-beta-77" />
-		<PackageReference Include="Marten" Version="8.34.1" />
+		<PackageReference Include="Marten" Version="8.34.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.7" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7" />
 		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="10.0.7" />
