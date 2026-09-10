@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "minver-cli": {
+      "version": "7.0.0",
+      "commands": [
+        "minver"
+      ],
+      "rollForward": false
+    },
+    "dotnet-ef": {
+      "version": "10.0.8",
+      "commands": [
+        "dotnet-ef"
+      ],
+      "rollForward": false
+    },
+    "jetbrains.resharper.globaltools": {
+      "version": "2026.1.2",
+      "commands": [
+        "jb"
+      ],
+      "rollForward": false
+    }
+  }
+}

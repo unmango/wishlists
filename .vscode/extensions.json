@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "mkhl.direnv",
+    "ms-azuretools.vscode-containers",
+    "dprint.dprint",
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "github.vscode-github-actions",
+    "jnoortheen.nix-ide",
+    "bradlc.vscode-tailwindcss",
+    "oven.bun-vscode",
+    "yzhang.markdown-all-in-one"
+  ]
+}
