@@ -200,7 +200,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # renovate: datasource=github-releases depName=dprint/dprint
-      DPRINT_VERSION: 0.54.0
+      DPRINT_VERSION: 0.57.4
     steps:
       - uses: actions/checkout@v7
 
