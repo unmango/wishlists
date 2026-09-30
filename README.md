@@ -1,5 +1,7 @@
 # Wishlists
 
+[![Hercules CI](https://hercules-ci.com/api/v1/site/github/account/unmango/project/wishlists/badge)](https://hercules-ci.com/github/unmango/wishlists)
+
 This is an application for sharing wishlists between a group of people!
 Create your own wishlist, share it with your group, and check off items from their wishlist as they're bought.
 
