@@ -34,7 +34,9 @@ internal static class AuthSetup
 				.AddCookie(o => {
 					o.Cookie.Name = "wishlists";
 					o.Cookie.HttpOnly = true;
-					o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+					o.Cookie.SecurePolicy = environment.IsDevelopment()
+						? CookieSecurePolicy.SameAsRequest
+						: CookieSecurePolicy.Always;
 					o.Cookie.SameSite = SameSiteMode.Lax;
 					o.ExpireTimeSpan = TimeSpan.FromDays(30);
 					o.SlidingExpiration = true;

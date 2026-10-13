@@ -11,18 +11,18 @@
   },
   {
     "pname": "JasperFx",
-    "version": "2.80.2",
-    "hash": "sha256-iQc0l9s+SgukPwddpddVR/aow3/LjnVcgr0TOnWtwYw="
+    "version": "2.84.0",
+    "hash": "sha256-6QrSgX7NsQXUqLg+JU0P2uCz0h21j1yNO+wsI2JmYJs="
   },
   {
     "pname": "JasperFx.Events",
-    "version": "2.80.2",
-    "hash": "sha256-tEAJKOrU1sGE94hlTyS0rJGAVgzLBLKQguqtPLYw8e4="
+    "version": "2.84.0",
+    "hash": "sha256-5ljIJtP2/FZcvjLOqcsZtnvTzAWOXi1UY/ZSu3uQ0CI="
   },
   {
     "pname": "Marten",
-    "version": "9.46.0",
-    "hash": "sha256-dXLbUBRpaSYwGVivNOfub2/5NxSMau8wJG/rz3j4LPk="
+    "version": "9.49.0",
+    "hash": "sha256-w+jdlDf4u0zJE6ZVzqgaWJe38tyVrDjC2mQDFag1DxE="
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.Google",
@@ -100,23 +100,28 @@
     "hash": "sha256-6nV1xQurUlpKCPVkbBcn0YLTaF3vvFFRoCjV+NjYox8="
   },
   {
+    "pname": "System.Linq.Dynamic.Core",
+    "version": "1.7.4",
+    "hash": "sha256-rhTPFvYyAD/ZYuKCiv166i7T/VkYyGoVVqv06MnZWwI="
+  },
+  {
     "pname": "Vite.AspNetCore",
     "version": "2.4.1",
     "hash": "sha256-t2A93YUFbOlQbxodj3spHWlSwWUNWCz2ZBDEQcsBBqk="
   },
   {
     "pname": "Weasel.Core",
-    "version": "9.41.0",
-    "hash": "sha256-27tTgnJNKacIVZvFgOsI/zKGJbBtSTHQol+wo0hI13c="
+    "version": "9.42.0",
+    "hash": "sha256-zC9kmOAYdo5/hiQrPahIIBQ1EgEwhh9xu0KfpUsKg7A="
   },
   {
     "pname": "Weasel.Postgresql",
-    "version": "9.41.0",
-    "hash": "sha256-HP6K6VuAOmdzMVw/RrOBUx80EvLGaFSoW/OGtGbVbJk="
+    "version": "9.42.0",
+    "hash": "sha256-wq4B9eUmeX0qAz+GuJFTymu7Dxq4qn3n3zEIL6bgo+Y="
   },
   {
     "pname": "Weasel.Storage",
-    "version": "9.41.0",
-    "hash": "sha256-3JfjSwmKofo9yKJX5E8bSIbV29T5onnzI0rTAiMW2/M="
+    "version": "9.42.0",
+    "hash": "sha256-nfk5x9Zh9giR8Lx8VzgcLweeZYZvkpjrfuazUHS7Uso="
   }
 ]
