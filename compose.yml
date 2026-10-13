@@ -29,12 +29,6 @@ services:
     ports:
       - '5432:5432'
 
-  migration-scripts:
-    build:
-      context: .
-      target: scripts
-    profiles: [ deploy ]
-
   web:
     build:
       context: .

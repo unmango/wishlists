@@ -8,7 +8,7 @@ export interface Props {
 }
 
 export function Component({ onBack }: Props): JSX.Element {
-  const { isLoading, data, error } = useQuery('/api/wishlists');
+  const { isLoading, data, error } = useQuery('/api/wishlists/mine');
 
   if (isLoading) return <p className='text-white'>Loading...</p>;
   if (error) return <p className='text-red-500'>Error: {String(error)}</p>;
@@ -19,7 +19,7 @@ export function Component({ onBack }: Props): JSX.Element {
         <FontAwesomeIcon icon={faChevronLeft} color='white' />
       </button>
       <div className='w-full bg-black/20 bg-clip-padding backdrop-filter backdrop-blur backdrop-saturate-100 backdrop-contrast-100 rounded-xl p-4 ml-4'>
-        {!data?.length && <EmptyList />}
+        {!data?.items.length && <EmptyList />}
       </div>
     </div>
   );

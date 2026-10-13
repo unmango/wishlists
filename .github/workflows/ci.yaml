@@ -25,9 +25,12 @@ jobs:
           cache: true
           cache-dependency-path: |
             src/UnMango.Wishlists.Api/packages.lock.json
+            test/UnMango.Wishlists.Api.Tests/packages.lock.json
 
       - run: dotnet restore --locked-mode
       - run: dotnet build --configuration Release
+      # Starts Postgres with Testcontainers, using the runner's Docker.
+      - run: dotnet test --no-build --configuration Release
 
   web:
     runs-on: ubuntu-latest

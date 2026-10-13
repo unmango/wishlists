@@ -18,4 +18,7 @@
   <Folder Name="/src/">
     <Project Path="src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj" />
   </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/UnMango.Wishlists.Api.Tests/UnMango.Wishlists.Api.Tests.csproj" />
+  </Folder>
 </Solution>

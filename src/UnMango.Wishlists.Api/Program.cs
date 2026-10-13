@@ -1,9 +1,14 @@
-using Microsoft.EntityFrameworkCore;
+using JasperFx;
+using JasperFx.Events.Projections;
+using Marten;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi;
+using UnMango.Wishlists.Api;
+using UnMango.Wishlists.Api.Api;
+using UnMango.Wishlists.Api.Auth;
 using UnMango.Wishlists.Api.Domain;
 using UnMango.Wishlists.Api.Extensions;
 using Vite.AspNetCore;
-using Marten;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -13,35 +18,48 @@ builder.Services.ConfigureHttpJsonOptions(options => options
 	.Add(AppSerializationContext.Default));
 
 builder.Services
-	.AddAuthorization()
+	.AddProblemDetails()
+	.AddExceptionHandler<ConcurrencyExceptionHandler>()
 	.AddViteServices()
-	.AddOpenApi(options => options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1);
+	.AddOpenApi(options => options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1)
+	.AddWishlistsAuth(builder.Configuration, builder.Environment);
+
+// The app runs behind the cluster's ingress, which terminates TLS.
+builder.Services.Configure<ForwardedHeadersOptions>(options => {
+	options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+	options.KnownIPNetworks.Clear();
+	options.KnownProxies.Clear();
+});
 
 if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connectionString) {
 	builder.Services
-		.AddDbContext<AppDbContext>(options => options.UseNpgsql(
-			connectionString,
-			x => x.SetPostgresVersion(18, 0)))
-		.AddMarten(options => options.Connection(connectionString))
-		.UseLightweightSessions();
-}
+		.AddMarten(options => {
+			options.Connection(connectionString);
+			options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
+			options.Projections.Snapshot<MemberView>(SnapshotLifecycle.Inline);
+			options.Projections.Snapshot<WishlistView>(SnapshotLifecycle.Inline);
+			options.Projections.Snapshot<PurchasesView>(SnapshotLifecycle.Inline);
+			options.Schema.For<MemberView>().UniqueIndex(x => x.GoogleSubject);
+			options.Schema.For<WishlistView>().Index(x => x.OwnerId);
+			options.Schema.For<DataProtectionKey>().Identity(x => x.Id);
+		})
+		.UseLightweightSessions()
+		.ApplyAllDatabaseChangesOnStartup();
 
-builder.Services
-	.AddIdentityApiEndpoints<User>()
-	.AddEntityFrameworkStores<AppDbContext>();
+	builder.Services.PersistDataProtectionKeysToMarten();
+}
 
 var app = builder.Build();
+app.UseForwardedHeaders();
+app.UseExceptionHandler();
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapOpenApi();
-app.MapGroup("/auth").MapIdentityApi<User>();
-var api = app.MapGroup("/api");
-
-if (!app.Environment.IsDevelopment() && !app.Environment.IsOpenApiCodegen()) {
-	api.RequireAuthorization();
-}
-
-var me = api.MapGroup("/me");
-me.MapGet("/", () => TypedResults.Ok(new User("Test")));
-api.MapGroup("/wishlists").MapWishlists();
+app.MapWishlistsAuth(app.Environment);
+app.MapGroup("/api")
+	.RequireAuthorization()
+	.MapWishlistsApi();
 
 if (app.Environment.IsDevelopment()) {
 	app.UseWebSockets();
@@ -50,8 +68,6 @@ if (app.Environment.IsDevelopment()) {
 	app.UseStaticFiles();
 }
 
-if (!app.Environment.IsOpenApiCodegen() && app.Environment.IsDevelopment()) {
-	app.Migrate<AppDbContext>();
-}
-
 app.Run();
+
+public partial class Program;
