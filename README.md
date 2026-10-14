@@ -19,18 +19,19 @@ The web app is React, Vite and Tailwind, served by the API in production.
 
 Members sign in with Google. Only emails on the allowlist get in.
 
-| Setting                    | Environment variable          | Notes                                        |
-| :------------------------- | :---------------------------- | :------------------------------------------- |
-| `Auth:Google:ClientId`     | `Auth__Google__ClientId`      | Required in production                       |
-| `Auth:Google:ClientSecret` | `Auth__Google__ClientSecret`  | Required in production                       |
-| `Auth:AllowedEmails`       | `Auth__AllowedEmails__0`, ... | Inline list                                  |
-| `Auth:AllowedEmailsFile`   | `Auth__AllowedEmailsFile`     | One email per line, re-read on every sign-in |
-| `ConnectionStrings:App`    | `ConnectionStrings__App`      | Postgres                                     |
+| Setting                          | Environment variable                      | Notes                                                                     |
+| :------------------------------- | :---------------------------------------- | :------------------------------------------------------------------------ |
+| `Auth:Google:ClientId`           | `Auth__Google__ClientId`                  | Required in production                                                    |
+| `Auth:Google:ClientSecret`       | `Auth__Google__ClientSecret`              | Required in production                                                    |
+| `Auth:AllowedEmails`             | `Auth__AllowedEmails__0`, ...             | Inline list                                                               |
+| `Auth:AllowedEmailsFile`         | `Auth__AllowedEmailsFile`                 | One email per line, re-read on every sign-in                              |
+| `ConnectionStrings:App`          | `ConnectionStrings__App`                  | Postgres                                                                  |
+| `ForwardedHeaders:KnownNetworks` | `ForwardedHeaders__KnownNetworks__0`, ... | Ingress CIDRs trusted for `X-Forwarded-*`; any peer is trusted when unset |
 
 Environment variables may also be prefixed with `UNMANGO_`.
 The Google OAuth client's redirect URL is `https://<host>/signin-google`.
 
-In Development there's no Google: sign in with `/auth/dev-login?email=you@example.com`.
+In Development, use `/auth/dev-login?email=you@example.com` to sign in without Google.
 
 ## Building and testing
 

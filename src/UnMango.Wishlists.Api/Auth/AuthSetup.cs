@@ -113,7 +113,7 @@ internal static class AuthSetup
 
 			if (environment.IsDevelopment()) {
 				// Lets you sign in locally without Google credentials. Never mapped outside Development.
-				auth.MapGet("/dev-login", async Task<RedirectHttpResult> (
+				auth.MapGet("/dev-login", async Task<Results<RedirectHttpResult, ValidationProblem>> (
 					HttpContext context,
 					[FromServices] MemberSignIn signIn,
 					[FromQuery] string email,
@@ -121,6 +121,13 @@ internal static class AuthSetup
 					[FromQuery] string? returnUrl,
 					CancellationToken cancellationToken
 				) => {
+					if (string.IsNullOrWhiteSpace(email)) {
+						return TypedResults.ValidationProblem(new Dictionary<string, string[]> {
+							["email"] = ["Email is required."],
+						});
+					}
+
+					email = email.Trim();
 					var displayName = name ?? email.Split('@')[0];
 					var member = await signIn.FindOrJoinAsync(
 						new GoogleProfile($"dev:{email}", email, displayName, displayName, null),

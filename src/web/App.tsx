@@ -13,7 +13,7 @@ function App() {
       <Workspace onBack={back}>
         {isLoading && <p className='text-white'>Loading...</p>}
         {error && <p className='text-red-500'>Error: {String(error)}</p>}
-        {!isLoading && !data && <NoWishlists onCreate={signIn} />}
+        {!isLoading && !data && !error && <NoWishlists onCreate={signIn} />}
         {data && <p className='text-white'>{data.name}: {data.items.length} items</p>}
       </Workspace>
     </div>

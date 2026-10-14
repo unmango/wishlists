@@ -29,6 +29,12 @@ builder.Services.Configure<ForwardedHeadersOptions>(options => {
 	options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 	options.KnownIPNetworks.Clear();
 	options.KnownProxies.Clear();
+
+	// Trust only the ingress's networks when they're configured; until then, trust any peer.
+	var knownNetworks = builder.Configuration.GetSection("ForwardedHeaders:KnownNetworks").Get<string[]>() ?? [];
+	foreach (var network in knownNetworks) {
+		options.KnownIPNetworks.Add(System.Net.IPNetwork.Parse(network.Trim()));
+	}
 });
 
 if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connectionString) {

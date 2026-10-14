@@ -13,8 +13,9 @@ internal sealed class MartenXmlRepository(IDocumentStore store) : IXmlRepository
 {
 	public IReadOnlyCollection<XElement> GetAllElements() {
 		using var session = store.QuerySession();
+		// IXmlRepository is synchronous and Marten only reads asynchronously. Keys are read once and cached.
 		return session.Query<DataProtectionKey>()
-			.ToList()
+			.ToListAsync().GetAwaiter().GetResult()
 			.Select(x => XElement.Parse(x.Xml))
 			.ToList();
 	}
@@ -22,7 +23,7 @@ internal sealed class MartenXmlRepository(IDocumentStore store) : IXmlRepository
 	public void StoreElement(XElement element, string friendlyName) {
 		using var session = store.LightweightSession();
 		session.Store(new DataProtectionKey(friendlyName, element.ToString(SaveOptions.DisableFormatting)));
-		// IXmlRepository is synchronous and Marten only saves asynchronously. Keys are written rarely.
+		// Same here for saving. Keys are written rarely.
 		session.SaveChangesAsync().GetAwaiter().GetResult();
 	}
 }
