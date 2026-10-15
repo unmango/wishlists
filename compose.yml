@@ -73,7 +73,7 @@ services:
 
   adminer:
     profiles: [ dev ]
-    image: adminer:6.1.1
+    image: adminer:6.1.2
     restart: always
     ports:
       - '8000:8080'
