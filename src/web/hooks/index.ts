@@ -1,2 +1,3 @@
+export * from './data';
 export * from './useApi';
-export * from './useWishlists';
+export * from './useRoute';

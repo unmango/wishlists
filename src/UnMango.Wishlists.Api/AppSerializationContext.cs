@@ -13,6 +13,7 @@ namespace UnMango.Wishlists.Api;
 [JsonSerializable(typeof(OwnItem))]
 [JsonSerializable(typeof(OwnWishlist))]
 [JsonSerializable(typeof(GiftWishlist))]
+[JsonSerializable(typeof(IReadOnlyList<MyPurchase>))]
 [JsonSerializable(typeof(HttpValidationProblemDetails))]
 [JsonSerializable(typeof(ProblemDetails))]
 internal partial class AppSerializationContext : JsonSerializerContext;
