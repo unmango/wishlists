@@ -77,7 +77,9 @@ export function ItemSheet({ item, onClose }: Props) {
       else await addItem(request as ItemRequest);
       onClose();
     } catch (err) {
-      setErrors(err instanceof ApiError ? { form: err.message, ...err.fieldErrors } : { form: 'Couldn’t save. Try again.' });
+      setErrors(
+        err instanceof ApiError ? { form: err.message, ...err.fieldErrors } : { form: 'Couldn’t save. Try again.' },
+      );
     } finally {
       setBusy(false);
     }
@@ -121,7 +123,11 @@ export function ItemSheet({ item, onClose }: Props) {
           <h2 id={`${id}-title`} className='m-0 font-display text-lg font-extrabold'>
             {editing ? 'Edit item' : 'Add item'}
           </h2>
-          <button type='submit' disabled={busy} className='h-11 min-w-16 text-right text-base font-bold text-primary disabled:opacity-50'>
+          <button
+            type='submit'
+            disabled={busy}
+            className='h-11 min-w-16 text-right text-base font-bold text-primary disabled:opacity-50'
+          >
             Save
           </button>
         </div>
@@ -192,12 +198,21 @@ export function ItemSheet({ item, onClose }: Props) {
             fields.reallyWant ? 'border-accent bg-accent-soft' : 'border-field bg-card'
           }`}
         >
-          <FontAwesomeIcon icon={faStar} className={`text-lg ${fields.reallyWant ? 'text-accent' : 'text-field'}`} aria-hidden='true' />
+          <FontAwesomeIcon
+            icon={faStar}
+            className={`text-lg ${fields.reallyWant ? 'text-accent' : 'text-field'}`}
+            aria-hidden='true'
+          />
           I really want this
         </button>
 
         {editing && (
-          <button type='button' onClick={remove} disabled={busy} className='h-11 text-base font-medium text-danger disabled:opacity-50'>
+          <button
+            type='button'
+            onClick={remove}
+            disabled={busy}
+            className='h-11 text-base font-medium text-danger disabled:opacity-50'
+          >
             Remove from my list
           </button>
         )}

@@ -24,7 +24,11 @@ export function Family({ me }: { me: Me }) {
           <div className='text-sm text-hero-muted'>Hi, {firstName}</div>
           <h1 className='m-0 font-display text-[32px] leading-tight font-extrabold tracking-tight'>Family</h1>
         </div>
-        <button type='button' onClick={() => void signOut()} className='h-11 px-1 text-sm text-hero-muted underline-offset-4 hover:underline'>
+        <button
+          type='button'
+          onClick={() => void signOut()}
+          className='h-11 px-1 text-sm text-hero-muted underline-offset-4 hover:underline'
+        >
           Sign out
         </button>
       </header>
@@ -39,7 +43,10 @@ export function Family({ me }: { me: Me }) {
         {others.map(member => (
           <li key={member.id}>
             <Card>
-              <a href={href({ name: 'list', id: member.wishlistId })} className='flex min-h-11 items-center gap-3.5 px-4 py-3.5 text-ink'>
+              <a
+                href={href({ name: 'list', id: member.wishlistId })}
+                className='flex min-h-11 items-center gap-3.5 px-4 py-3.5 text-ink'
+              >
                 <Avatar id={member.id} name={member.displayName} url={member.avatarUrl} />
                 <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
                   <div className='truncate text-[17px] font-medium'>{member.displayName}</div>

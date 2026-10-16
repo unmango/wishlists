@@ -41,7 +41,9 @@ export function PageHeader({ eyebrow, title, action }: { eyebrow?: string; title
     <header className='flex items-end gap-2 px-5 pt-14 pb-4'>
       <div className='flex min-w-0 flex-1 flex-col gap-1'>
         {eyebrow && <div className='text-sm text-muted'>{eyebrow}</div>}
-        <h1 className='m-0 font-display text-[32px] leading-tight font-extrabold tracking-tight break-words'>{title}</h1>
+        <h1 className='m-0 font-display text-[32px] leading-tight font-extrabold tracking-tight break-words'>
+          {title}
+        </h1>
       </div>
       {action}
     </header>

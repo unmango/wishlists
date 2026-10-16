@@ -59,7 +59,9 @@ export async function renameWishlist(name: string) {
 
 export async function markBought(wishlistId: string, itemId: string) {
   try {
-    await send(client.PUT('/api/wishlists/{id}/items/{itemId}/bought', { params: { path: { id: wishlistId, itemId } } }));
+    await send(
+      client.PUT('/api/wishlists/{id}/items/{itemId}/bought', { params: { path: { id: wishlistId, itemId } } }),
+    );
   } finally {
     // Refresh even on a conflict, so the list shows who got there first.
     await Promise.all([mutate(keys.list(wishlistId)), mutate(keys.buying)]);
@@ -68,7 +70,9 @@ export async function markBought(wishlistId: string, itemId: string) {
 
 export async function unmarkBought(wishlistId: string, itemId: string) {
   try {
-    await send(client.DELETE('/api/wishlists/{id}/items/{itemId}/bought', { params: { path: { id: wishlistId, itemId } } }));
+    await send(
+      client.DELETE('/api/wishlists/{id}/items/{itemId}/bought', { params: { path: { id: wishlistId, itemId } } }),
+    );
   } finally {
     await Promise.all([mutate(keys.list(wishlistId)), mutate(keys.buying)]);
   }

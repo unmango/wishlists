@@ -60,24 +60,20 @@ export function MyList() {
 
   return (
     <Screen>
-      {renaming && data ? (
-        <RenameForm current={data.name} onDone={() => setRenaming(false)} />
-      ) : (
+      {renaming && data ? <RenameForm current={data.name} onDone={() => setRenaming(false)} /> : (
         <PageHeader
           eyebrow='My list'
           title={data?.name ?? 'My wishlist'}
-          action={
-            data && (
-              <button
-                type='button'
-                aria-label='Rename list'
-                onClick={() => setRenaming(true)}
-                className='flex size-11 shrink-0 items-center justify-center rounded-full bg-card text-soft'
-              >
-                <FontAwesomeIcon icon={faPen} aria-hidden='true' />
-              </button>
-            )
-          }
+          action={data && (
+            <button
+              type='button'
+              aria-label='Rename list'
+              onClick={() => setRenaming(true)}
+              className='flex size-11 shrink-0 items-center justify-center rounded-full bg-card text-soft'
+            >
+              <FontAwesomeIcon icon={faPen} aria-hidden='true' />
+            </button>
+          )}
         />
       )}
 

@@ -16,7 +16,9 @@ export function Buying() {
   const { data, error, isLoading } = useMyPurchases();
   const total = data?.reduce((sum, p) => sum + (toNumber(p.price) ?? 0), 0) ?? 0;
   const count = data?.length ?? 0;
-  const eyebrow = data ? `${count} ${count === 1 ? 'gift' : 'gifts'}${total > 0 ? ` · ${formatPrice(total)} so far` : ''}` : undefined;
+  const eyebrow = data
+    ? `${count} ${count === 1 ? 'gift' : 'gifts'}${total > 0 ? ` · ${formatPrice(total)} so far` : ''}`
+    : undefined;
 
   return (
     <Screen>
@@ -29,8 +31,8 @@ export function Buying() {
       )}
 
       <div className='flex flex-col gap-4.5 px-4'>
-        {data &&
-          groupByOwner(data).map(group => (
+        {data
+          && groupByOwner(data).map(group => (
             <section key={group.wishlistId} className='flex flex-col gap-2'>
               <h2 className='mx-1 my-0 text-[13px] font-bold tracking-wide text-muted uppercase'>
                 For {group.ownerName.split(' ')[0]}
@@ -39,9 +41,14 @@ export function Buying() {
                 <ul className='divide-y divide-line'>
                   {group.items.map(item => (
                     <li key={item.itemId}>
-                      <a href={href({ name: 'list', id: item.wishlistId })} className='flex min-h-14 items-center gap-2.5 px-4 py-3 text-ink'>
+                      <a
+                        href={href({ name: 'list', id: item.wishlistId })}
+                        className='flex min-h-14 items-center gap-2.5 px-4 py-3 text-ink'
+                      >
                         <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                          <span className={`text-base font-medium break-words ${item.removedByOwner ? 'line-through' : ''}`}>
+                          <span
+                            className={`text-base font-medium break-words ${item.removedByOwner ? 'line-through' : ''}`}
+                          >
                             {item.name}
                           </span>
                           <span className={`text-[13px] ${item.removedByOwner ? 'text-accent' : 'text-muted'}`}>
