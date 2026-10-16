@@ -19,7 +19,8 @@
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = import inputs.systems;
+      # nix-systems/default still lists x86_64-darwin, which nixpkgs 26.11 refuses to evaluate.
+      systems = builtins.filter (s: s != "x86_64-darwin") (import inputs.systems);
 
       imports = [
         inputs.treefmt-nix.flakeModule
