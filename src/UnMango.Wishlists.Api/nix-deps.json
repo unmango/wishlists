@@ -11,28 +11,28 @@
   },
   {
     "pname": "JasperFx",
-    "version": "2.84.0",
-    "hash": "sha256-6QrSgX7NsQXUqLg+JU0P2uCz0h21j1yNO+wsI2JmYJs="
+    "version": "2.87.1",
+    "hash": "sha256-RRBh1k7YAln/jNIJGM/WoizwHRKW52YI7QRA4Fv7hB4="
   },
   {
     "pname": "JasperFx.Events",
-    "version": "2.84.0",
-    "hash": "sha256-5ljIJtP2/FZcvjLOqcsZtnvTzAWOXi1UY/ZSu3uQ0CI="
+    "version": "2.87.1",
+    "hash": "sha256-oQLDJiCzNoy1K9x5AxK1wQUK1PsvJamb6yPIwekScYs="
   },
   {
     "pname": "Marten",
-    "version": "9.49.0",
-    "hash": "sha256-w+jdlDf4u0zJE6ZVzqgaWJe38tyVrDjC2mQDFag1DxE="
+    "version": "9.50.2",
+    "hash": "sha256-sR8IJaq34dqZIcaQpCnM47mSpOWh92xgDo8+e3zQBnk="
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.Google",
-    "version": "10.0.12",
-    "hash": "sha256-YKlwM907XbpazSdzgLT2dh0FKv48WA5C4NZLKOOyGyw="
+    "version": "10.0.13",
+    "hash": "sha256-RtUCqua/Vu/XE8TuVzbo2PHoEJ6UK6eUNbOK9gA8xGE="
   },
   {
     "pname": "Microsoft.AspNetCore.OpenApi",
-    "version": "10.0.12",
-    "hash": "sha256-wgFQ5FKNBHSL2RH/mXaOLbLMdL2IryDyC9bKDXL3w+U="
+    "version": "10.0.13",
+    "hash": "sha256-NV0Sl/TvAg8WqRpEgiEw0PsU1znOU6vUToH5h49Dj9M="
   },
   {
     "pname": "Microsoft.Bcl.TimeProvider",
@@ -41,8 +41,8 @@
   },
   {
     "pname": "Microsoft.Extensions.ApiDescription.Server",
-    "version": "10.0.12",
-    "hash": "sha256-bt1cj8Q1/UbdVSACqaHOzGSACGBksqBgdDN+533rjkY="
+    "version": "10.0.13",
+    "hash": "sha256-j99VW8Kv9WDBTaXsfpoL5n6yRJuKZiiQ7IqSAKJVJjY="
   },
   {
     "pname": "Microsoft.IO.RecyclableMemoryStream",
@@ -51,8 +51,8 @@
   },
   {
     "pname": "Microsoft.OpenApi",
-    "version": "2.12.0",
-    "hash": "sha256-B42H4dhWZye4EID+Xr6X8jh5n0XcNwncX6iShkyiKic="
+    "version": "2.12.2",
+    "hash": "sha256-OjW4VjHhx7h3thJEypPgQvaiScouBV/Vw9krVPGyR6k="
   },
   {
     "pname": "NetTopologySuite",
@@ -111,17 +111,17 @@
   },
   {
     "pname": "Weasel.Core",
-    "version": "9.42.0",
-    "hash": "sha256-zC9kmOAYdo5/hiQrPahIIBQ1EgEwhh9xu0KfpUsKg7A="
+    "version": "9.45.0",
+    "hash": "sha256-MmQoj6ZFa8NqDD/GJObwsQfgIz8EkaF2juVM20gDl9E="
   },
   {
     "pname": "Weasel.Postgresql",
-    "version": "9.42.0",
-    "hash": "sha256-wq4B9eUmeX0qAz+GuJFTymu7Dxq4qn3n3zEIL6bgo+Y="
+    "version": "9.45.0",
+    "hash": "sha256-7yhWtsJ/DFrTzQdITOTtNSEfyFK9nqIK1F2NMUP8WLw="
   },
   {
     "pname": "Weasel.Storage",
-    "version": "9.42.0",
-    "hash": "sha256-nfk5x9Zh9giR8Lx8VzgcLweeZYZvkpjrfuazUHS7Uso="
+    "version": "9.45.0",
+    "hash": "sha256-RPvGn3bm6DaXAyufXiKE0WJzBX3PmRwMfdPIANrjpqI="
   }
 ]
