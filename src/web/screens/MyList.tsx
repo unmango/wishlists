@@ -1,10 +1,11 @@
 import { faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { type FormEvent, useState } from 'react';
-import { formatPrice, linkHost, type OwnItem } from '../api';
+import type { OwnItem } from '../api';
 import { ItemSheet } from '../components/ItemSheet';
 import { Card, ErrorMessage, Loading, PageHeader, ReallyWantStar, Screen } from '../components/ui';
-import { renameWishlist, useMyWishlist } from '../hooks';
+import { formatPrice, linkHost } from '../format';
+import { useMyWishlist, useRenameWishlist } from '../hooks';
 
 function itemMeta(item: OwnItem): string {
   const parts = [linkHost(item.link) ?? 'No link'];
@@ -14,16 +15,11 @@ function itemMeta(item: OwnItem): string {
 
 function RenameForm({ current, onDone }: { current: string; onDone: () => void }) {
   const [name, setName] = useState(current);
-  const [error, setError] = useState<string>();
+  const rename = useRenameWishlist();
 
-  async function submit(e: FormEvent) {
+  function submit(e: FormEvent) {
     e.preventDefault();
-    try {
-      await renameWishlist(name.trim());
-      onDone();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Couldn’t rename it.');
-    }
+    void rename.trigger(name.trim(), { onSuccess: onDone });
   }
 
   return (
@@ -39,9 +35,17 @@ function RenameForm({ current, onDone }: { current: string; onDone: () => void }
         autoFocus
         className='h-12 rounded-xl border-[1.5px] border-primary bg-card px-3.5 font-display text-2xl font-extrabold text-ink outline-none'
       />
-      {error && <p role='alert' className='m-0 text-sm text-danger'>{error}</p>}
+      {rename.error && (
+        <p role='alert' className='m-0 text-sm text-danger'>
+          {rename.error instanceof Error ? rename.error.message : 'Couldn’t rename it.'}
+        </p>
+      )}
       <div className='flex gap-2'>
-        <button type='submit' className='h-11 rounded-[10px] bg-primary px-4 font-medium text-on-primary'>
+        <button
+          type='submit'
+          disabled={rename.isMutating}
+          className='h-11 rounded-[10px] bg-primary px-4 font-medium text-on-primary'
+        >
           Save
         </button>
         <button type='button' onClick={onDone} className='h-11 rounded-[10px] bg-chip px-4 text-soft'>

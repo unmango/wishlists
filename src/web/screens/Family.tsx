@@ -1,8 +1,9 @@
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { type Me, type Member, toNumber } from '../api';
+import type { Me, Member } from '../api';
 import { Avatar, Card, ErrorMessage, Loading, Screen } from '../components/ui';
-import { href, signOut, useMembers } from '../hooks';
+import { toNumber } from '../format';
+import { href, useMembers, useSignOut } from '../hooks';
 
 function summary(member: Member): string {
   const items = toNumber(member.itemCount) ?? 0;
@@ -14,6 +15,7 @@ function summary(member: Member): string {
 
 export function Family({ me }: { me: Me }) {
   const { data, error, isLoading } = useMembers();
+  const signOut = useSignOut();
   const others = data?.filter(m => m.id !== me.id) ?? [];
   const firstName = me.displayName.split(' ')[0];
 
@@ -26,7 +28,8 @@ export function Family({ me }: { me: Me }) {
         </div>
         <button
           type='button'
-          onClick={() => void signOut()}
+          onClick={() => void signOut.trigger()}
+          disabled={signOut.isMutating}
           className='h-11 px-1 text-sm text-hero-muted underline-offset-4 hover:underline'
         >
           Sign out

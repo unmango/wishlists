@@ -8,7 +8,7 @@ import { SignIn } from './screens/SignIn';
 import { TheirList } from './screens/TheirList';
 
 function App() {
-  const { data: me, error, isLoading } = useMe();
+  const { me, error, isLoading } = useMe();
   const route = useRoute();
 
   // Your own list opened by link (someone shared it) shows the owner's view.

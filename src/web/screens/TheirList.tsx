@@ -1,29 +1,19 @@
 import { faCheck, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
-import { formatPrice, type GiftItem, linkHost, type Me } from '../api';
+import type { GiftItem, Me } from '../api';
 import { Card, ErrorMessage, Loading, ReallyWantStar, Screen } from '../components/ui';
-import { href, markBought, unmarkBought, useWishlist } from '../hooks';
+import { formatPrice, linkHost } from '../format';
+import { href, useMarkBought, useUnmarkBought, useWishlist } from '../hooks';
 
 function ItemRow(
   { item, wishlistId, ownerName, me }: { item: GiftItem; wishlistId: string; ownerName: string; me: Me },
 ) {
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<unknown>();
+  const mark = useMarkBought(wishlistId, item.id);
+  const unmark = useUnmarkBought(wishlistId, item.id);
+  const busy = mark.isMutating || unmark.isMutating;
+  const error = mark.error ?? unmark.error;
   const mine = item.boughtBy === me.id;
   const host = linkHost(item.link);
-
-  async function run(action: () => Promise<void>) {
-    setBusy(true);
-    setError(undefined);
-    try {
-      await action();
-    } catch (e) {
-      setError(e);
-    } finally {
-      setBusy(false);
-    }
-  }
 
   return (
     <li>
@@ -59,7 +49,10 @@ function ItemRow(
           <button
             type='button'
             disabled={busy}
-            onClick={() => void run(() => markBought(wishlistId, item.id))}
+            onClick={() => {
+              unmark.reset();
+              void mark.trigger();
+            }}
             className='h-11 rounded-[10px] border-[1.5px] border-primary bg-card text-[15px] font-medium text-primary disabled:opacity-50'
           >
             I’ll get this
@@ -75,7 +68,10 @@ function ItemRow(
             <button
               type='button'
               disabled={busy}
-              onClick={() => void run(() => unmarkBought(wishlistId, item.id))}
+              onClick={() => {
+                mark.reset();
+                void unmark.trigger();
+              }}
               className='h-11 rounded-[10px] bg-chip px-3.5 text-sm text-soft disabled:opacity-50'
             >
               Undo
@@ -87,7 +83,7 @@ function ItemRow(
           <div className='text-sm text-muted'>{item.boughtByName ?? 'Someone'} is getting this</div>
         )}
 
-        {error !== undefined && (
+        {error && (
           <p role='alert' className='m-0 text-sm text-danger'>
             {error instanceof Error ? error.message : 'That didn’t work. Try again.'}
           </p>

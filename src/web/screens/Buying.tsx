@@ -1,5 +1,6 @@
-import { formatPrice, linkHost, type MyPurchase, toNumber } from '../api';
+import type { MyPurchase } from '../api';
 import { Card, ErrorMessage, Loading, PageHeader, Screen } from '../components/ui';
+import { formatPrice, linkHost, toNumber } from '../format';
 import { href, useMyPurchases } from '../hooks';
 
 function groupByOwner(purchases: MyPurchase[]) {
