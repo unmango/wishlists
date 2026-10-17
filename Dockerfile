@@ -1,17 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0-noble AS tools
-WORKDIR /work
-COPY .config/ .
-RUN dotnet tool restore
-
-FROM tools AS scripts
-COPY src/UnMango.Wishlists.Api/*.csproj ./
-RUN dotnet restore
-COPY src/UnMango.Wishlists.Api/ ./
-RUN dotnet build --no-restore
-CMD ["dotnet", "ef", "migrations", "script", "--idempotent", "--no-build"]
-
-FROM oven/bun:1.4.2-slim AS web
+FROM oven/bun:1.4.3-slim AS web
 
 WORKDIR /work
 COPY package.json bun.lock ./
@@ -43,8 +31,6 @@ RUN dotnet publish \
     --configuration $CONFIGURATION \
     --output /out
 
-# TODO: EF Core AOT is borked
-# FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/runtime-deps:10.0-noble AS app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:10.0-noble AS app
 COPY --from=api /out /app
 ENTRYPOINT ["/app/UnMango.Wishlists.Api"]

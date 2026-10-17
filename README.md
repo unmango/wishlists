@@ -2,57 +2,48 @@
 
 This is an application for sharing wishlists between a group of people!
 Create your own wishlist, share it with your group, and check off items from their wishlist as they're bought.
+The owner of a list never sees what's been bought.
 
 ## Architecture
 
-C# ASP.NET Web API
-Create React App Static Web Application
+| Role    | Location                                                                   |
+| :------ | :------------------------------------------------------------------------- |
+| API     | [`src/UnMango.Wishlists.Api/`](./src/UnMango.Wishlists.Api/)               |
+| Web App | [`src/web/`](./src/web/)                                                   |
+| Tests   | [`test/UnMango.Wishlists.Api.Tests/`](./test/UnMango.Wishlists.Api.Tests/) |
 
-| Role    | Location                                                      |
-| :------ | :------------------------------------------------------------ |
-| API     | [`/api/UnMango.Wishlists.Api/`](./api/UnMango.Wishlists.Api/) |
-| Web App | [`/app/web/`](./app/web/)                                     |
+The API is ASP.NET with Marten event sourcing on Postgres.
+The web app is React, Vite and Tailwind, served by the API in production.
 
-## API
+## Sign-in
 
-The API documentation can be found [here](./api/UnMango.Wishlists.Api/README.md).
+Members sign in with Google. Only emails on the allowlist get in.
 
-## Building
+| Setting                          | Environment variable                      | Notes                                                                     |
+| :------------------------------- | :---------------------------------------- | :------------------------------------------------------------------------ |
+| `Auth:Google:ClientId`           | `Auth__Google__ClientId`                  | Required in production                                                    |
+| `Auth:Google:ClientSecret`       | `Auth__Google__ClientSecret`              | Required in production                                                    |
+| `Auth:AllowedEmails`             | `Auth__AllowedEmails__0`, ...             | Inline list                                                               |
+| `Auth:AllowedEmailsFile`         | `Auth__AllowedEmailsFile`                 | One email per line, re-read on every sign-in                              |
+| `ConnectionStrings:App`          | `ConnectionStrings__App`                  | Postgres                                                                  |
+| `ForwardedHeaders:KnownNetworks` | `ForwardedHeaders__KnownNetworks__0`, ... | Ingress CIDRs trusted for `X-Forwarded-*`; any peer is trusted when unset |
 
-As a convencience, scripts are provided to build both applications.
+Environment variables may also be prefixed with `UNMANGO_`.
+The Google OAuth client's redirect URL is `https://<host>/signin-google`.
+
+In Development, use `/auth/dev-login?email=you@example.com` to sign in without Google.
+
+## Building and testing
 
 ```shell
-./hack/build.sh
+make build
+make test
 ```
 
-```shell
-pwsh ./hack/build.ps1
-```
-
-### Web App
-
-```shell
-cd app/web
-npm ci
-npm run build
-```
+Tests run against Postgres. They start one with Testcontainers, or use `WISHLISTS_TEST_CONNECTION_STRING` if set.
 
 ## Running
 
-As a convencience, scripts are provided to start both applications.
-
 ```shell
-./hack/start.sh
-```
-
-```shell
-pwsh ./hack/start.ps1
-```
-
-### Web App
-
-```shell
-cd app/web
-npm ci
-npm run dev
+make dev
 ```

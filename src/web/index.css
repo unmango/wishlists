@@ -1,1 +1,74 @@
 @import "tailwindcss";
+
+/* Light and dark follow the phone's setting. Colors come from the step 2 mockup. */
+:root {
+  color-scheme: light dark;
+  --wl-ground: #f3f3f8;
+  --wl-card: #ffffff;
+  --wl-ink: #1a1b2e;
+  --wl-muted: #5a5c70;
+  --wl-soft: #3d3f52;
+  --wl-faint: #8b8da0;
+  --wl-line: #e2e3ec;
+  --wl-field: #cbccda;
+  --wl-chip: #ececf4;
+  --wl-primary: #2b2d6e;
+  --wl-primary-hover: #1c1d4d;
+  --wl-on-primary: #ffffff;
+  --wl-hero: #2b2d6e;
+  --wl-hero-muted: #d6d7f0;
+  --wl-accent: #d93b30;
+  --wl-accent-soft: #fdedeb;
+  --wl-danger: #8a1f1f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --wl-ground: #12131f;
+    --wl-card: #1e2033;
+    --wl-ink: #ececf5;
+    --wl-muted: #a3a5bc;
+    --wl-soft: #c9cadb;
+    --wl-faint: #74768c;
+    --wl-line: #2c2e45;
+    --wl-field: #3a3c56;
+    --wl-chip: #2c2e45;
+    --wl-primary: #8f93ff;
+    --wl-primary-hover: #b8bbff;
+    --wl-on-primary: #12131f;
+    --wl-hero: #1e2033;
+    --wl-accent: #ff6b5e;
+    --wl-accent-soft: #3a1e22;
+    --wl-danger: #ff8a80;
+  }
+}
+
+@theme inline {
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --color-ground: var(--wl-ground);
+  --color-card: var(--wl-card);
+  --color-ink: var(--wl-ink);
+  --color-muted: var(--wl-muted);
+  --color-soft: var(--wl-soft);
+  --color-faint: var(--wl-faint);
+  --color-line: var(--wl-line);
+  --color-field: var(--wl-field);
+  --color-chip: var(--wl-chip);
+  --color-primary: var(--wl-primary);
+  --color-primary-hover: var(--wl-primary-hover);
+  --color-on-primary: var(--wl-on-primary);
+  --color-hero: var(--wl-hero);
+  --color-hero-muted: var(--wl-hero-muted);
+  --color-accent: var(--wl-accent);
+  --color-accent-soft: var(--wl-accent-soft);
+  --color-danger: var(--wl-danger);
+}
+
+body {
+  margin: 0;
+  background: var(--wl-ground);
+  color: var(--wl-ink);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}

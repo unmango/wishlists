@@ -11,7 +11,6 @@ NIX     ?= nix
 
 API_DIR   ?= src/UnMango.Wishlists.Api
 WEB_DIR   ?= src/web
-QUERY_DIR ?= ${API_DIR}/Generated
 
 CS_SRC   != find . -path '*.cs'
 TS_SRC   != find . \( -not -path './node_modules/*' \) -path '*.ts'
@@ -23,6 +22,9 @@ WEB_SRC  := ${TS_SRC} ${TSX_SRC}
 export COMPOSE_PROFILES ?= dev
 
 build: api web
+
+test:
+	$(DOTNET) test
 
 nix:
 	$(NIX) build .#api .#web .#wishlists .#docker
@@ -54,18 +56,8 @@ start:
 stop:
 	$(DOCKER) compose --profile run --profile dev down
 
-migration:
-	read -p 'Migration name: ' name && \
-	$(DOTNET) ef migrations add "$$name" --project ${API_DIR}
-
 clean:
 	rm -rf bin dist $(wildcard result*)
-
-precompile-queries: # WIP
-	$(DOTNET) ef dbcontext optimize \
-	--project ${API_DIR} \
-	--output-dir $(notdir ${QUERY_DIR}) \
-	--precompile-queries
 
 bin/schema.json:
 	$(DOTNET) build ${API_DIR}

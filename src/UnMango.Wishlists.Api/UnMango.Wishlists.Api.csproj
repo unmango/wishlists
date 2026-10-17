@@ -9,26 +9,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CliWrap" Version="3.10.5" />
-		<PackageReference Include="LanguageExt.Core" Version="5.0.0-beta-77" />
-		<PackageReference Include="Marten" Version="9.37.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.12" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
-		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="10.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tasks" Version="10.0.12" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.12" PrivateAssets="all" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
-		<PackageReference Include="OpenIddict.Client.AspNetCore" Version="7.7.1" />
-		<PackageReference Include="OpenIddict.Client.WebIntegration" Version="7.7.1" />
+		<PackageReference Include="Marten" Version="9.50.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
+		<PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.13" PrivateAssets="all" />
 		<PackageReference Include="Vite.AspNetCore" Version="2.4.1" />
 	</ItemGroup>
 
-	<!-- TODO: EF Core AOT is borked -->
 	<PropertyGroup>
 		<PublishAot>false</PublishAot>
 		<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
-  		<!-- <InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.EntityFrameworkCore.GeneratedInterceptors</InterceptorsNamespaces> -->
 	</PropertyGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="UnMango.Wishlists.Api.Tests" />
+	</ItemGroup>
 
 </Project>

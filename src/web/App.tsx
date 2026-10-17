@@ -1,21 +1,34 @@
-import { useCallback } from 'react';
-import { v7 as uuid } from 'uuid';
-import { NoWishlists, Workspace } from './components';
-import { useWishlists } from './hooks';
+import { useEffect } from 'react';
+import { ErrorMessage, Loading, TabBar } from './components/ui';
+import { href, useMe, useRoute } from './hooks';
+import { Buying } from './screens/Buying';
+import { Family } from './screens/Family';
+import { MyList } from './screens/MyList';
+import { SignIn } from './screens/SignIn';
+import { TheirList } from './screens/TheirList';
 
 function App() {
-  const { data, error, isLoading, create } = useWishlists();
+  const { me, error, isLoading } = useMe();
+  const route = useRoute();
 
-  const back = useCallback(() => {}, []);
+  // Your own list opened by link (someone shared it) shows the owner's view.
+  const ownList = route.name === 'list' && me && route.id === me.wishlistId;
+  useEffect(() => {
+    if (ownList) window.location.replace(href({ name: 'mine' }));
+  }, [ownList]);
+
+  if (isLoading) return <Loading />;
+  if (error) return <ErrorMessage error={error} />;
+  if (!me) return <SignIn />;
 
   return (
-    <div className='h-svh w-svw p-4 bg-linear-to-tr from-fuchsia-800 to-indigo-800'>
-      <Workspace onBack={back}>
-        {isLoading && <p className='text-white'>Loading...</p>}
-        {error && <p className='text-red-500'>Error: {String(error)}</p>}
-        {!data?.length && <NoWishlists onCreate={() => create('Test', uuid())} />}
-      </Workspace>
-    </div>
+    <>
+      {route.name === 'family' && <Family me={me} />}
+      {route.name === 'list' && !ownList && <TheirList key={route.id} id={route.id} me={me} />}
+      {route.name === 'mine' && <MyList />}
+      {route.name === 'buying' && <Buying />}
+      <TabBar active={route.name} />
+    </>
   );
 }
 

@@ -1,16 +1,31 @@
 @HostAddress = http://localhost:5217
 
+# Sign in first (Development only): open {{HostAddress}}/auth/dev-login?email=you@example.com
+
 GET {{HostAddress}}/openapi/v1.json
 Accept: application/json
 
 ###
 
-GET {{HostAddress}}/api/wishlists
+GET {{HostAddress}}/api/me
 Accept: application/json
 
 ###
 
-GET {{HostAddress}}/api/wishlists/1
+GET {{HostAddress}}/api/wishlists/mine
 Accept: application/json
+
+###
+
+POST {{HostAddress}}/api/wishlists/mine/items
+Content-Type: application/json
+
+{
+  "name": "Socks",
+  "link": "https://example.com/socks",
+  "price": 12.50,
+  "notes": "Wool, size L",
+  "reallyWant": true
+}
 
 ###

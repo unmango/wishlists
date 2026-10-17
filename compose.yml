@@ -29,12 +29,6 @@ services:
     ports:
       - '5432:5432'
 
-  migration-scripts:
-    build:
-      context: .
-      target: scripts
-    profiles: [ deploy ]
-
   web:
     build:
       context: .
@@ -79,7 +73,7 @@ services:
 
   adminer:
     profiles: [ dev ]
-    image: adminer:6.0.1
+    image: adminer:6.1.2
     restart: always
     ports:
       - '8000:8080'

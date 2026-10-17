@@ -43,6 +43,12 @@ let
     projectFile = "src/UnMango.Wishlists.Api/UnMango.Wishlists.Api.csproj";
     nugetDeps = ./src/UnMango.Wishlists.Api/nix-deps.json;
 
+    # global.json pins a newer SDK patch than nixpkgs may ship; the SDK above is what we build with.
+    # The local tools (minver, jb) aren't needed to build and aren't in nugetDeps.
+    postPatch = ''
+      rm -f global.json .config/dotnet-tools.json
+    '';
+
     meta = {
       description = "Wishlists API";
       inherit (sharedMeta) license maintainers;

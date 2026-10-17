@@ -25,9 +25,12 @@ jobs:
           cache: true
           cache-dependency-path: |
             src/UnMango.Wishlists.Api/packages.lock.json
+            test/UnMango.Wishlists.Api.Tests/packages.lock.json
 
       - run: dotnet restore --locked-mode
       - run: dotnet build --configuration Release
+      # Starts Postgres with Testcontainers, using the runner's Docker.
+      - run: dotnet test --no-build --configuration Release
 
   web:
     runs-on: ubuntu-latest
@@ -55,7 +58,7 @@ jobs:
           cachix_auth_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - run: nix flake check --all-systems
-      - run: nix build .#api .#web .#wishlists .#docker
+      - run: nix build -L .#api .#web .#wishlists .#docker
 
   docker:
     runs-on: ubuntu-latest
@@ -170,7 +173,7 @@ jobs:
           python-version: "3.x"
           check-latest: true
 
-      - uses: helm/chart-testing-action@v2.8.0
+      - uses: helm/chart-testing-action@v2.9.0
 
       - name: Run chart-testing (list-changed)
         id: list-changed
@@ -186,7 +189,7 @@ jobs:
 
       - name: Create kind cluster
         if: steps.list-changed.outputs.changed == 'true'
-        uses: helm/kind-action@v1.15.0
+        uses: helm/kind-action@v1.15.1
 
       - name: Run chart-testing (install)
         if: steps.list-changed.outputs.changed == 'true'
@@ -196,7 +199,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # renovate: datasource=github-releases depName=dprint/dprint
-      DPRINT_VERSION: 0.57.4
+      DPRINT_VERSION: 0.63.0
     steps:
       - uses: actions/checkout@v7
 
