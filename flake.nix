@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    systems.url = "github:nix-systems/default";
+    systems.url = "github:UnstoppableMango/nix-systems";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -19,10 +19,10 @@
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      # nix-systems/default still lists x86_64-darwin, which nixpkgs 26.11 refuses to evaluate.
-      systems = builtins.filter (s: s != "x86_64-darwin") (import inputs.systems);
+      systems = import inputs.systems;
 
       imports = [
+        inputs.systems.flakeModule
         inputs.treefmt-nix.flakeModule
       ];
 
