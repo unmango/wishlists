@@ -2,7 +2,7 @@ namespace UnMango.Wishlists.Api.Api;
 
 public sealed record Me(Guid Id, string Email, string DisplayName, string? AvatarUrl, Guid WishlistId);
 
-public sealed record Member(Guid Id, string DisplayName, string? AvatarUrl, Guid WishlistId);
+public sealed record Member(Guid Id, string DisplayName, string? AvatarUrl, Guid WishlistId, int ItemCount, int ReallyWantCount);
 
 public sealed record ItemRequest(string Name, string? Link, decimal? Price, string? Notes, bool ReallyWant);
 
@@ -33,3 +33,14 @@ public sealed record GiftWishlist(
 	Guid OwnerId,
 	string OwnerName,
 	IReadOnlyList<GiftItem> Items);
+
+/// <summary>An item the signed-in member has marked bought on someone else's list.</summary>
+public sealed record MyPurchase(
+	Guid WishlistId,
+	Guid OwnerId,
+	string OwnerName,
+	Guid ItemId,
+	string Name,
+	string? Link,
+	decimal? Price,
+	bool RemovedByOwner);
