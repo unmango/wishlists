@@ -82,7 +82,8 @@ export function useUnmarkBought(wishlistId: string, itemId: string) {
 export function useSignOut() {
   const { mutate } = useSWRConfig();
   return useSWRMutation('sign-out', async () => {
-    await fetch('/auth/logout', { method: 'POST' });
+    const response = await fetch('/auth/logout', { method: 'POST' });
+    if (!response.ok) throw new Error('Couldn’t sign out. Try again.');
     await mutate(() => true, undefined, { revalidate: false });
     window.location.assign('/');
   }, options);

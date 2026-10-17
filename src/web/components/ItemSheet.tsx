@@ -25,6 +25,7 @@ export function ItemSheet({ item, onClose }: Props) {
 function ItemForm({ item, titleId, onDone }: { item: OwnItem | null; titleId: string; onDone: () => void }) {
   const [fields, setFields] = useState(() => fieldsFrom(item));
   const [invalid, setInvalid] = useState<ItemErrors>({});
+  const errorId = useId();
   const add = useAddItem();
   const edit = useEditItem();
   const remove = useRemoveItem();
@@ -42,7 +43,11 @@ function ItemForm({ item, titleId, onDone }: { item: OwnItem | null; titleId: st
     e.preventDefault();
     const result = itemSchema.safeParse(fields);
     if (!result.success) {
-      setInvalid(validationErrors(result.error));
+      const found = validationErrors(result.error);
+      setInvalid(found);
+      // Move to the first bad field so screen readers announce its error.
+      const first = (['name', 'link', 'price', 'notes'] as const).find(f => found[f]);
+      if (first) (e.currentTarget as HTMLFormElement).querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
       return;
     }
     setInvalid({});
@@ -54,6 +59,13 @@ function ItemForm({ item, titleId, onDone }: { item: OwnItem | null; titleId: st
     if (!item || !window.confirm(`Remove “${item.name}” from your list?`)) return;
     void remove.trigger(item.id, { onSuccess: onDone });
   }
+
+  /** Props tying an input to its error message. */
+  const described = (field: keyof ItemFields) => ({
+    name: field,
+    'aria-invalid': errors[field] ? true : undefined,
+    'aria-describedby': errors[field] ? `${errorId}-${field}` : undefined,
+  });
 
   const input = (field: keyof ItemErrors) =>
     `h-12 w-full rounded-xl border bg-card px-3.5 text-base text-ink outline-none focus:border-primary focus:border-[1.5px] ${
@@ -87,6 +99,7 @@ function ItemForm({ item, titleId, onDone }: { item: OwnItem | null; titleId: st
       <label className='flex flex-col gap-1.5 text-[13px] font-medium text-soft'>
         What is it?
         <input
+          {...described('name')}
           className={input('name')}
           value={fields.name}
           onChange={e => set('name', e.target.value)}
@@ -95,12 +108,13 @@ function ItemForm({ item, titleId, onDone }: { item: OwnItem | null; titleId: st
           required
           autoFocus
         />
-        {errors.name && <span className='text-danger'>{errors.name}</span>}
+        {errors.name && <span id={`${errorId}-name`} className='text-danger'>{errors.name}</span>}
       </label>
 
       <label className='flex flex-col gap-1.5 text-[13px] font-medium text-soft'>
         Link (optional)
         <input
+          {...described('link')}
           className={input('link')}
           type='url'
           inputMode='url'
@@ -108,24 +122,26 @@ function ItemForm({ item, titleId, onDone }: { item: OwnItem | null; titleId: st
           onChange={e => set('link', e.target.value)}
           placeholder='https://'
         />
-        {errors.link && <span className='text-danger'>{errors.link}</span>}
+        {errors.link && <span id={`${errorId}-link`} className='text-danger'>{errors.link}</span>}
       </label>
 
       <label className='flex flex-col gap-1.5 text-[13px] font-medium text-soft'>
         Price (optional)
         <input
+          {...described('price')}
           className={input('price')}
           inputMode='decimal'
           value={fields.price}
           onChange={e => set('price', e.target.value)}
           placeholder='$0.00'
         />
-        {errors.price && <span className='text-danger'>{errors.price}</span>}
+        {errors.price && <span id={`${errorId}-price`} className='text-danger'>{errors.price}</span>}
       </label>
 
       <label className='flex flex-col gap-1.5 text-[13px] font-medium text-soft'>
         Notes (optional)
         <textarea
+          {...described('notes')}
           className={`${input('notes')} h-auto resize-none py-3`}
           rows={2}
           value={fields.notes}
@@ -133,7 +149,7 @@ function ItemForm({ item, titleId, onDone }: { item: OwnItem | null; titleId: st
           placeholder='Size, color, anything that helps'
           maxLength={2000}
         />
-        {errors.notes && <span className='text-danger'>{errors.notes}</span>}
+        {errors.notes && <span id={`${errorId}-notes`} className='text-danger'>{errors.notes}</span>}
       </label>
 
       <button

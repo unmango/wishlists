@@ -29,7 +29,8 @@ export const itemSchema = z.object({
   price: z
     .string()
     .transform(v => v.replace(/[$,\s]/g, ''))
-    .refine(v => v === '' || Number(v) >= 0, 'Enter a price like 24 or 24.99.')
+    // A plain decimal only: Number() would also take '0x10', '1e3' and 'Infinity'.
+    .refine(v => v === '' || /^\d+(\.\d{1,2})?$/.test(v), 'Enter a price like 24 or 24.99.')
     .transform(v => (v === '' ? null : Number(v))),
   notes: z.string().trim().max(2000, 'Keep notes under 2,000 characters.').transform(v => v || null),
   reallyWant: z.boolean(),
