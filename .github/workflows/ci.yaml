@@ -5,6 +5,8 @@ on:
     branches: [main]
   push:
     branches: [main]
+    # A v* tag publishes a stable chart and image, e.g. v0.1.0 -> chart 0.1.0 and image tag 0.1.0.
+    tags: ['v*']
 
 permissions:
   contents: read
