@@ -42,8 +42,44 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.containerPort }}
               protocol: TCP
+          env:
+            {{- with .Values.app.database }}
+            {{- if .existingSecret }}
+            - name: ConnectionStrings__App
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .existingSecret }}
+                  key: {{ .existingSecretKey }}
+            {{- else if .connectionString }}
+            - name: ConnectionStrings__App
+              value: {{ .connectionString | quote }}
+            {{- end }}
+            {{- end }}
+            {{- with .Values.app.google.existingSecret }}
+            - name: Auth__Google__ClientId
+              valueFrom:
+                secretKeyRef:
+                  name: {{ . }}
+                  key: {{ $.Values.app.google.clientIdKey }}
+            - name: Auth__Google__ClientSecret
+              valueFrom:
+                secretKeyRef:
+                  name: {{ . }}
+                  key: {{ $.Values.app.google.clientSecretKey }}
+            {{- end }}
+            {{- if .Values.app.allowedEmails.existingSecret }}
+            - name: Auth__AllowedEmailsFile
+              value: /etc/wishlists/allowed-emails/{{ .Values.app.allowedEmails.key }}
+            {{- end }}
+            {{- range $i, $network := .Values.app.knownNetworks }}
+            - name: ForwardedHeaders__KnownNetworks__{{ $i }}
+              value: {{ $network | quote }}
+            {{- end }}
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
@@ -56,13 +92,28 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.volumeMounts }}
+          {{- if or .Values.volumeMounts .Values.app.allowedEmails.existingSecret }}
           volumeMounts:
+            {{- if .Values.app.allowedEmails.existingSecret }}
+            - name: allowed-emails
+              mountPath: /etc/wishlists/allowed-emails
+              readOnly: true
+            {{- end }}
+            {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
+            {{- end }}
           {{- end }}
-      {{- with .Values.volumes }}
+      {{- if or .Values.volumes .Values.app.allowedEmails.existingSecret }}
       volumes:
+        {{- with .Values.app.allowedEmails.existingSecret }}
+        # Mounted as a directory, not with subPath, so edits to the Secret reach the running pod.
+        - name: allowed-emails
+          secret:
+            secretName: {{ . }}
+        {{- end }}
+        {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

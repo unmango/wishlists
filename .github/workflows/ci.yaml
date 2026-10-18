@@ -69,6 +69,21 @@ jobs:
     outputs:
       image-tags: ${{ steps.meta.outputs.tags }}
     steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          filter: tree:0
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - run: dotnet tool restore
+
+      # The same version the helm job gives the chart's appVersion, so the chart's default image tag exists.
+      - id: version
+        run: echo "version=$(dotnet minver -t v)" >> "$GITHUB_OUTPUT"
+
       - uses: docker/setup-buildx-action@v4
 
       - id: meta
@@ -78,6 +93,7 @@ jobs:
             ghcr.io/unmango/wishlists
             unstoppablemango/wishlists
           tags: |
+            type=raw,value=${{ steps.version.outputs.version }}
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
