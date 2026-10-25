@@ -11,18 +11,18 @@
   },
   {
     "pname": "JasperFx",
-    "version": "2.91.0",
-    "hash": "sha256-/YSOvD7nsT54D1w2NVj6KI9/H7eMvKSf+olgusPysIA="
+    "version": "2.95.1",
+    "hash": "sha256-uoHW/SbeLP+xsOTqliWG9FZrN+P0QkBI0gBYc4YeKvY="
   },
   {
     "pname": "JasperFx.Events",
-    "version": "2.91.0",
-    "hash": "sha256-br+f7SkH0BAVNH1XC4KMQGWmncvxv3yXF65Zu9AO04M="
+    "version": "2.95.1",
+    "hash": "sha256-nzhnO5vto/R6ltHk3LULkMca+OVey3cdxCQj5/j3Fio="
   },
   {
     "pname": "Marten",
-    "version": "9.51.0",
-    "hash": "sha256-ZFs0BAMDDl/BwhgeRhII/+92egr8+EqYmtXM6rrTiHU="
+    "version": "9.54.1",
+    "hash": "sha256-/ucmVTuQBfNZPaRTLFLR5dDNkt4GVm2VQT39mIvKsCI="
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.Google",
