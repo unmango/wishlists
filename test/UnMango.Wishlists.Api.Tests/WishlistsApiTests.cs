@@ -44,6 +44,43 @@ public sealed class WishlistsApiTests(AppFixture app)
 	}
 
 	[Fact]
+	public async Task Members_include_item_counts() {
+		var (adaId, ada) = await app.JoinAsync("Ada");
+		await ada.PostAsJsonAsync("/api/wishlists/mine/items", Item(), Ct);
+		await ada.PostAsJsonAsync("/api/wishlists/mine/items", Item("Hat") with { ReallyWant = false }, Ct);
+
+		var members = await ada.GetFromJsonAsync<List<Member>>("/api/members", Ct);
+		var self = Assert.Single(members!, x => x.Id == adaId);
+
+		Assert.Equal(2, self.ItemCount);
+		Assert.Equal(1, self.ReallyWantCount);
+	}
+
+	[Fact]
+	public async Task Purchases_mine_lists_only_my_marks_across_lists() {
+		var (_, ada) = await app.JoinAsync("Ada");
+		var (_, cy) = await app.JoinAsync("Cy");
+		var (bobId, bob) = await app.JoinAsync("Bob");
+		var adaList = (await ada.GetFromJsonAsync<Me>("/api/me", Ct))!.WishlistId;
+		var cyList = (await cy.GetFromJsonAsync<Me>("/api/me", Ct))!.WishlistId;
+		var socks = await (await ada.PostAsJsonAsync("/api/wishlists/mine/items", Item(), Ct)).Content.ReadFromJsonAsync<OwnItem>(Ct);
+		var hat = await (await cy.PostAsJsonAsync("/api/wishlists/mine/items", Item("Hat"), Ct)).Content.ReadFromJsonAsync<OwnItem>(Ct);
+		var scarf = await (await cy.PostAsJsonAsync("/api/wishlists/mine/items", Item("Scarf"), Ct)).Content.ReadFromJsonAsync<OwnItem>(Ct);
+
+		await bob.PutAsync($"/api/wishlists/{adaList}/items/{socks!.Id}/bought", null, Ct);
+		await bob.PutAsync($"/api/wishlists/{cyList}/items/{hat!.Id}/bought", null, Ct);
+		await ada.PutAsync($"/api/wishlists/{cyList}/items/{scarf!.Id}/bought", null, Ct);
+		await ada.DeleteAsync($"/api/wishlists/mine/items/{socks.Id}", Ct);
+
+		var mine = await bob.GetFromJsonAsync<List<MyPurchase>>("/api/purchases/mine", Ct);
+
+		Assert.Equal(2, mine!.Count);
+		Assert.Contains(mine, x => x.ItemId == socks.Id && x.RemovedByOwner && x.OwnerId != bobId);
+		Assert.Contains(mine, x => x.ItemId == hat.Id && !x.RemovedByOwner);
+		Assert.DoesNotContain(mine, x => x.ItemId == scarf.Id);
+	}
+
+	[Fact]
 	public async Task Owner_can_add_edit_remove_and_rename() {
 		var (_, client) = await app.JoinAsync("Ada");
 

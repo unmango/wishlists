@@ -1,6 +1,6 @@
 {
   "name": "unmango-wishlists",
-  "packageManager": "bun@1.4.3",
+  "packageManager": "bun@1.4.4",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -17,6 +17,7 @@
     "openapi-fetch": "^0.17.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "swr": "^2.3.6",
     "swr-openapi": "^5.4.2",
     "tailwindcss": "^4.1.16",
     "uuid": "^14.0.0",

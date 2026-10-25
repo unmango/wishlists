@@ -35,12 +35,48 @@ internal static class WishlistsApi
 			) => {
 				var members = await session.Query<MemberView>().ToListAsync(cancellationToken);
 				var wishlists = await session.Query<WishlistView>().ToListAsync(cancellationToken);
-				var wishlistByOwner = wishlists.ToDictionary(x => x.OwnerId, x => x.Id);
+				var wishlistByOwner = wishlists.ToDictionary(x => x.OwnerId);
 
 				IReadOnlyList<Member> result = members
 					.Where(x => wishlistByOwner.ContainsKey(x.Id))
 					.OrderBy(x => x.DisplayName)
-					.Select(x => new Member(x.Id, x.DisplayName, x.AvatarUrl, wishlistByOwner[x.Id]))
+					.Select(x => {
+						var wishlist = wishlistByOwner[x.Id];
+						var items = wishlist.CurrentItems.ToList();
+						return new Member(x.Id, x.DisplayName, x.AvatarUrl, wishlist.Id, items.Count, items.Count(i => i.ReallyWant));
+					})
+					.ToList();
+
+				return TypedResults.Ok(result);
+			});
+
+			endpoints.MapGet("/purchases/mine", async Task<Ok<IReadOnlyList<MyPurchase>>> (
+				ClaimsPrincipal user,
+				[FromServices] IQuerySession session,
+				CancellationToken cancellationToken
+			) => {
+				var memberId = user.MemberId;
+				// A household has a handful of lists, so filtering in memory is simpler than querying dictionary values.
+				var purchases = await session.Query<PurchasesView>().ToListAsync(cancellationToken);
+				var mine = purchases
+					.Select(p => (p.WishlistId, ItemIds: p.Buyers.Where(b => b.Value == memberId).Select(b => b.Key).ToHashSet()))
+					.Where(x => x.ItemIds.Count > 0)
+					.ToList();
+
+				if (mine.Count == 0) return TypedResults.Ok<IReadOnlyList<MyPurchase>>([]);
+
+				var wishlists = await session.LoadManyAsync<WishlistView>(cancellationToken, mine.Select(x => x.WishlistId));
+				var members = await session.Query<MemberView>().ToListAsync(cancellationToken);
+				var names = members.ToDictionary(x => x.Id, x => x.DisplayName);
+				var itemIdsByWishlist = mine.ToDictionary(x => x.WishlistId, x => x.ItemIds);
+
+				IReadOnlyList<MyPurchase> result = wishlists
+					.Where(w => w.OwnerId != memberId)
+					.OrderBy(w => names.GetValueOrDefault(w.OwnerId, ""))
+					.SelectMany(w => w.Items
+						.Where(i => itemIdsByWishlist[w.Id].Contains(i.Id))
+						.Select(i => new MyPurchase(
+							w.Id, w.OwnerId, names.GetValueOrDefault(w.OwnerId, ""), i.Id, i.Name, i.Link, i.Price, i.Removed)))
 					.ToList();
 
 				return TypedResults.Ok(result);

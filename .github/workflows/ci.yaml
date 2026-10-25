@@ -5,6 +5,8 @@ on:
     branches: [main]
   push:
     branches: [main]
+    # A v* tag publishes a stable chart and image, e.g. v0.1.0 -> chart 0.1.0 and image tag 0.1.0.
+    tags: ['v*']
 
 permissions:
   contents: read
@@ -52,14 +54,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: cachix/install-nix-action@v31.11.2
+      - uses: unmango/actions/setup-nix@e8bbcbd12a2c521c5cb36957c00a7a8f4fe2e766 # v2.0.0
         with:
           github_access_token: ${{ github.token }}
-
-      - uses: cachix/cachix-action@v17
-        with:
-          name: unstoppablemango
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix_auth_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - run: nix flake check --all-systems
       - run: nix build -L .#api .#web .#wishlists .#docker
@@ -69,6 +67,22 @@ jobs:
     outputs:
       image-tags: ${{ steps.meta.outputs.tags }}
     steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          filter: tree:0
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - run: dotnet tool restore
+
+      # The same version the helm job gives the chart's appVersion, so the chart's default image tag exists.
+      - id: version
+        run: echo "version=$(dotnet minver -t v)" >> "$GITHUB_OUTPUT"
+
       - uses: docker/setup-buildx-action@v4
 
       - id: meta
@@ -78,6 +92,7 @@ jobs:
             ghcr.io/unmango/wishlists
             unstoppablemango/wishlists
           tags: |
+            type=raw,value=${{ steps.version.outputs.version }}
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -126,7 +141,7 @@ jobs:
       - name: Setup helm
         uses: azure/setup-helm@v5.0.1
         with:
-          version: "3.22.0"
+          version: "3.22.1"
 
       - run: helm lint
 
@@ -172,7 +187,7 @@ jobs:
 
       - uses: azure/setup-helm@v5.0.1
 
-      - uses: actions/setup-python@v7.0.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.x"
           check-latest: true
@@ -203,7 +218,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # renovate: datasource=github-releases depName=dprint/dprint
-      DPRINT_VERSION: 0.63.0
+      DPRINT_VERSION: 0.64.3
     steps:
       - uses: actions/checkout@v7
 

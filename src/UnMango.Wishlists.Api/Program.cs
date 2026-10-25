@@ -71,6 +71,8 @@ if (app.Environment.IsDevelopment()) {
 	app.UseWebSockets();
 	app.UseViteDevelopmentServer(useMiddleware: true);
 } else if (!app.Environment.IsOpenApiCodegen()) {
+	// Serve wwwroot/index.html at "/". Screens are hash routes, so no fallback route is needed.
+	app.UseDefaultFiles();
 	app.UseStaticFiles();
 }
 
