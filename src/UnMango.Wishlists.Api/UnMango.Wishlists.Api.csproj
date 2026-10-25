@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Marten" Version="9.51.0" />
+		<PackageReference Include="Marten" Version="9.54.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.13" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
 		<PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.13" PrivateAssets="all" />
