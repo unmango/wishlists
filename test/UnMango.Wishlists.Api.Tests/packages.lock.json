@@ -109,8 +109,8 @@
       },
       "JasperFx": {
         "type": "Transitive",
-        "resolved": "2.91.0",
-        "contentHash": "XZgnz4jjJ47qVmE5VNILhu3x3MGJlwXqFoJSTqLnrH8Z3jg942U/3wY0uaer23F+u925w1qrWN8I62TBq5KT5g==",
+        "resolved": "2.95.1",
+        "contentHash": "rkgp95xfa1Nbk+jtUjNvnA3wYuKgDwJm8poS+I0G+TqzRWB0cFPkk9F9HoRobhaw5j5DCgrcu3Tm2o0DqCkxeQ==",
         "dependencies": {
           "FastExpressionCompiler": "5.4.1",
           "ImTools": "4.0.0",
@@ -126,19 +126,19 @@
       },
       "JasperFx.Events": {
         "type": "Transitive",
-        "resolved": "2.91.0",
-        "contentHash": "/Mf17nXV7Fa8kayCykGDwbsoSb2Nxn+szvVdgQosyU9yRarFvlfrNJKd2GXhGnYcTyO6foma0s0UZ6sX2ZnKxA==",
+        "resolved": "2.95.1",
+        "contentHash": "qJ96wE3FByK0drhthP9RLdHp2t3AuHBRjkpE9kHhp7cYrl0Co3mJ+al2A39FF0qVIU0qtt2lk6Zy7ux6U1Lt4A==",
         "dependencies": {
-          "JasperFx": "2.91.0"
+          "JasperFx": "2.95.1"
         }
       },
       "Marten": {
         "type": "Transitive",
-        "resolved": "9.51.0",
-        "contentHash": "xHNGT9XnDbB2n1cQbIOlfnZjWo7Hu1oRbNPhQbFHajQUqRXCfft4dkHoykkoz+gV6KwrjONU4HJ44QDU6l5xIA==",
+        "resolved": "9.54.1",
+        "contentHash": "NQtfyhrybZWz8Bcu35+hMIaKkHEoV203xH4shJ8HhjC4LsV11XBZjvijGjWX9EMvpUWq9oofz6cFd9DQFHv8jQ==",
         "dependencies": {
-          "JasperFx": "2.91.0",
-          "JasperFx.Events": "2.91.0",
+          "JasperFx": "2.95.1",
+          "JasperFx.Events": "2.95.1",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "3.0.1",
           "Weasel.Postgresql": "9.46.0",
@@ -726,7 +726,7 @@
       "unmango.wishlists.api": {
         "type": "Project",
         "dependencies": {
-          "Marten": "[9.51.0, )",
+          "Marten": "[9.54.1, )",
           "Microsoft.AspNetCore.Authentication.Google": "[10.0.13, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.13, )",
           "Vite.AspNetCore": "[2.4.1, )"
