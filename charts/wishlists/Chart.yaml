@@ -2,8 +2,8 @@ apiVersion: v2
 name: wishlists
 description: Wishlists and stuff
 type: application
-version: 0.1.0
-appVersion: 0.1.0
+version: 0.1.1
+appVersion: 0.1.1
 maintainers:
   - name: UnstoppableMango
     email: erik.rasmussen@unmango.dev
