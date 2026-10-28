@@ -4,15 +4,15 @@
     "net10.0": {
       "Marten": {
         "type": "Direct",
-        "requested": "[9.54.1, )",
-        "resolved": "9.54.1",
-        "contentHash": "NQtfyhrybZWz8Bcu35+hMIaKkHEoV203xH4shJ8HhjC4LsV11XBZjvijGjWX9EMvpUWq9oofz6cFd9DQFHv8jQ==",
+        "requested": "[9.54.2, )",
+        "resolved": "9.54.2",
+        "contentHash": "pDTe/jLqC9g7Nd94PZRtSxeR/ZbK/Vrk6FV3eloD68svAK7mVUfY7cCfPYggqrHpyrOwJFM/F3wZAwfbrPPUoQ==",
         "dependencies": {
           "JasperFx": "2.95.1",
           "JasperFx.Events": "2.95.1",
           "Microsoft.IO.RecyclableMemoryStream": "3.0.1",
-          "Weasel.Postgresql": "9.46.0",
-          "Weasel.Storage": "9.46.0"
+          "Weasel.Postgresql": "9.47.0",
+          "Weasel.Storage": "9.47.0"
         }
       },
       "Microsoft.AspNetCore.Authentication.Google": {
@@ -155,31 +155,31 @@
       },
       "Weasel.Core": {
         "type": "Transitive",
-        "resolved": "9.46.0",
-        "contentHash": "On+ns8cxs4JLl1akScHTgE5ysA129QhNG8p0TJ2nE1j5HvacGrXPVgygS12b/mr/Y3hkXgAwbun4Fvw70dGrwQ==",
+        "resolved": "9.47.0",
+        "contentHash": "mdLDiEsq+KfiCIj/cMi4hOxMNiNWktlGqFyuZgfQFiCFsV6/8nA7rW6efuFtB29r9QvPgmXYcNnfvygB2n+c4g==",
         "dependencies": {
           "JasperFx": "2.90.2"
         }
       },
       "Weasel.Postgresql": {
         "type": "Transitive",
-        "resolved": "9.46.0",
-        "contentHash": "x2jZuHpWFAieCSQlU4LBeRLFt4egTDoXVbHpu6j1a90Zv7qkCE1GL6FgxByxzvXAjk/BR7IOofIBsO+RW40o9w==",
+        "resolved": "9.47.0",
+        "contentHash": "cNgpAGxqWQTwZ26H54TMtfNr7bJhZnvJq9TOXBT6zNC+KqdqnIWbzNfAkFBfbg0PR4dNc4X4ROYWQyH225iaSw==",
         "dependencies": {
           "JasperFx.Events": "2.90.2",
           "Npgsql": "9.0.4",
           "Npgsql.NetTopologySuite": "9.0.4",
           "Patched.DistributedLock.Postgres": "1.3.3",
-          "Weasel.Core": "9.46.0"
+          "Weasel.Core": "9.47.0"
         }
       },
       "Weasel.Storage": {
         "type": "Transitive",
-        "resolved": "9.46.0",
-        "contentHash": "OZPHUh0SdvMR0Fq/AJd+G+6B7Mw5l1ydqFmwtO4C8Tacdf4JZ51yeE7FGDwTsairHPte51ilrrkI7WzLeffYAA==",
+        "resolved": "9.47.0",
+        "contentHash": "ugq7EiMJq6/8RcBGQFWNof/b3GNWkq4cm+KfH6bSbpRNwdzBeWgAjzfKHi1pIWaIo2idnKjLNXvzFpJJF/PRaw==",
         "dependencies": {
           "JasperFx.Events": "2.90.2",
-          "Weasel.Core": "9.46.0"
+          "Weasel.Core": "9.47.0"
         }
       }
     }
