@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/unmango/wishlists/compare/v0.1.0...v0.1.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* **ci:** get main green after the 0.1.0 release ([#468](https://github.com/unmango/wishlists/issues/468)) ([0c6d6b0](https://github.com/unmango/wishlists/commit/0c6d6b08bb38a6655b9be91c633ee6740a67a925))
+
 ## 0.1.0 (2026-10-28)
 
 
