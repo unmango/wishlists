@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.2](https://github.com/unmango/wishlists/compare/v0.1.1...v0.1.2) (2026-11-01)
+
+
+### Bug Fixes
+
+* **nix:** regenerate nix-deps.json for Marten 9.54.2 ([#473](https://github.com/unmango/wishlists/issues/473)) ([b3878dd](https://github.com/unmango/wishlists/commit/b3878dd5b4864a741cec73835bd0b8dffa097d86))
+
+
+### Dependencies
+
+* update adminer docker tag to v6.2.0 ([#471](https://github.com/unmango/wishlists/issues/471)) ([df0e4e3](https://github.com/unmango/wishlists/commit/df0e4e3c72a41b0f39778d688427c162cb2860db))
+* update dependency marten to 9.54.2 ([#470](https://github.com/unmango/wishlists/issues/470)) ([d25aa1f](https://github.com/unmango/wishlists/commit/d25aa1ffb7f45bc7a1f4ec84bb621f4dd99e17cf))
+
 ## [0.1.1](https://github.com/unmango/wishlists/compare/v0.1.0...v0.1.1) (2026-10-28)
 
 
