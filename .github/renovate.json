@@ -16,5 +16,8 @@
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     }
+  ],
+  "gitIgnoredAuthors": [
+    "98929874+thecluster-bot[bot]@users.noreply.github.com"
   ]
 }
