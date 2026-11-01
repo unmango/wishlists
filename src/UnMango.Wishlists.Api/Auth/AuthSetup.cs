@@ -99,11 +99,16 @@ internal static class AuthSetup
 
 			auth.MapGet("/login", async Task<Results<ChallengeHttpResult, ProblemHttpResult>> (
 				[FromServices] IAuthenticationSchemeProvider schemes,
-				[FromQuery] string? returnUrl
+				[FromQuery] string? returnUrl,
+				[FromQuery] bool pickAccount = false
 			) => await schemes.GetSchemeAsync(GoogleDefaults.AuthenticationScheme) is null
 				? TypedResults.Problem(statusCode: StatusCodes.Status503ServiceUnavailable, title: "Google sign-in isn't configured.")
 				: TypedResults.Challenge(
-					new AuthenticationProperties { RedirectUri = SafeReturnUrl(returnUrl) },
+					new GoogleChallengeProperties {
+						RedirectUri = SafeReturnUrl(returnUrl),
+						// After a rejected sign-in, make Google show its account picker so a retry can pick another account.
+						Prompt = pickAccount ? "select_account" : null,
+					},
 					[GoogleDefaults.AuthenticationScheme]));
 
 			auth.MapPost("/logout", async Task<NoContent> (HttpContext context) => {

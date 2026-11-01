@@ -2,7 +2,7 @@ import { faGift } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const messages: Record<string, string> = {
-  denied: 'That Google account isn’t on the family list. Ask Erik to add it.',
+  denied: 'That Google account can’t sign in here. Try a different one.',
   failed: 'Signing in with Google didn’t finish. Try again.',
 };
 
@@ -30,6 +30,8 @@ export function SignIn() {
   const status = new URLSearchParams(window.location.search).get('signin') ?? '';
   const message = messages[status];
   const returnUrl = encodeURIComponent(`/${window.location.hash}`);
+  // After a denial, ask Google for its account picker so the retry isn't the same account again.
+  const pickAccount = status === 'denied' ? '&pickAccount=true' : '';
 
   return (
     <main className='flex min-h-svh flex-col bg-[#2b2d6e] px-7 pb-14 text-white'>
@@ -49,7 +51,7 @@ export function SignIn() {
           </p>
         )}
         <a
-          href={`/auth/login?returnUrl=${returnUrl}`}
+          href={`/auth/login?returnUrl=${returnUrl}${pickAccount}`}
           className='flex h-13 items-center justify-center gap-2.5 rounded-xl bg-white text-[17px] font-medium text-[#1a1b2e]'
         >
           <GoogleLogo />
