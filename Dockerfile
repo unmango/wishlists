@@ -32,5 +32,8 @@ RUN dotnet publish \
     --output /out
 
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:10.0-noble AS app
+# The content root is the working directory, so without this ASP.NET looks for
+# /wwwroot instead of /app/wwwroot and serves 404 for the web app.
+WORKDIR /app
 COPY --from=api /out /app
 ENTRYPOINT ["/app/UnMango.Wishlists.Api"]

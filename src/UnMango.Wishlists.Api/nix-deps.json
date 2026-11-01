@@ -11,18 +11,18 @@
   },
   {
     "pname": "JasperFx",
-    "version": "2.95.1",
-    "hash": "sha256-uoHW/SbeLP+xsOTqliWG9FZrN+P0QkBI0gBYc4YeKvY="
+    "version": "2.97.0",
+    "hash": "sha256-VzSJT8cUaZz5ZHRhSJoItWGLk+rrPzYkGRBpKwWEpOg="
   },
   {
     "pname": "JasperFx.Events",
-    "version": "2.95.1",
-    "hash": "sha256-nzhnO5vto/R6ltHk3LULkMca+OVey3cdxCQj5/j3Fio="
+    "version": "2.97.0",
+    "hash": "sha256-2geJDWyj50YiOsPUtlnZmr6TEZRQqBMiioLAZypOXOM="
   },
   {
     "pname": "Marten",
-    "version": "9.54.2",
-    "hash": "sha256-He4Z9sl4qix8y3/4Kb/DFlJbZHqVoMQkiqFvYK0NqWM="
+    "version": "9.56.0",
+    "hash": "sha256-wIaT6QqhegiLnDf61y9bG6MAZKMnHlycj+1YXtxhlwk="
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.Google",
@@ -111,17 +111,17 @@
   },
   {
     "pname": "Weasel.Core",
-    "version": "9.47.0",
-    "hash": "sha256-tovNTZ8p7pUhKlVtp7HXMqn1hXE79lMDjv7BZhkrg7M="
+    "version": "9.47.1",
+    "hash": "sha256-mVcX+6XtC2MtQIXhq+vGG2ucqV3+EW18nTleFuv7MZE="
   },
   {
     "pname": "Weasel.Postgresql",
-    "version": "9.47.0",
-    "hash": "sha256-hpk7RAGljQbNsj4Gqz5daDQ7qDtfTt8uRk5BpvpVIaM="
+    "version": "9.47.1",
+    "hash": "sha256-jbdfeGyQfUczFgFtOzmtgBWyag1wVSNSZZMJCpik4Do="
   },
   {
     "pname": "Weasel.Storage",
-    "version": "9.47.0",
-    "hash": "sha256-dgJNGdx4xsrgUzK7yOBUQLuZZQztzNIO7fL7yDcFq34="
+    "version": "9.47.1",
+    "hash": "sha256-+/05PQG/G/53FbYwNs2q/ZhaObVd6AhvwPMnJuamaok="
   }
 ]
