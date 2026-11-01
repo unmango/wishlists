@@ -35,6 +35,8 @@ public sealed class AppFixture : IAsyncLifetime
 		_factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder
 			.UseEnvironment("Testing")
 			.UseSetting("ConnectionStrings:App", connectionString)
+			.UseSetting("Auth:Google:ClientId", "test-client-id")
+			.UseSetting("Auth:Google:ClientSecret", "test-client-secret")
 			.ConfigureTestServices(services => services
 				.AddAuthentication(TestAuthHandler.Scheme)
 				.AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.Scheme, null)));
