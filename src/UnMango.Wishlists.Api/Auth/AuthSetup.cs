@@ -41,6 +41,26 @@ internal static class AuthSetup
 					o.ExpireTimeSpan = TimeSpan.FromDays(30);
 					o.SlidingExpiration = true;
 
+					// Without IsPersistent the cookie has no Expires, so it dies with the browser session: closing an
+					// installed home-screen app or restarting the phone would sign the member out. ExpireTimeSpan alone
+					// only limits the ticket inside the cookie.
+					o.Events.OnSigningIn = ctx => {
+						ctx.Properties.IsPersistent = true;
+						return Task.CompletedTask;
+					};
+
+					// The allowlist is only checked at Google sign-in, so without this a member taken off it keeps a
+					// working cookie for up to 30 days. Development skips it because /auth/dev-login bypasses the list.
+					if (!environment.IsDevelopment()) {
+						o.Events.OnValidatePrincipal = async ctx => {
+							var allowed = ctx.HttpContext.RequestServices.GetRequiredService<AllowedEmails>();
+							if (allowed.Contains(ctx.Principal?.FindFirstValue(ClaimTypes.Email))) return;
+
+							ctx.RejectPrincipal();
+							await ctx.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+						};
+					}
+
 					// The front end signs in explicitly through /auth/login, so API calls get status codes, not redirects.
 					o.Events.OnRedirectToLogin = ctx => {
 						ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
