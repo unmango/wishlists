@@ -41,6 +41,14 @@ internal static class AuthSetup
 					o.ExpireTimeSpan = TimeSpan.FromDays(30);
 					o.SlidingExpiration = true;
 
+					// Without IsPersistent the cookie has no Expires, so it dies with the browser session: closing an
+					// installed home-screen app or restarting the phone would sign the member out. ExpireTimeSpan alone
+					// only limits the ticket inside the cookie.
+					o.Events.OnSigningIn = ctx => {
+						ctx.Properties.IsPersistent = true;
+						return Task.CompletedTask;
+					};
+
 					// The front end signs in explicitly through /auth/login, so API calls get status codes, not redirects.
 					o.Events.OnRedirectToLogin = ctx => {
 						ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;

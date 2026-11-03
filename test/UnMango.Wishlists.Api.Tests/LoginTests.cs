@@ -1,4 +1,10 @@
 using System.Net;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using UnMango.Wishlists.Api.Auth;
 
 namespace UnMango.Wishlists.Api.Tests;
 
@@ -21,5 +27,19 @@ public sealed class LoginTests(AppFixture app)
 
 		Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
 		Assert.Contains("prompt=select_account", response.Headers.Location!.Query);
+	}
+
+	[Fact]
+	public async Task Sign_in_cookie_outlives_the_browser_session() {
+		using var scope = app.Services.CreateScope();
+		var context = new DefaultHttpContext { RequestServices = scope.ServiceProvider };
+		var principal = new ClaimsPrincipal(new ClaimsIdentity(
+			[new Claim(MemberSignIn.MemberIdClaim, Guid.NewGuid().ToString())],
+			CookieAuthenticationDefaults.AuthenticationScheme));
+
+		await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+		var cookie = Assert.Single(context.Response.Headers.SetCookie, c => c!.StartsWith("wishlists="));
+		Assert.Contains("expires=", cookie, StringComparison.OrdinalIgnoreCase);
 	}
 }
