@@ -139,13 +139,13 @@ on Wi-Fi. "Don't change the name or location of your web app manifest file"
 
 ## 2. Icons
 
-| File | Size / format | Purpose | Why |
-|---|---|---|---|
-| `icons/icon-192.png` | 192x192 PNG | `any` | Chrome/Samsung criteria ([web.dev](https://web.dev/articles/install-criteria)) |
-| `icons/icon-512.png` | 512x512 PNG | `any` | Chrome criteria; splash screen; Safari manifest icon |
-| `icons/maskable-512.png` | 512x512 PNG, opaque, art inside the central 80% (40% radius circle) | `maskable` | Android adaptive icon shapes. Without one, Android may shrink the icon onto a white background ([web.dev learn: manifest](https://web.dev/learn/pwa/web-app-manifest)) |
-| `apple-touch-icon.png` | 180x180 PNG, opaque | link `rel="apple-touch-icon"` | iPhone retina home-screen size ([Apple: Configuring Web Applications](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html)) |
-| `favicon.svg` | SVG | `<link rel="icon">` | Replaces `vite.svg`. Safari 26 accepts SVG icons everywhere ([WebKit 26.0](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/)) |
+| File                     | Size / format                                                       | Purpose                       | Why                                                                                                                                                                                                                                       |
+| ------------------------ | ------------------------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `icons/icon-192.png`     | 192x192 PNG                                                         | `any`                         | Chrome/Samsung criteria ([web.dev](https://web.dev/articles/install-criteria))                                                                                                                                                            |
+| `icons/icon-512.png`     | 512x512 PNG                                                         | `any`                         | Chrome criteria; splash screen; Safari manifest icon                                                                                                                                                                                      |
+| `icons/maskable-512.png` | 512x512 PNG, opaque, art inside the central 80% (40% radius circle) | `maskable`                    | Android adaptive icon shapes. Without one, Android may shrink the icon onto a white background ([web.dev learn: manifest](https://web.dev/learn/pwa/web-app-manifest))                                                                    |
+| `apple-touch-icon.png`   | 180x180 PNG, opaque                                                 | link `rel="apple-touch-icon"` | iPhone retina home-screen size ([Apple: Configuring Web Applications](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html)) |
+| `favicon.svg`            | SVG                                                                 | `<link rel="icon">`           | Replaces `vite.svg`. Safari 26 accepts SVG icons everywhere ([WebKit 26.0](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/))                                                                                                |
 
 Notes:
 
@@ -208,12 +208,12 @@ What this means for Wishlists:
 
 ## 4. Service worker: needed anywhere?
 
-| Browser | Needed to install/standalone? |
-|---|---|
-| Chrome Android | No (removed in Chrome 108; not in the current Chromium checker) |
+| Browser          | Needed to install/standalone?                                                                                                                      |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chrome Android   | No (removed in Chrome 108; not in the current Chromium checker)                                                                                    |
 | Samsung Internet | Listed in Samsung's ambient-badge doc for the address-bar icon (old page; unverified today). The menu "Add page to > Home screen" works regardless |
-| Firefox Android | No (shortcut only) |
-| Safari iOS 26 | No |
+| Firefox Android  | No (shortcut only)                                                                                                                                 |
+| Safari iOS 26    | No                                                                                                                                                 |
 
 If the Samsung badge turns out to matter, the smallest compliant addition is a hand-written
 `public/sw.js` with a pass-through `fetch` listener, registered from `main.tsx`. Don't add
@@ -253,13 +253,13 @@ responses.
 
 ## 6. vite-plugin-pwa vs hand-written files
 
-| | Hand-written (`public/`) | vite-plugin-pwa 2.0.0 |
-|---|---|---|
-| What you get | Exactly the files you write. Vite copies `public/` into `dist/`, then into `wwwroot/` | Generated `manifest.webmanifest`, injected link, **Workbox service worker** and registration script ([vite-pwa guide](https://vite-pwa-org.netlify.app/guide/)) |
-| Vite compatibility | n/a | peer `vite ^3 … ^8` (npm, 2026-10). Untested here with the `rolldown-vite@7.3.1` override |
-| Service worker | None (not needed, section 4) | Generated by default. Supports `manifest: false` and other modes, but the plugin's point is the SW |
-| Icons | Made once (by hand or with `@vite-pwa/assets-generator` CLI, run ad hoc) | Can wire in `@vite-pwa/assets-generator` |
-| Risk | Low. Static JSON plus PNGs | A caching SW in front of a cookie-auth API needs an update strategy (`autoUpdate`/prompt) and testing |
+|                    | Hand-written (`public/`)                                                              | vite-plugin-pwa 2.0.0                                                                                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| What you get       | Exactly the files you write. Vite copies `public/` into `dist/`, then into `wwwroot/` | Generated `manifest.webmanifest`, injected link, **Workbox service worker** and registration script ([vite-pwa guide](https://vite-pwa-org.netlify.app/guide/)) |
+| Vite compatibility | n/a                                                                                   | peer `vite ^3 … ^8` (npm, 2026-10). Untested here with the `rolldown-vite@7.3.1` override                                                                       |
+| Service worker     | None (not needed, section 4)                                                          | Generated by default. Supports `manifest: false` and other modes, but the plugin's point is the SW                                                              |
+| Icons              | Made once (by hand or with `@vite-pwa/assets-generator` CLI, run ad hoc)              | Can wire in `@vite-pwa/assets-generator`                                                                                                                        |
+| Risk               | Low. Static JSON plus PNGs                                                            | A caching SW in front of a cookie-auth API needs an update strategy (`autoUpdate`/prompt) and testing                                                           |
 
 **Recommendation:** hand-write `public/manifest.webmanifest` and the icons, and add the link tags
 to `index.html`. Revisit vite-plugin-pwa only if offline support or a precaching SW becomes a
@@ -273,7 +273,7 @@ confused.
 ## 7. ASP.NET static host (`Program.cs`, Dockerfile)
 
 **Dockerfile issue (fix this first):** `COPY vite.config.ts tsconfig*.json index.html public/ ./`
-copies the *contents* of `public/` into `/work`, not into `/work/public`. When a `COPY` source
+copies the _contents_ of `public/` into `/work`, not into `/work/public`. When a `COPY` source
 is a directory, Docker copies the directory's contents, not the directory itself
 ([Dockerfile reference: COPY](https://docs.docker.com/reference/dockerfile/#copy)). Vite's
 `publicDir` defaults to `<root>/public`, so in the image build it finds nothing to copy into
