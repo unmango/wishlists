@@ -31,15 +31,37 @@ public sealed class LoginTests(AppFixture app)
 
 	[Fact]
 	public async Task Sign_in_cookie_outlives_the_browser_session() {
+		var cookie = await SignInCookieAsync(AppFixture.AllowedEmail);
+
+		Assert.Contains("expires=", cookie, StringComparison.OrdinalIgnoreCase);
+	}
+
+	[Theory]
+	[InlineData(AppFixture.AllowedEmail, true)]
+	[InlineData("removed@example.com", false)]
+	public async Task Sign_in_cookie_only_works_while_the_email_is_allowed(string email, bool expected) {
+		var cookie = await SignInCookieAsync(email);
+
+		using var scope = app.Services.CreateScope();
+		var context = new DefaultHttpContext { RequestServices = scope.ServiceProvider };
+		context.Request.Headers.Cookie = cookie.Split(';')[0];
+		var result = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+		Assert.Equal(expected, result.Succeeded);
+	}
+
+	private async Task<string> SignInCookieAsync(string email) {
 		using var scope = app.Services.CreateScope();
 		var context = new DefaultHttpContext { RequestServices = scope.ServiceProvider };
 		var principal = new ClaimsPrincipal(new ClaimsIdentity(
-			[new Claim(MemberSignIn.MemberIdClaim, Guid.NewGuid().ToString())],
+			[
+				new Claim(MemberSignIn.MemberIdClaim, Guid.NewGuid().ToString()),
+				new Claim(ClaimTypes.Email, email),
+			],
 			CookieAuthenticationDefaults.AuthenticationScheme));
 
 		await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-		var cookie = Assert.Single(context.Response.Headers.SetCookie, c => c!.StartsWith("wishlists="));
-		Assert.Contains("expires=", cookie, StringComparison.OrdinalIgnoreCase);
+		return Assert.Single(context.Response.Headers.SetCookie, c => c!.StartsWith("wishlists="))!;
 	}
 }

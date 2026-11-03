@@ -37,6 +37,7 @@ public sealed class AppFixture : IAsyncLifetime
 			.UseSetting("ConnectionStrings:App", connectionString)
 			.UseSetting("Auth:Google:ClientId", "test-client-id")
 			.UseSetting("Auth:Google:ClientSecret", "test-client-secret")
+			.UseSetting("Auth:AllowedEmails:0", AllowedEmail)
 			.ConfigureTestServices(services => services
 				.AddAuthentication(TestAuthHandler.Scheme)
 				.AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.Scheme, null)));
@@ -49,6 +50,8 @@ public sealed class AppFixture : IAsyncLifetime
 		if (_factory is not null) await _factory.DisposeAsync();
 		if (_container is not null) await _container.DisposeAsync();
 	}
+
+	public const string AllowedEmail = "allowed@example.com";
 
 	public IServiceProvider Services => _factory!.Services;
 
