@@ -14,8 +14,9 @@ marked **(unverified)** could not be confirmed in a primary source during this p
   `theme_color`, `background_color`, and PNG icons at 192x192 and 512x512 (`purpose: "any"`),
   plus a separate 512x512 `purpose: "maskable"` icon. Link it from `index.html`. Add a
   180x180 `apple-touch-icon` PNG.
-- **No service worker is needed for install** on Chrome for Android (since Chrome 108) or
-  Safari on iOS. Samsung Internet's own (older) docs still list a registered service worker
+- **No service worker is needed to install from the browser menu** on Chrome for Android
+  (since Chrome 108) or Safari on iOS. Whether Chrome's automatic install prompt still checks
+  for a fetch handler is unverified (section 4). Samsung Internet's own (older) docs still list a registered service worker
   for its address-bar install badge. Firefox for Android installs a shortcut whatever you
   serve.
 - **HTTPS is required** everywhere. `localhost` is exempt for development.
@@ -272,14 +273,13 @@ confused.
 
 ## 7. ASP.NET static host (`Program.cs`, Dockerfile)
 
-**Dockerfile issue (fix this first):** `COPY vite.config.ts tsconfig*.json index.html public/ ./`
-copies the _contents_ of `public/` into `/work`, not into `/work/public`. When a `COPY` source
+**Dockerfile issue (fixed in #492):** `COPY vite.config.ts tsconfig*.json index.html public/ ./`
+copied the _contents_ of `public/` into `/work`, not into `/work/public`. When a `COPY` source
 is a directory, Docker copies the directory's contents, not the directory itself
 ([Dockerfile reference: COPY](https://docs.docker.com/reference/dockerfile/#copy)). Vite's
-`publicDir` defaults to `<root>/public`, so in the image build it finds nothing to copy into
-`dist/`. Today `/vite.svg` is probably missing from `wwwroot`. A manifest and icons in
-`public/` would be missing too, and the browser would get 404s. Fix it with a separate line,
-`COPY public/ ./public/`, and confirm by listing `wwwroot` in the built image.
+`publicDir` defaults to `<root>/public`, so the image build found nothing to copy into
+`dist/`. The Dockerfile now has a separate `COPY public/ ./public/` line. Confirm by listing
+`wwwroot` in the built image.
 
 - **MIME type:** the default `FileExtensionContentTypeProvider` already maps `.webmanifest` to
   `application/manifest+json`, which is the type the spec registers. `.png` and `.svg` are mapped
@@ -358,4 +358,4 @@ Then check:
 
 - Chrome DevTools > Application > Manifest shows no installability errors and the computed `id`.
 - `about://webapks` on Android.
-- On a real iPhone, Share > Add to Home Screen opens without Safari UI.
+- On a real iPhone with "Open as Web App" left on, Share > Add to Home Screen opens without Safari UI.
