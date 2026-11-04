@@ -25,8 +25,12 @@ The one list of items a member keeps.
 _Avoid_: list (when ambiguous), registry
 
 **Item**:
-One thing on a wishlist: a name, and optionally a link, price, notes and a "really want" flag.
+One thing on a wishlist: a name, and optionally a link, price, notes and a "really want" flag. An item with a link may also show a thumbnail.
 _Avoid_: gift, wish
+
+**Thumbnail**:
+A small picture on an item, found automatically from the item's link. Never chosen or uploaded by the owner. When the link changes or is cleared, the thumbnail goes with it.
+_Avoid_: picture, photo, preview image, og image
 
 **Mark bought**:
 What a gift-giver does to an item so other gift-givers know it's taken. Visible to every member except the owner.
