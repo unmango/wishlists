@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.5](https://github.com/unmango/wishlists/compare/v0.1.4...v0.1.5) (2026-11-06)
+
+
+### Bug Fixes
+
+* keep members signed in and ship public/ in the image ([#492](https://github.com/unmango/wishlists/issues/492)) ([592f0ae](https://github.com/unmango/wishlists/commit/592f0ae7c51fb601ad7031246fe26f14a99866b7))
+
+
+### Documentation
+
+* **context:** define Thumbnail ([#493](https://github.com/unmango/wishlists/issues/493)) ([76e8827](https://github.com/unmango/wishlists/commit/76e88273c5549b7af39ae40df411cce0f5114dba))
+* keep household details out of GitHub ([#482](https://github.com/unmango/wishlists/issues/482)) ([a4b6cd0](https://github.com/unmango/wishlists/commit/a4b6cd072c16280ea298962697b7360ece200112))
+
 ## [0.1.4](https://github.com/unmango/wishlists/compare/v0.1.3...v0.1.4) (2026-11-01)
 
 
