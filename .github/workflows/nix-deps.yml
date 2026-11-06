@@ -23,7 +23,7 @@ jobs:
     steps:
       # A push made with GITHUB_TOKEN wouldn't trigger CI on the new commit,
       # so push with the release App's token instead.
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         id: app-token
         with:
           app-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
