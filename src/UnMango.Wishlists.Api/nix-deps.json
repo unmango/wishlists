@@ -11,18 +11,18 @@
   },
   {
     "pname": "JasperFx",
-    "version": "2.97.0",
-    "hash": "sha256-VzSJT8cUaZz5ZHRhSJoItWGLk+rrPzYkGRBpKwWEpOg="
+    "version": "2.100.0",
+    "hash": "sha256-6nt81RUzcnq50+MptbAZbLXEgBTPvznMkjH3wmMKBQg="
   },
   {
     "pname": "JasperFx.Events",
-    "version": "2.97.0",
-    "hash": "sha256-2geJDWyj50YiOsPUtlnZmr6TEZRQqBMiioLAZypOXOM="
+    "version": "2.100.0",
+    "hash": "sha256-v0oylQXeMxbxOGXLPrIfiiWyG51IL5beQYhP0FFDMkE="
   },
   {
     "pname": "Marten",
-    "version": "9.56.0",
-    "hash": "sha256-wIaT6QqhegiLnDf61y9bG6MAZKMnHlycj+1YXtxhlwk="
+    "version": "9.58.0",
+    "hash": "sha256-ubEXPs8xLZy1wQZBCDbUtNnNndio2itzAM9KkNhtbL0="
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.Google",
@@ -56,6 +56,11 @@
   },
   {
     "pname": "NetTopologySuite",
+    "version": "2.0.0",
+    "hash": "sha256-sGv/EpZI+knjObiks9DP/qstFZ+G0UMsagDFvAmgYvo="
+  },
+  {
+    "pname": "NetTopologySuite",
     "version": "2.5.0",
     "hash": "sha256-nIjkrfQwb8BDbtyLFoKLn5+KklbfW60Dxb1Op9t58lM="
   },
@@ -63,6 +68,11 @@
     "pname": "NetTopologySuite.IO.PostGis",
     "version": "2.1.0",
     "hash": "sha256-/TNiUvxRPcKu/DomqSepGp/YPffTZDE7TwB6gmdRIrs="
+  },
+  {
+    "pname": "Npgsql",
+    "version": "8.0.6",
+    "hash": "sha256-HebK3NmiuFvq6KfjNwpUs6B/RqA5Uwl9QzTRfaOrK34="
   },
   {
     "pname": "Npgsql",
@@ -111,17 +121,17 @@
   },
   {
     "pname": "Weasel.Core",
-    "version": "9.47.1",
-    "hash": "sha256-mVcX+6XtC2MtQIXhq+vGG2ucqV3+EW18nTleFuv7MZE="
+    "version": "9.49.0",
+    "hash": "sha256-AtYR0cicPxPl4c35sD1X2+5Veyv23HbzKDyyQpIyPt0="
   },
   {
     "pname": "Weasel.Postgresql",
-    "version": "9.47.1",
-    "hash": "sha256-jbdfeGyQfUczFgFtOzmtgBWyag1wVSNSZZMJCpik4Do="
+    "version": "9.49.0",
+    "hash": "sha256-9wLrZOJPGG7MD5+DuZuGGZXCTQUvMNmw/SEylsWsZqs="
   },
   {
     "pname": "Weasel.Storage",
-    "version": "9.47.1",
-    "hash": "sha256-+/05PQG/G/53FbYwNs2q/ZhaObVd6AhvwPMnJuamaok="
+    "version": "9.49.0",
+    "hash": "sha256-tD3YwxnxBOggF5EvdkOKev2ZmPLz0geCAc58xfgoq9Q="
   }
 ]
