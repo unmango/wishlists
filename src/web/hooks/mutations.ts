@@ -15,10 +15,12 @@ function useRefreshMine() {
  * A new link's thumbnail is looked for in the background after the save, so refresh my list once
  * more after it has had time to land. Otherwise it shows up on the next normal refresh.
  */
+const thumbnailLookupMs = 3000;
+
 function useRefreshMineForThumbnail() {
   const mutate = useMutate();
   return (saved: OwnItem | undefined) => {
-    if (saved?.link && !saved.thumbnail) setTimeout(() => void mutate(['/api/wishlists/mine']), 3000);
+    if (saved?.link && !saved.thumbnail) setTimeout(() => void mutate(['/api/wishlists/mine']), thumbnailLookupMs);
   };
 }
 

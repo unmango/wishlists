@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace UnMango.Wishlists.Api.Thumbnails;
 
-/// <summary>Finds the picture a shop page advertises for sharing (og:image, then twitter:image).</summary>
+/// <summary>Finds the image a shop page advertises for sharing (og:image, then twitter:image).</summary>
 public static partial class PageImage
 {
 	// Most specific first.
@@ -28,7 +28,7 @@ public static partial class PageImage
 		foreach (var key in Keys) {
 			if (found.TryGetValue(key, out var value)
 			    && Uri.TryCreate(page, value, out var uri)
-			    && (uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp)) {
+			    && ThumbnailClient.IsHttp(uri)) {
 				return uri;
 			}
 		}

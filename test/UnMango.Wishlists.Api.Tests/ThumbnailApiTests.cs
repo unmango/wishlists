@@ -112,7 +112,7 @@ public sealed class ThumbnailApiTests(AppFixture app)
 	public async Task Items_without_a_thumbnail_have_none() {
 		var (_, ada) = await app.JoinAsync("Ada");
 		var noImage = $"https://shop.example.com/{Guid.NewGuid():N}";
-		app.Web.Html(noImage, "<html><head><title>No picture</title></head></html>");
+		app.Web.Html(noImage, "<html><head><title>No image</title></head></html>");
 
 		var plain = await AddAsync(ada, noImage);
 		var broken = await AddAsync(ada, $"https://shop.example.com/{Guid.NewGuid():N}"); // 404

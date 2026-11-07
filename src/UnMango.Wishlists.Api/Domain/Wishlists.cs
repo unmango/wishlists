@@ -50,6 +50,9 @@ public sealed record WishlistView(
 
 	public WishlistItem? FindCurrent(Guid itemId) => CurrentItems.FirstOrDefault(x => x.Id == itemId);
 
+	/// <summary>Finds an item even if the owner removed it.</summary>
+	public WishlistItem? Find(Guid itemId) => Items.FirstOrDefault(x => x.Id == itemId);
+
 	public static WishlistView Create(WishlistCreated e) =>
 		new(e.WishlistId, e.OwnerId, e.Name, e.PurchasesId, []);
 

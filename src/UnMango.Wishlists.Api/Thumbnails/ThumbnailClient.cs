@@ -8,11 +8,10 @@ public sealed record ThumbnailImage(string ContentType, byte[] Bytes);
 
 /// <summary>
 /// Looks at an item's link for a thumbnail, and downloads it. Every miss (an error, a timeout, a page
-/// with no picture, something too big or not an image) comes back as null, never as an exception.
+/// with no image, something too big or not an image) comes back as null, never as an exception.
 /// </summary>
 public sealed class ThumbnailClient(HttpClient http)
 {
-	public const string HttpClientName = "Thumbnails";
 	public const int MaxRedirects = 3;
 	public const int MaxPageBytes = 1024 * 1024;
 	public const int MaxImageBytes = 5 * 1024 * 1024;
@@ -26,7 +25,7 @@ public sealed class ThumbnailClient(HttpClient http)
 		return http;
 	}
 
-	/// <summary>The picture the page at <paramref name="link" /> advertises, if any.</summary>
+	/// <summary>The image the page at <paramref name="link" /> advertises, if any.</summary>
 	public Task<Uri?> FindAsync(string link, CancellationToken cancellationToken) =>
 		Guard(cancellationToken, async ct => {
 			var fetched = await GetAsync(link, "text/html,application/xhtml+xml", ct);
@@ -109,8 +108,10 @@ public sealed class ThumbnailClient(HttpClient http)
 		var ok = baseUri is null
 			? Uri.TryCreate(value, UriKind.Absolute, out uri!)
 			: Uri.TryCreate(baseUri, value, out uri!);
-		return ok && (uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp);
+		return ok && IsHttp(uri);
 	}
+
+	public static bool IsHttp(Uri uri) => uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp;
 
 	/// <summary>Reads at most <paramref name="max" /> bytes, and says whether there was more.</summary>
 	private static async Task<(byte[] Bytes, bool Truncated)> ReadAsync(HttpResponseMessage response, int max, CancellationToken ct) {

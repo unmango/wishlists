@@ -230,7 +230,7 @@ internal static class WishlistsApi
 				// Any member may see any item's thumbnail; the image comes only from the stored URL, never from the request.
 				var wishlist = await session.Query<WishlistView>()
 					.FirstOrDefaultAsync(w => w.Items.Any(i => i.Id == itemId), cancellationToken);
-				var url = wishlist?.Items.First(i => i.Id == itemId).ThumbnailUrl;
+				var url = wishlist?.Find(itemId)?.ThumbnailUrl;
 				if (url is null) return TypedResults.NotFound();
 
 				var image = await thumbnails.DownloadAsync(url, cancellationToken);

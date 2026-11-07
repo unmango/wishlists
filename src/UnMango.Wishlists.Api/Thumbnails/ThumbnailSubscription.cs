@@ -45,7 +45,15 @@ public sealed class ThumbnailSubscription : SubscriptionBase
 			var item = wishlist?.FindCurrent(itemId);
 			if (item is null || item.Link != link || item.ThumbnailUrl is not null) continue;
 
-			var image = await _client.FindAsync(link, cancellationToken);
+			Uri? image;
+			try {
+				image = await _client.FindAsync(link, cancellationToken);
+			} catch (Exception ex) when (ex is not OperationCanceledException) {
+				// A surprise in one page mustn't pause the subscription and stall every later lookup.
+				_logger.LogWarning(ex, "Thumbnail lookup failed for item {ItemId}", itemId);
+				continue;
+			}
+
 			_logger.LogInformation("Thumbnail lookup for item {ItemId}: {Result}", itemId, image is null ? "none" : "found");
 			if (image is null) continue;
 
@@ -56,7 +64,7 @@ public sealed class ThumbnailSubscription : SubscriptionBase
 				session.Events.Append(e.StreamId, new ItemThumbnailFound(itemId, link, image.AbsoluteUri));
 				await session.SaveChangesAsync(cancellationToken);
 			} catch (Exception ex) when (ex is not OperationCanceledException) {
-				// Most likely the owner saved at the same moment. Losing one thumbnail beats stalling every later lookup.
+				// Most likely a concurrent write to the same stream. Losing one thumbnail beats stalling every later lookup.
 				_logger.LogWarning(ex, "Couldn't record the thumbnail for item {ItemId}", itemId);
 			}
 		}
