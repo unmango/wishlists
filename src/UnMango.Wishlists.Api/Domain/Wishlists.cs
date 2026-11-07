@@ -24,6 +24,9 @@ public sealed record ItemEdited(
 
 public sealed record ItemRemoved(Guid ItemId);
 
+/// <summary>A thumbnail found on the page at <paramref name="Link" />, recorded in the background after the item was saved.</summary>
+public sealed record ItemThumbnailFound(Guid ItemId, string Link, string ImageUrl);
+
 public sealed record WishlistItem(
 	Guid Id,
 	string Name,
@@ -31,7 +34,8 @@ public sealed record WishlistItem(
 	decimal? Price,
 	string? Notes,
 	bool ReallyWant,
-	bool Removed = false);
+	bool Removed = false,
+	string? ThumbnailUrl = null);
 
 public sealed record WishlistView(
 	Guid Id,
@@ -46,6 +50,9 @@ public sealed record WishlistView(
 
 	public WishlistItem? FindCurrent(Guid itemId) => CurrentItems.FirstOrDefault(x => x.Id == itemId);
 
+	/// <summary>Finds an item even if the owner removed it.</summary>
+	public WishlistItem? Find(Guid itemId) => Items.FirstOrDefault(x => x.Id == itemId);
+
 	public static WishlistView Create(WishlistCreated e) =>
 		new(e.WishlistId, e.OwnerId, e.Name, e.PurchasesId, []);
 
@@ -57,9 +64,22 @@ public sealed record WishlistView(
 
 	public WishlistView Apply(ItemEdited e) => this with {
 		Items = Items.Select(x => x.Id == e.ItemId
-				? x with { Name = e.Name, Link = e.Link, Price = e.Price, Notes = e.Notes, ReallyWant = e.ReallyWant }
+				? x with {
+					Name = e.Name,
+					Link = e.Link,
+					Price = e.Price,
+					Notes = e.Notes,
+					ReallyWant = e.ReallyWant,
+					// The thumbnail belongs to the link: a new or cleared link takes it away.
+					ThumbnailUrl = x.Link == e.Link ? x.ThumbnailUrl : null,
+				}
 				: x)
 			.ToList(),
+	};
+
+	// A lookup that finishes after the link changed is for a link the item no longer has.
+	public WishlistView Apply(ItemThumbnailFound e) => this with {
+		Items = Items.Select(x => x.Id == e.ItemId && x.Link == e.Link ? x with { ThumbnailUrl = e.ImageUrl } : x).ToList(),
 	};
 
 	public WishlistView Apply(ItemRemoved e) => this with {

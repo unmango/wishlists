@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using UnMango.Wishlists.Api.Auth;
 using UnMango.Wishlists.Api.Domain;
+using UnMango.Wishlists.Api.Thumbnails;
 
 namespace UnMango.Wishlists.Api.Api;
 
@@ -76,7 +77,8 @@ internal static class WishlistsApi
 					.SelectMany(w => w.Items
 						.Where(i => itemIdsByWishlist[w.Id].Contains(i.Id))
 						.Select(i => new MyPurchase(
-							w.Id, w.OwnerId, names.GetValueOrDefault(w.OwnerId, ""), i.Id, i.Name, i.Link, i.Price, i.Removed)))
+							w.Id, w.OwnerId, names.GetValueOrDefault(w.OwnerId, ""), i.Id, i.Name, i.Link, i.Price, i.Removed,
+							ThumbnailPath.For(i))))
 					.ToList();
 
 				return TypedResults.Ok(result);
@@ -141,7 +143,8 @@ internal static class WishlistsApi
 				stream.AppendOne(added);
 				await session.SaveChangesAsync(cancellationToken);
 
-				var item = new OwnItem(added.ItemId, added.Name, added.Link, added.Price, added.Notes, added.ReallyWant);
+				// No thumbnail yet: it's looked for in the background.
+				var item = new OwnItem(added.ItemId, added.Name, added.Link, added.Price, added.Notes, added.ReallyWant, null);
 				return TypedResults.Created($"/api/wishlists/mine/items/{item.Id}", item);
 			});
 
@@ -164,7 +167,7 @@ internal static class WishlistsApi
 				stream.AppendOne(edited);
 				await session.SaveChangesAsync(cancellationToken);
 
-				return TypedResults.Ok(new OwnItem(itemId, edited.Name, edited.Link, edited.Price, edited.Notes, edited.ReallyWant));
+				return TypedResults.Ok(ToOwn(stream.Aggregate.Apply(edited).FindCurrent(itemId)!));
 			});
 
 			mine.MapDelete("/items/{itemId:guid}", async Task<Results<NoContent, NotFound>> (
@@ -208,12 +211,34 @@ internal static class WishlistsApi
 						Guid? buyer = buyers.TryGetValue(x.Id, out var b) ? b : null;
 						return new GiftItem(
 							x.Id, x.Name, x.Link, x.Price, x.Notes, x.ReallyWant, x.Removed,
-							buyer, buyer is { } bid ? names.GetValueOrDefault(bid) : null);
+							buyer, buyer is { } bid ? names.GetValueOrDefault(bid) : null,
+							ThumbnailPath.For(x));
 					})
 					.ToList();
 
 				return TypedResults.Ok(new GiftWishlist(
 					wishlist.Id, wishlist.Name, wishlist.OwnerId, names.GetValueOrDefault(wishlist.OwnerId, ""), items));
+			});
+
+			endpoints.MapGet("/items/{itemId:guid}/thumbnail", async Task<Results<FileContentHttpResult, NotFound>> (
+				HttpContext context,
+				[FromServices] IQuerySession session,
+				[FromServices] ThumbnailClient thumbnails,
+				[FromRoute] Guid itemId,
+				CancellationToken cancellationToken
+			) => {
+				// Any member may see any item's thumbnail; the image comes only from the stored URL, never from the request.
+				var wishlist = await session.Query<WishlistView>()
+					.FirstOrDefaultAsync(w => w.Items.Any(i => i.Id == itemId), cancellationToken);
+				var url = wishlist?.Find(itemId)?.ThumbnailUrl;
+				if (url is null) return TypedResults.NotFound();
+
+				var image = await thumbnails.DownloadAsync(url, cancellationToken);
+				if (image is null) return TypedResults.NotFound();
+
+				context.Response.Headers.CacheControl = "private, max-age=86400";
+				context.Response.Headers.XContentTypeOptions = "nosniff";
+				return TypedResults.File(image.Bytes, image.ContentType);
 			});
 
 			wishlists.MapPut("/{id:guid}/items/{itemId:guid}/bought", async Task<Results<NoContent, NotFound, ProblemHttpResult>> (
@@ -280,9 +305,10 @@ internal static class WishlistsApi
 	private static OwnWishlist ToOwn(WishlistView wishlist) => new(
 		wishlist.Id,
 		wishlist.Name,
-		wishlist.CurrentItems
-			.Select(x => new OwnItem(x.Id, x.Name, x.Link, x.Price, x.Notes, x.ReallyWant))
-			.ToList());
+		wishlist.CurrentItems.Select(ToOwn).ToList());
+
+	private static OwnItem ToOwn(WishlistItem x) =>
+		new(x.Id, x.Name, x.Link, x.Price, x.Notes, x.ReallyWant, ThumbnailPath.For(x));
 
 	private static string? Clean(string? value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 

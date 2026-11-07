@@ -78,6 +78,34 @@ app:
 # Extra environment variables for the app container.
 extraEnv: []
 
+# An egress NetworkPolicy for the app. Thumbnail lookups fetch item links from the internet; the app
+# already refuses private and cluster addresses itself, and this adds a second fence at the network.
+# Off by default: only turn it on where the cluster's CNI enforces NetworkPolicies.
+networkPolicy:
+  enabled: false
+  # Address ranges left out of the "public internet" rule (ports 80 and 443).
+  excludedCidrs:
+    - 10.0.0.0/8
+    - 100.64.0.0/10
+    - 127.0.0.0/8
+    - 169.254.0.0/16
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+  # Also allow the public IPv6 internet.
+  ipv6: false
+  excludedCidrsV6:
+    - fc00::/7
+    - fe80::/10
+  # More egress rules. The database is usually in the cluster, so it needs one, for example:
+  # - to:
+  #     - podSelector:
+  #         matchLabels:
+  #           cnpg.io/cluster: wishlists-db
+  #   ports:
+  #     - protocol: TCP
+  #       port: 5432
+  extraEgress: []
+
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types

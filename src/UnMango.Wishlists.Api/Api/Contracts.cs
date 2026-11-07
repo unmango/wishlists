@@ -9,7 +9,8 @@ public sealed record ItemRequest(string Name, string? Link, decimal? Price, stri
 public sealed record RenameWishlist(string Name);
 
 /// <summary>An item as its owner sees it. Deliberately has no bought fields.</summary>
-public sealed record OwnItem(Guid Id, string Name, string? Link, decimal? Price, string? Notes, bool ReallyWant);
+/// <param name="Thumbnail">Path to the item's thumbnail image, when one was found from its link.</param>
+public sealed record OwnItem(Guid Id, string Name, string? Link, decimal? Price, string? Notes, bool ReallyWant, string? Thumbnail);
 
 /// <summary>A wishlist as its owner sees it. Deliberately has no bought fields.</summary>
 public sealed record OwnWishlist(Guid Id, string Name, IReadOnlyList<OwnItem> Items);
@@ -24,7 +25,8 @@ public sealed record GiftItem(
 	bool ReallyWant,
 	bool RemovedByOwner,
 	Guid? BoughtBy,
-	string? BoughtByName);
+	string? BoughtByName,
+	string? Thumbnail);
 
 /// <summary>A wishlist as a gift-giver sees it.</summary>
 public sealed record GiftWishlist(
@@ -43,4 +45,5 @@ public sealed record MyPurchase(
 	string Name,
 	string? Link,
 	decimal? Price,
-	bool RemovedByOwner);
+	bool RemovedByOwner,
+	string? Thumbnail);

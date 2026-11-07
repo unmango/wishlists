@@ -1,7 +1,7 @@
 import { faCheck, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { GiftItem, Me } from '../api';
-import { Card, ErrorMessage, Loading, ReallyWantStar, Screen } from '../components/ui';
+import { Card, ErrorMessage, Loading, ReallyWantStar, Screen, Thumbnail } from '../components/ui';
 import { formatPrice, linkHost } from '../format';
 import { href, useMarkBought, useUnmarkBought, useWishlist } from '../hooks';
 
@@ -19,6 +19,7 @@ function ItemRow(
     <li>
       <Card className={`flex flex-col gap-2.5 px-4 py-3.5 ${item.removedByOwner ? 'opacity-70' : ''}`}>
         <div className='flex items-start gap-2.5'>
+          <Thumbnail src={item.thumbnail} />
           <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
             <div className='flex items-center gap-1.5'>
               {item.reallyWant && <ReallyWantStar label={`${ownerName} really wants this`} />}
