@@ -36,18 +36,17 @@ jobs:
 
   web:
     runs-on: ubuntu-latest
-    env:
-      # renovate: datasource=github-tags depName=oven-sh/bun
-      BUN_VERSION: 1.4.4
     steps:
       - uses: actions/checkout@v7
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: unmango/actions/setup-nix@e8bbcbd12a2c521c5cb36957c00a7a8f4fe2e766 # v2.0.0
         with:
-          bun-version: ${{ env.BUN_VERSION }}
+          github_access_token: ${{ github.token }}
+          cachix_auth_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - run: bun install --frozen-lockfile
-      - run: bun run build
+      # Take bun from the flake's locked nixpkgs, so CI uses the same bun as the nix build and dev shell.
+      - run: nix shell --inputs-from . nixpkgs#bun --command bun install --frozen-lockfile
+      - run: nix shell --inputs-from . nixpkgs#bun --command bun run build
 
   nix:
     runs-on: ubuntu-latest
