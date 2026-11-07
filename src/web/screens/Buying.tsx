@@ -1,5 +1,5 @@
 import type { MyPurchase } from '../api';
-import { Card, ErrorMessage, Loading, PageHeader, Screen } from '../components/ui';
+import { Card, ErrorMessage, Loading, PageHeader, Screen, Thumbnail } from '../components/ui';
 import { formatPrice, linkHost, toNumber } from '../format';
 import { href, useMyPurchases } from '../hooks';
 
@@ -46,6 +46,7 @@ export function Buying() {
                         href={href({ name: 'list', id: item.wishlistId })}
                         className='flex min-h-14 items-center gap-2.5 px-4 py-3 text-ink'
                       >
+                        <Thumbnail src={item.thumbnail} />
                         <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
                           <span
                             className={`text-base font-medium break-words ${item.removedByOwner ? 'line-through' : ''}`}

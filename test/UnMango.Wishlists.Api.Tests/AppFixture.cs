@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Testcontainers.PostgreSql;
 using UnMango.Wishlists.Api.Auth;
+using UnMango.Wishlists.Api.Tests.Thumbnails;
+using UnMango.Wishlists.Api.Thumbnails;
 
 [assembly: AssemblyFixture(typeof(UnMango.Wishlists.Api.Tests.AppFixture))]
 
@@ -38,9 +40,13 @@ public sealed class AppFixture : IAsyncLifetime
 			.UseSetting("Auth:Google:ClientId", "test-client-id")
 			.UseSetting("Auth:Google:ClientSecret", "test-client-secret")
 			.UseSetting("Auth:AllowedEmails:0", AllowedEmail)
-			.ConfigureTestServices(services => services
-				.AddAuthentication(TestAuthHandler.Scheme)
-				.AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.Scheme, null)));
+			.ConfigureTestServices(services => {
+				services
+					.AddAuthentication(TestAuthHandler.Scheme)
+					.AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.Scheme, null);
+				// Thumbnail lookups go to the fake web instead of the internet.
+				services.AddHttpClient<ThumbnailClient>().ConfigurePrimaryHttpMessageHandler(() => Web);
+			}));
 
 		// Force startup so the schema exists before tests run.
 		_ = _factory.Server;
@@ -54,6 +60,9 @@ public sealed class AppFixture : IAsyncLifetime
 	public const string AllowedEmail = "allowed@example.com";
 
 	public IServiceProvider Services => _factory!.Services;
+
+	/// <summary>The pretend internet that thumbnail lookups reach.</summary>
+	public FakeWeb Web { get; } = new();
 
 	/// <summary>A client with no signed-in member.</summary>
 	public HttpClient Anonymous() => _factory!.CreateClient(new WebApplicationFactoryClientOptions {

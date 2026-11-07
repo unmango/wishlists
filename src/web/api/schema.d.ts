@@ -109,6 +109,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/items/{itemId}/thumbnail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    itemId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/wishlists/mine": {
         parameters: {
             query?: never;
@@ -459,6 +494,7 @@ export interface components {
             /** Format: uuid */
             boughtBy: null | string;
             boughtByName: null | string;
+            thumbnail: null | string;
         };
         GiftWishlist: {
             /** Format: uuid */
@@ -522,6 +558,7 @@ export interface components {
             /** Format: double */
             price: null | number | string;
             removedByOwner: boolean;
+            thumbnail: null | string;
         };
         OwnItem: {
             /** Format: uuid */
@@ -532,6 +569,7 @@ export interface components {
             price: null | number | string;
             notes: null | string;
             reallyWant: boolean;
+            thumbnail: null | string;
         };
         OwnWishlist: {
             /** Format: uuid */

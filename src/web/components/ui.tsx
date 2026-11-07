@@ -1,6 +1,6 @@
 import { faBagShopping, faGift, faStar, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { href, type Route } from '../hooks';
 
 const tints = ['#0f6e7a', '#c2362c', '#8f5b12', '#6b3f86', '#2f5f9e', '#3d6b2f'];
@@ -52,6 +52,21 @@ export function PageHeader({ eyebrow, title, action }: { eyebrow?: string; title
 
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <div className={`rounded-[10px] bg-card shadow-[0_1px_2px_rgba(0,0,0,0.06)] ${className}`}>{children}</div>;
+}
+
+/** An item's thumbnail, or nothing at all when it has none or the image won't load. */
+export function Thumbnail({ src }: { src: string | null }) {
+  const [failed, setFailed] = useState<string>();
+  if (!src || failed === src) return null;
+  return (
+    <img
+      src={src}
+      alt=''
+      loading='lazy'
+      onError={() => setFailed(src)}
+      className='size-14 shrink-0 rounded-md bg-chip object-cover'
+    />
+  );
 }
 
 export function Loading() {

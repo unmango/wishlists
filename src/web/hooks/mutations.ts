@@ -1,6 +1,6 @@
 import { useSWRConfig } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { defaultClient as client, type ItemRequest, useMutate } from '../api';
+import { defaultClient as client, type ItemRequest, type OwnItem, useMutate } from '../api';
 
 // Errors land in the hook's `error` instead of rejecting trigger().
 const options = { throwOnError: false } as const;
@@ -9,6 +9,17 @@ const options = { throwOnError: false } as const;
 function useRefreshMine() {
   const mutate = useMutate();
   return () => Promise.all([mutate(['/api/wishlists/mine']), mutate(['/api/members'])]);
+}
+
+/**
+ * A new link's thumbnail is looked for in the background after the save, so refresh my list once
+ * more after it has had time to land. Otherwise it shows up on the next normal refresh.
+ */
+function useRefreshMineForThumbnail() {
+  const mutate = useMutate();
+  return (saved: OwnItem | undefined) => {
+    if (saved?.link && !saved.thumbnail) setTimeout(() => void mutate(['/api/wishlists/mine']), 3000);
+  };
 }
 
 /** Refreshes someone else's list and my purchases after a mark changes. */
@@ -23,18 +34,26 @@ function useRefreshMarks(wishlistId: string) {
 
 export function useAddItem() {
   const refresh = useRefreshMine();
+  const refreshForThumbnail = useRefreshMineForThumbnail();
   return useSWRMutation('add-item', async (_, { arg }: { arg: ItemRequest }) => {
-    await client.POST('/api/wishlists/mine/items', { body: arg });
+    const { data } = await client.POST('/api/wishlists/mine/items', { body: arg });
     await refresh();
+    refreshForThumbnail(data);
   }, options);
 }
 
 export function useEditItem() {
   const refresh = useRefreshMine();
+  const refreshForThumbnail = useRefreshMineForThumbnail();
   return useSWRMutation('edit-item', async (_, { arg }: { arg: { itemId: string; item: ItemRequest } }) => {
     const { itemId, item } = arg;
-    await client.PUT('/api/wishlists/mine/items/{itemId}', { params: { path: { itemId } }, body: item });
+    const { data } = await client.PUT('/api/wishlists/mine/items/{itemId}', {
+      params: { path: { itemId } },
+      body: item,
+    });
     await refresh();
+    // Same-link edits keep their thumbnail, so in practice this fires for a new link.
+    refreshForThumbnail(data);
   }, options);
 }
 

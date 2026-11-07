@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { type FormEvent, useState } from 'react';
 import type { OwnItem } from '../api';
 import { ItemSheet } from '../components/ItemSheet';
-import { Card, ErrorMessage, Loading, PageHeader, ReallyWantStar, Screen } from '../components/ui';
+import { Card, ErrorMessage, Loading, PageHeader, ReallyWantStar, Screen, Thumbnail } from '../components/ui';
 import { formatPrice, linkHost } from '../format';
 import { useMyWishlist, useRenameWishlist } from '../hooks';
 
@@ -96,6 +96,7 @@ export function MyList() {
                 onClick={() => setSheetItem(item)}
                 className='flex w-full items-center gap-2.5 px-4 py-3.5 text-left text-ink'
               >
+                <Thumbnail src={item.thumbnail} />
                 <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
                   <div className='flex items-center gap-1.5'>
                     {item.reallyWant && <ReallyWantStar label='Really want' />}

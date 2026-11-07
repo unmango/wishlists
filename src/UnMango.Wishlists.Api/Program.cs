@@ -1,4 +1,5 @@
 using JasperFx;
+using JasperFx.Events.Daemon;
 using JasperFx.Events.Projections;
 using Marten;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -8,6 +9,7 @@ using UnMango.Wishlists.Api.Api;
 using UnMango.Wishlists.Api.Auth;
 using UnMango.Wishlists.Api.Domain;
 using UnMango.Wishlists.Api.Extensions;
+using UnMango.Wishlists.Api.Thumbnails;
 using Vite.AspNetCore;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -37,6 +39,10 @@ builder.Services.Configure<ForwardedHeadersOptions>(options => {
 	}
 });
 
+// Every request to an item's link goes through the SSRF guard.
+builder.Services.AddHttpClient<ThumbnailClient>(http => ThumbnailClient.Configure(http))
+	.ConfigurePrimaryHttpMessageHandler(GuardedHandler.Create);
+
 if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connectionString) {
 	builder.Services
 		.AddMarten(options => {
@@ -50,7 +56,10 @@ if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connecti
 			options.Schema.For<DataProtectionKey>().Identity(x => x.Id);
 		})
 		.UseLightweightSessions()
-		.ApplyAllDatabaseChangesOnStartup();
+		.ApplyAllDatabaseChangesOnStartup()
+		// Thumbnail lookups run in the background. HotCold elects one leader, so only one pod looks things up.
+		.AddSubscriptionWithServices<ThumbnailSubscription>(ServiceLifetime.Scoped, o => o.Name = "Thumbnails")
+		.AddAsyncDaemon(DaemonMode.HotCold);
 
 	builder.Services.PersistDataProtectionKeysToMarten();
 }
