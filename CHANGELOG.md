@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.6](https://github.com/unmango/wishlists/compare/v0.1.5...v0.1.6) (2026-11-07)
+
+
+### Documentation
+
+* add Hercules CI badge ([#422](https://github.com/unmango/wishlists/issues/422)) ([1ba3edc](https://github.com/unmango/wishlists/commit/1ba3edcf4ff2b151469326d7b7c87e2a85fbce5d))
+
+
+### Dependencies
+
+* update adminer docker tag to v6.3.0 ([#497](https://github.com/unmango/wishlists/issues/497)) ([166ebd6](https://github.com/unmango/wishlists/commit/166ebd647f3f29e73769633049822bbac5d75b92))
+* update dependency marten to 9.58.0 ([#498](https://github.com/unmango/wishlists/issues/498)) ([4dfce2d](https://github.com/unmango/wishlists/commit/4dfce2d2c183a3458785383c49276122565b000f))
+
+
+### Continuous Integration
+
+* take bun from the flake's nixpkgs in the web job ([#502](https://github.com/unmango/wishlists/issues/502)) ([c8bfdc3](https://github.com/unmango/wishlists/commit/c8bfdc3489a22b64db5a673001df19746260c90e))
+* upgrade Helm to v4 and fix the Helm job for it ([#500](https://github.com/unmango/wishlists/issues/500)) ([17d2af9](https://github.com/unmango/wishlists/commit/17d2af960d1bd4aaa1bec301e2f2519b94cc76cb))
+
 ## [0.1.5](https://github.com/unmango/wishlists/compare/v0.1.4...v0.1.5) (2026-11-06)
 
 
