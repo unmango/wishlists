@@ -3,21 +3,14 @@
   "isRoot": true,
   "tools": {
     "minver-cli": {
-      "version": "7.0.0",
+      "version": "8.0.0",
       "commands": [
         "minver"
       ],
       "rollForward": false
     },
-    "dotnet-ef": {
-      "version": "10.0.12",
-      "commands": [
-        "dotnet-ef"
-      ],
-      "rollForward": false
-    },
     "jetbrains.resharper.globaltools": {
-      "version": "2026.2.2",
+      "version": "2026.2.4",
       "commands": [
         "jb"
       ],

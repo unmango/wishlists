@@ -5,6 +5,8 @@ on:
     branches: [main]
   push:
     branches: [main]
+    # A v* tag publishes a stable chart and image, e.g. v0.1.0 -> chart 0.1.0 and image tag 0.1.0.
+    tags: ['v*']
 
 permissions:
   contents: read
@@ -25,9 +27,12 @@ jobs:
           cache: true
           cache-dependency-path: |
             src/UnMango.Wishlists.Api/packages.lock.json
+            test/UnMango.Wishlists.Api.Tests/packages.lock.json
 
       - run: dotnet restore --locked-mode
       - run: dotnet build --configuration Release
+      # Starts Postgres with Testcontainers, using the runner's Docker.
+      - run: dotnet test --no-build --configuration Release
 
   web:
     runs-on: ubuntu-latest
@@ -49,23 +54,35 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: cachix/install-nix-action@v31.11.1
+      - uses: unmango/actions/setup-nix@e8bbcbd12a2c521c5cb36957c00a7a8f4fe2e766 # v2.0.0
         with:
           github_access_token: ${{ github.token }}
-
-      - uses: cachix/cachix-action@v17
-        with:
-          name: unstoppablemango
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          cachix_auth_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - run: nix flake check --all-systems
-      - run: nix build .#api .#web .#wishlists .#docker
+      - run: nix build -L .#api .#web .#wishlists .#docker
 
   docker:
     runs-on: ubuntu-latest
     outputs:
       image-tags: ${{ steps.meta.outputs.tags }}
     steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          filter: tree:0
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - run: dotnet tool restore
+
+      # The same version the helm job gives the chart's appVersion, so the chart's default image tag exists.
+      - id: version
+        run: echo "version=$(dotnet minver -t v)" >> "$GITHUB_OUTPUT"
+
       - uses: docker/setup-buildx-action@v4
 
       - id: meta
@@ -75,6 +92,7 @@ jobs:
             ghcr.io/unmango/wishlists
             unstoppablemango/wishlists
           tags: |
+            type=raw,value=${{ steps.version.outputs.version }}
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -112,8 +130,6 @@ jobs:
     defaults:
       run:
         working-directory: charts/wishlists
-    env:
-      HELM_EXPERIMENTAL_OCI: "1"
     steps:
       - uses: actions/checkout@v7
         with:
@@ -123,9 +139,9 @@ jobs:
       - name: Setup helm
         uses: azure/setup-helm@v5.0.1
         with:
-          version: "3.22.0"
+          version: "4.3.1"
 
-      - run: helm lint
+      - run: helm lint .
 
       - uses: actions/setup-dotnet@v6
         with:
@@ -169,12 +185,12 @@ jobs:
 
       - uses: azure/setup-helm@v5.0.1
 
-      - uses: actions/setup-python@v7.0.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.x"
           check-latest: true
 
-      - uses: helm/chart-testing-action@v2.8.0
+      - uses: helm/chart-testing-action@v2.9.0
 
       - name: Run chart-testing (list-changed)
         id: list-changed
@@ -190,7 +206,7 @@ jobs:
 
       - name: Create kind cluster
         if: steps.list-changed.outputs.changed == 'true'
-        uses: helm/kind-action@v1.15.0
+        uses: helm/kind-action@v1.15.2
 
       - name: Run chart-testing (install)
         if: steps.list-changed.outputs.changed == 'true'
@@ -200,10 +216,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # renovate: datasource=github-releases depName=dprint/dprint
-      DPRINT_VERSION: 0.57.4
+      DPRINT_VERSION: 0.64.3
     steps:
       - uses: actions/checkout@v7
 
-      - uses: dprint/check@v2.5
+      - uses: dprint/check@v2.6
         with:
           dprint-version: ${{ env.DPRINT_VERSION }}

@@ -1,0 +1,60 @@
+name: Nix deps
+
+# Renovate bumps NuGet packages in packages.lock.json but can't regenerate
+# nix-deps.json, so the nix build fails with NU1102 until someone does it by
+# hand. This regenerates it on Renovate's PRs and pushes it back to the branch.
+on:
+  pull_request:
+    paths:
+      - src/UnMango.Wishlists.Api/packages.lock.json
+      - src/UnMango.Wishlists.Api/*.csproj
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nix-deps-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  regenerate:
+    if: startsWith(github.head_ref, 'renovate/') && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      # A push made with GITHUB_TOKEN wouldn't trigger CI on the new commit,
+      # so push with the release App's token instead.
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ steps.app-token.outputs.token }}
+
+      - uses: unmango/actions/setup-nix@e8bbcbd12a2c521c5cb36957c00a7a8f4fe2e766 # v2.0.0
+        with:
+          github_access_token: ${{ github.token }}
+          cachix_auth_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Regenerate nix-deps.json
+        run: |
+          nix build .#api.fetch-deps --out-link fetch-deps
+          ./fetch-deps src/UnMango.Wishlists.Api/nix-deps.json
+          rm fetch-deps
+
+      - name: Push changes
+        env:
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          if git diff --quiet; then
+            echo "nix-deps.json is up to date"
+            exit 0
+          fi
+          user_id=$(curl -fsS "https://api.github.com/users/${APP_SLUG}%5Bbot%5D" | jq -r .id)
+          git config user.name "${APP_SLUG}[bot]"
+          git config user.email "${user_id}+${APP_SLUG}[bot]@users.noreply.github.com"
+          git commit -am "deps: regenerate nix-deps.json"
+          git push

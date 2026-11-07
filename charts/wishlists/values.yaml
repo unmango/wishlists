@@ -10,7 +10,8 @@ image:
   repository: ghcr.io/unmango/wishlists
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  # Overrides the image tag whose default is the chart appVersion. CI tags every image with the
+  # same version it gives the chart, so pinning the chart version pins the image too.
   tag: ""
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -23,8 +24,8 @@ fullnameOverride: ""
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
+  # Automatically mount a ServiceAccount's API credentials? The app never calls the Kubernetes API.
+  automount: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
@@ -38,16 +39,44 @@ podAnnotations: {}
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+# 1654 is the non-root `app` user the .NET base image ships. fsGroup lets it read mounted Secrets.
+podSecurityContext:
+  fsGroup: 1654
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  runAsUser: 1654
+
+# The port the app listens on inside the container (the .NET image's default).
+containerPort: 8080
+
+# Settings for the app. Each one becomes an environment variable on the container.
+app:
+  database:
+    # Npgsql connection string for the Postgres database the app keeps everything in.
+    connectionString: ""
+    # Or read it from a Secret, when it carries a password.
+    existingSecret: ""
+    existingSecretKey: connection-string
+  google:
+    # Secret holding the Google OAuth client. Required: the app won't start in Production without it.
+    existingSecret: ""
+    clientIdKey: client-id
+    clientSecretKey: client-secret
+  allowedEmails:
+    # Secret holding the emails allowed to sign in, one per line. Mounted as a file the app re-reads on each sign-in.
+    existingSecret: ""
+    key: emails
+  # CIDRs of the proxies in front of the app (for example the cluster's pod network).
+  # The app trusts X-Forwarded-For and X-Forwarded-Proto only from these. Empty trusts any peer.
+  knownNetworks: []
+
+# Extra environment variables for the app container.
+extraEnv: []
 
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:

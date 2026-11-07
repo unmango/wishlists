@@ -1,7 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>UnstoppableMango/renovate-config"
+    "github>UnstoppableMango/renovate-config",
+    "github>UnstoppableMango/renovate-config:release-please"
   ],
   "nix": {
     "enabled": true
@@ -15,5 +16,8 @@
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     }
+  ],
+  "gitIgnoredAuthors": [
+    "98929874+thecluster-bot[bot]@users.noreply.github.com"
   ]
 }
