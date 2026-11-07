@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/unmango/wishlists/compare/v0.1.6...v0.1.7) (2026-11-07)
+
+
+### Features
+
+* show item thumbnails found from their link ([#503](https://github.com/unmango/wishlists/issues/503)) ([902b750](https://github.com/unmango/wishlists/commit/902b750dbf3fc4b0ca63677e7c5de9cc6ae8ecea))
+
 ## [0.1.6](https://github.com/unmango/wishlists/compare/v0.1.5...v0.1.6) (2026-11-07)
 
 
