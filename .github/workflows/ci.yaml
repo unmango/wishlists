@@ -130,8 +130,6 @@ jobs:
     defaults:
       run:
         working-directory: charts/wishlists
-    env:
-      HELM_EXPERIMENTAL_OCI: "1"
     steps:
       - uses: actions/checkout@v7
         with:
@@ -143,7 +141,7 @@ jobs:
         with:
           version: "4.3.1"
 
-      - run: helm lint
+      - run: helm lint .
 
       - uses: actions/setup-dotnet@v6
         with:
