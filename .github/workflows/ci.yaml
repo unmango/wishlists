@@ -130,8 +130,6 @@ jobs:
     defaults:
       run:
         working-directory: charts/wishlists
-    env:
-      HELM_EXPERIMENTAL_OCI: "1"
     steps:
       - uses: actions/checkout@v7
         with:
@@ -141,9 +139,9 @@ jobs:
       - name: Setup helm
         uses: azure/setup-helm@v5.0.1
         with:
-          version: "3.22.1"
+          version: "4.3.1"
 
-      - run: helm lint
+      - run: helm lint .
 
       - uses: actions/setup-dotnet@v6
         with:
