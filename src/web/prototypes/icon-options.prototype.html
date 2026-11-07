@@ -1,0 +1,200 @@
+<!doctype html>
+<!-- PROTOTYPE, throwaway: icon options for #488. Not part of the app build. -->
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wishlists Icon Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<style>
+  /* Layout: one column of option cards; a sticky pair of phone home screens shows the picked option in place. */
+  :root {
+    --ground: #f3f3f8;
+    --card: #ffffff;
+    --ink: #1a1b2e;
+    --muted: #5a5c70;
+    --line: #e2e3ec;
+    --primary: #2b2d6e;
+    --accent: #d93b30;
+    --pick: #2b2d6e;
+    /* icon art is fixed: home-screen icons don't follow the phone's theme */
+    --icon-bg: #2b2d6e;
+    --icon-fg: #ffffff;
+    --icon-accent: #ff5a4c;
+    --wall-light: linear-gradient(160deg, #dfe3f5, #f6e6e3);
+    --wall-dark: linear-gradient(160deg, #0d0e1a, #23233f);
+    --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+    --font-body: "DM Sans", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #12131f; --card: #1e2033; --ink: #ececf5; --muted: #a3a5bc;
+      --line: #2c2e45; --primary: #8f93ff; --accent: #ff6b5e; --pick: #8f93ff;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #12131f; --card: #1e2033; --ink: #ececf5; --muted: #a3a5bc;
+    --line: #2c2e45; --primary: #8f93ff; --accent: #ff6b5e; --pick: #8f93ff;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--ground); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 24px 48px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 28px; }
+  header { display: grid; gap: 8px; max-width: 62ch; }
+  .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 6vw, 40px); line-height: 1.05; margin: 0; text-wrap: balance; }
+  h2 { font-family: var(--font-display); font-weight: 800; font-size: 20px; margin: 0; }
+  p { margin: 0; }
+  .muted { color: var(--muted); }
+  .layout { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; } .phones { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); } }
+
+  .options { display: grid; gap: 14px; }
+  .opt {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: center;
+    background: var(--card); border: 2px solid var(--line); border-radius: 10px; padding: 16px;
+    cursor: pointer; text-align: left; font: inherit; color: inherit; width: 100%;
+  }
+  .opt:hover { border-color: var(--muted); }
+  .opt:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .opt[aria-pressed="true"] { border-color: var(--pick); box-shadow: 0 0 0 1px var(--pick) inset; }
+  .big { position: relative; width: 132px; height: 132px; border-radius: 22.37%; overflow: hidden; }
+  .big svg, .crop svg, .app svg { display: block; width: 100%; height: 100%; }
+  .safe { position: absolute; inset: 10%; border-radius: 50%; border: 1.5px dashed rgba(255,255,255,.55); pointer-events: none; }
+  .info { display: grid; gap: 10px; min-width: 0; }
+  .name { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .letter { font-family: var(--font-display); font-weight: 800; color: var(--accent); }
+  .crops { display: flex; gap: 14px; flex-wrap: wrap; }
+  .crop-cell { display: grid; gap: 4px; justify-items: center; font-size: 11px; color: var(--muted); }
+  .crop { width: 48px; height: 48px; overflow: hidden; }
+  .c-circle { border-radius: 50%; }
+  .c-squircle { border-radius: 32%; }
+  .c-ios { border-radius: 22.37%; }
+  .c-drop { border-radius: 50% 50% 50% 12%; }
+  @media (max-width: 520px) { .opt { grid-template-columns: minmax(0, 1fr); } .big { width: 112px; height: 112px; } }
+
+  .phones { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+  .phones > .phone { flex: 1 1 260px; max-width: 320px; }
+  .phones > .ph-cap { flex-basis: 100%; text-align: center; }
+  .phone { border-radius: 26px; padding: 22px 12px 18px; display: grid; gap: 14px; border: 6px solid #0b0b12; }
+  .phone.light { background: var(--wall-light); }
+  .phone.dark { background: var(--wall-dark); }
+  .clock { text-align: center; font-family: var(--font-display); font-weight: 600; font-size: 28px; }
+  .light .clock, .light .app span { color: #1a1b2e; }
+  .dark .clock, .dark .app span { color: #f2f2f8; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 8px; }
+  .app { display: grid; gap: 4px; justify-items: center; font-size: 10.5px; }
+  .app .tile { width: 100%; max-width: 50px; aspect-ratio: 1; border-radius: 22.37%; overflow: hidden; }
+  .app span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .ph-cap { grid-column: 1 / -1; font-size: 13px; }
+  .note { font-size: 13px; color: var(--muted); max-width: 62ch; }
+  @media (prefers-reduced-motion: no-preference) { .opt { transition: border-color .15s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Prototype · throwaway</span>
+    <h1>Which icon goes on the home screen?</h1>
+    <p class="muted">Five rough options in the app's indigo and tomato red. Tap one to see it on a light and a dark home screen. Each shows the crops phones apply: Android may cut it to a circle, squircle or teardrop; iPhone uses a rounded square. The dashed ring is the safe zone everything must fit inside.</p>
+  </header>
+
+  <div class="layout">
+    <div class="options" id="options"></div>
+    <aside class="phones" aria-label="Picked icon on a home screen">
+      <div class="phone light"><div class="clock">9:41</div><div class="grid" id="grid-light"></div></div>
+      <div class="phone dark"><div class="clock">9:41</div><div class="grid" id="grid-dark"></div></div>
+      <p class="ph-cap muted" id="ph-cap"></p>
+    </aside>
+  </div>
+
+  <p class="note">Home-screen icons don't switch with the phone's light or dark setting, so each option uses one look for both. These are sketches: the picked one gets redrawn cleanly at 192, 512, maskable 512 and the 180 iPhone size in the build PR.</p>
+</div>
+
+<script>
+  const BG = 'var(--icon-bg)', FG = 'var(--icon-fg)', AC = 'var(--icon-accent)';
+  const heart = (cx, cy, s, fill) =>
+    `<path transform="translate(${cx - 12 * s} ${cy - 12.5 * s}) scale(${s})" fill="${fill}" d="M12 21s-7.5-4.6-9.7-9.2C.8 8.5 2.7 4.5 6.6 4.5c2.2 0 3.7 1.2 5.4 3.2 1.7-2 3.2-3.2 5.4-3.2 3.9 0 5.8 4 4.3 7.3C19.5 16.4 12 21 12 21z"/>`;
+  const sparkle = (cx, cy, r, fill) =>
+    `<path transform="translate(${cx} ${cy}) scale(${r})" fill="${fill}" d="M0 -1C.14 -.14 .14 -.14 1 0C.14 .14 .14 .14 0 1C-.14 .14 -.14 .14 -1 0C-.14 -.14 -.14 -.14 0 -1Z"/>`;
+  const svg = (inner) => `<svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="${BG}"/>${inner}</svg>`;
+
+  const OPTIONS = [
+    {
+      key: 'A', name: 'Gift tag', idea: 'A tag with a red string and a small heart. Reads as "presents" without being a box.',
+      art: svg(`<g transform="rotate(-12 50 50)">
+        <path d="M30 76V40l11-14h18l11 14v36z" fill="${FG}" stroke="${FG}" stroke-width="6" stroke-linejoin="round"/>
+        <circle cx="50" cy="38" r="4.5" fill="${BG}"/>
+        <path d="M50 38c6-10 14-14 20-12" fill="none" stroke="${AC}" stroke-width="4" stroke-linecap="round"/>
+        ${heart(50, 59, 0.75, AC)}</g>`),
+    },
+    {
+      key: 'B', name: 'List with a heart', idea: 'A short list where the top item is the red "really want" heart from the app.',
+      art: svg(`${heart(31, 33, 0.62, AC)}
+        <rect x="43" y="29" width="30" height="7" rx="3.5" fill="${FG}"/>
+        <circle cx="31" cy="50" r="4" fill="${FG}"/><rect x="43" y="46.5" width="30" height="7" rx="3.5" fill="${FG}" opacity=".85"/>
+        <circle cx="31" cy="67" r="4" fill="${FG}"/><rect x="43" y="63.5" width="22" height="7" rx="3.5" fill="${FG}" opacity=".7"/>`),
+    },
+    {
+      key: 'C', name: 'Gift from above', idea: 'A present seen from the top: white box, red ribbon and bow. The most literal option.',
+      art: svg(`<rect x="27" y="27" width="46" height="46" rx="5" fill="${FG}"/>
+        <rect x="45.5" y="27" width="9" height="46" fill="${AC}"/><rect x="27" y="45.5" width="46" height="9" fill="${AC}"/>
+        <ellipse cx="41" cy="44" rx="9" ry="5.5" transform="rotate(35 41 44)" fill="none" stroke="${AC}" stroke-width="4"/>
+        <ellipse cx="59" cy="44" rx="9" ry="5.5" transform="rotate(-35 59 44)" fill="none" stroke="${AC}" stroke-width="4"/>
+        <circle cx="50" cy="50" r="5" fill="${AC}" stroke="${FG}" stroke-width="2"/>`),
+    },
+    {
+      key: 'D', name: 'Chunky W', idea: 'The app\'s heading font as a monogram, with a red sparkle. Simplest and most "app-like".',
+      art: svg(`<text x="47" y="69" text-anchor="middle" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="800" font-size="58" fill="${FG}">W</text>
+        ${sparkle(73, 29, 9, AC)}`),
+    },
+    {
+      key: 'E', name: 'Wish sparkle', idea: 'One big red sparkle with two small white ones. About wishing, not shopping.',
+      art: svg(`${sparkle(47, 53, 27, AC)}${sparkle(71, 29, 8, FG)}${sparkle(72, 69, 5, FG)}`),
+    },
+  ];
+
+  const NEIGHBOURS = [
+    { label: 'Camera', color: '#5f6b7a' }, { label: 'Notes', color: '#e8b931' }, { label: 'Clock', color: '#1f1f24' },
+    { label: 'Messages', color: '#3fb950' }, null, { label: 'Weather', color: '#4a90d9' },
+  ];
+
+  let picked = 'A';
+  const optionsEl = document.getElementById('options');
+
+  optionsEl.innerHTML = OPTIONS.map(o => `
+    <button class="opt" type="button" id="opt-${o.key}" data-key="${o.key}" aria-pressed="false">
+      <div class="big">${o.art}<div class="safe"></div></div>
+      <div class="info">
+        <div class="name"><span class="letter">${o.key}</span><h2>${o.name}</h2></div>
+        <p class="muted">${o.idea}</p>
+        <div class="crops">
+          ${[['c-circle', 'Circle'], ['c-squircle', 'Squircle'], ['c-drop', 'Teardrop'], ['c-ios', 'iPhone']]
+            .map(([c, l]) => `<div class="crop-cell"><div class="crop ${c}">${o.art}</div>${l}</div>`).join('')}
+        </div>
+      </div>
+    </button>`).join('');
+
+  function renderPhones() {
+    const o = OPTIONS.find(x => x.key === picked);
+    const tiles = NEIGHBOURS.map(n => n
+      ? `<div class="app"><div class="tile" style="background:${n.color}"></div><span>${n.label}</span></div>`
+      : `<div class="app"><div class="tile">${o.art}</div><span>Wishlists</span></div>`).join('');
+    document.getElementById('grid-light').innerHTML = tiles;
+    document.getElementById('grid-dark').innerHTML = tiles;
+    document.getElementById('ph-cap').textContent = `Showing ${o.key}: ${o.name}`;
+    document.querySelectorAll('.opt').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.key === picked)));
+  }
+
+  optionsEl.addEventListener('click', e => {
+    const b = e.target.closest('.opt');
+    if (!b) return;
+    picked = b.dataset.key;
+    renderPhones();
+  });
+  renderPhones();
+</script>
