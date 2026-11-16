@@ -26,13 +26,13 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.Google",
-    "version": "10.0.14",
-    "hash": "sha256-ACCU1lnLAjFxVO3wG7xj4L/j1Dr4TSHYqRwTztMG38A="
+    "version": "10.0.15",
+    "hash": "sha256-FiK/dSCwyxdeq2pBKV9D6uyU18y8GR0DSuyNe12KDJ4="
   },
   {
     "pname": "Microsoft.AspNetCore.OpenApi",
-    "version": "10.0.14",
-    "hash": "sha256-apfyJFWq5DvIZkcs8dTP3LxNZSCRwYfwKgIpbeM69g8="
+    "version": "10.0.15",
+    "hash": "sha256-AhwLxQ8+h3z4/9XTu6BmaVBYRAb2kZDYc15DFpwh/Ok="
   },
   {
     "pname": "Microsoft.Bcl.TimeProvider",
@@ -41,8 +41,8 @@
   },
   {
     "pname": "Microsoft.Extensions.ApiDescription.Server",
-    "version": "10.0.14",
-    "hash": "sha256-sRRF03887lSMO7RZ9W3lB9ZIY6PEWoLwgfxutcfoJE8="
+    "version": "10.0.15",
+    "hash": "sha256-CGCPBE9J7vMPr8ZLJYi62/klLPEbCVGuIoB5jBvmrLA="
   },
   {
     "pname": "Microsoft.IO.RecyclableMemoryStream",
@@ -51,8 +51,8 @@
   },
   {
     "pname": "Microsoft.OpenApi",
-    "version": "2.12.2",
-    "hash": "sha256-OjW4VjHhx7h3thJEypPgQvaiScouBV/Vw9krVPGyR6k="
+    "version": "2.13.0",
+    "hash": "sha256-83e1TBWbfn9H6FhzkGZsud/4u05Vr4LE7byQ0cDS+UM="
   },
   {
     "pname": "NetTopologySuite",
