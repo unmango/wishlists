@@ -15,6 +15,16 @@
       ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
+    },
+    {
+      "description": "Move the .NET Docker images with the SDK and packages, so a .NET major is one PR",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "mcr.microsoft.com/dotnet/**"
+      ],
+      "groupName": "dotnet monorepo"
     }
   ],
   "gitIgnoredAuthors": [
