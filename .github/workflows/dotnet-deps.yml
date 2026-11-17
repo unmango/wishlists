@@ -1,10 +1,5 @@
 name: .NET deps
 
-# Renovate bumps NuGet packages and the SDK in global.json, but it can't
-# regenerate nix-deps.json (so the nix build fails with NU1102), and on a .NET
-# major it can't move the target framework, so its lock file update fails with
-# NU1202 and CI fails with NU1004. hack/sync-dotnet.sh fixes all of that; this
-# runs it on Renovate's PRs and pushes the result back to the branch.
 on:
   pull_request:
     paths:
