@@ -13,6 +13,7 @@ internal static class WishlistsApi
 	private const int MaxNameLength = 200;
 	private const int MaxNotesLength = 2000;
 	private const int MaxLinkLength = 2000;
+	private const int MaxImportItems = 200;
 
 	extension(IEndpointRouteBuilder endpoints)
 	{
@@ -146,6 +147,38 @@ internal static class WishlistsApi
 				// No thumbnail yet: it's looked for in the background.
 				var item = new OwnItem(added.ItemId, added.Name, added.Link, added.Price, added.Notes, added.ReallyWant, null);
 				return TypedResults.Created($"/api/wishlists/mine/items/{item.Id}", item);
+			});
+
+			mine.MapPost("/items/import", async Task<Results<Ok<ImportResult>, NotFound, ValidationProblem>> (
+				ClaimsPrincipal user,
+				[FromServices] IDocumentSession session,
+				[FromBody] ImportRequest req,
+				CancellationToken cancellationToken
+			) => {
+				if (Validate(req) is { } errors) return TypedResults.ValidationProblem(errors);
+				if (await OwnWishlistAsync(session, user.MemberId, cancellationToken) is not { } current) {
+					return TypedResults.NotFound();
+				}
+
+				var stream = await session.Events.FetchForWriting<WishlistView>(current.Id, cancellationToken);
+				// Import only adds: anything already on the wishlist, or earlier in the file, is skipped.
+				var seen = stream.Aggregate!.CurrentItems
+					.Select(x => DuplicateKey(x.Name, x.Link))
+					.ToHashSet(StringComparer.Ordinal);
+				var added = req.Items
+					.Select(x => new ItemAdded(Guid.CreateVersion7(), x.Name.Trim(), Clean(x.Link), x.Price, Clean(x.Notes), x.ReallyWant))
+					.Where(x => seen.Add(DuplicateKey(x.Name, x.Link)))
+					.ToList();
+
+				// One save, so a failure adds nothing and gift-givers never see a half-imported wishlist.
+				stream.AppendMany(added);
+				await session.SaveChangesAsync(cancellationToken);
+
+				// No thumbnails yet: they're looked for in the background, as for items added by hand.
+				IReadOnlyList<OwnItem> items = added
+					.Select(x => new OwnItem(x.ItemId, x.Name, x.Link, x.Price, x.Notes, x.ReallyWant, null))
+					.ToList();
+				return TypedResults.Ok(new ImportResult(items, req.Items.Count - items.Count));
 			});
 
 			mine.MapPut("/items/{itemId:guid}", async Task<Results<Ok<OwnItem>, NotFound, ValidationProblem>> (
@@ -310,7 +343,34 @@ internal static class WishlistsApi
 	private static OwnItem ToOwn(WishlistItem x) =>
 		new(x.Id, x.Name, x.Link, x.Price, x.Notes, x.ReallyWant, ThumbnailPath.For(x));
 
+	/// <summary>Two items are the same when they share a link, or a name when neither has a link.</summary>
+	private static string DuplicateKey(string name, string? link) =>
+		Clean(link) is { } l ? $"link:{l}" : $"name:{name.Trim().ToUpperInvariant()}";
+
 	private static string? Clean(string? value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+
+	/// <summary>Checks every item again, even though the phone already did: one bad item rejects the whole import.</summary>
+	internal static Dictionary<string, string[]>? Validate(ImportRequest req) {
+		if (req.Items is not { Count: > 0 and <= MaxImportItems } items) {
+			return new Dictionary<string, string[]> {
+				["items"] = [$"Import between 1 and {MaxImportItems} items at a time."],
+			};
+		}
+
+		var errors = new Dictionary<string, string[]>();
+		for (var i = 0; i < items.Count; i++) {
+			if (items[i] is not { } item) {
+				errors[$"items[{i}]"] = ["Item is required."];
+				continue;
+			}
+
+			foreach (var (field, messages) in Validate(item) ?? []) {
+				errors[$"items[{i}].{field}"] = messages;
+			}
+		}
+
+		return errors.Count > 0 ? errors : null;
+	}
 
 	internal static Dictionary<string, string[]>? Validate(ItemRequest req) {
 		var errors = new Dictionary<string, string[]>();

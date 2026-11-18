@@ -10,6 +10,8 @@ namespace UnMango.Wishlists.Api;
 [JsonSerializable(typeof(IReadOnlyList<Member>))]
 [JsonSerializable(typeof(ItemRequest))]
 [JsonSerializable(typeof(RenameWishlist))]
+[JsonSerializable(typeof(ImportRequest))]
+[JsonSerializable(typeof(ImportResult))]
 [JsonSerializable(typeof(OwnItem))]
 [JsonSerializable(typeof(OwnWishlist))]
 [JsonSerializable(typeof(GiftWishlist))]

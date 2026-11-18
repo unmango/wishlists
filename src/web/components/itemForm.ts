@@ -10,13 +10,19 @@ export type ItemErrors = Partial<Record<keyof ItemFields | 'form', string>>;
 
 const fieldNames = ['name', 'link', 'price', 'notes', 'reallyWant'] as const satisfies (keyof ItemFields)[];
 
-function isWebLink(value: string): boolean {
+export function isWebLink(value: string): boolean {
   try {
     return ['http:', 'https:'].includes(new URL(value).protocol);
   } catch {
     return false;
   }
 }
+
+/** Drops the dollar signs, thousands commas and spaces people type around a price. */
+export const cleanPrice = (value: string) => value.replace(/[$,\s]/g, '');
+
+/** A plain decimal only: Number() would also take '0x10', '1e3' and 'Infinity'. */
+export const isPlainPrice = (value: string) => /^\d+(\.\d{1,2})?$/.test(value);
 
 /** Turns what was typed into an ItemRequest. Mirrors the API's own checks so most mistakes never leave the phone. */
 export const itemSchema = z.object({
@@ -28,9 +34,8 @@ export const itemSchema = z.object({
     .transform(v => v || null),
   price: z
     .string()
-    .transform(v => v.replace(/[$,\s]/g, ''))
-    // A plain decimal only: Number() would also take '0x10', '1e3' and 'Infinity'.
-    .refine(v => v === '' || /^\d+(\.\d{1,2})?$/.test(v), 'Enter a price like 24 or 24.99.')
+    .transform(cleanPrice)
+    .refine(v => v === '' || isPlainPrice(v), 'Enter a price like 24 or 24.99.')
     .transform(v => (v === '' ? null : Number(v))),
   notes: z.string().trim().max(2000, 'Keep notes under 2,000 characters.').transform(v => v || null),
   reallyWant: z.boolean(),
