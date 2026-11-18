@@ -8,6 +8,12 @@ public sealed record ItemRequest(string Name, string? Link, decimal? Price, stri
 
 public sealed record RenameWishlist(string Name);
 
+/// <summary>Items to add to your own wishlist at once, from a file the owner picked.</summary>
+public sealed record ImportRequest(IReadOnlyList<ItemRequest> Items);
+
+/// <summary>What an import added, and how many items it skipped because they were already on the wishlist.</summary>
+public sealed record ImportResult(IReadOnlyList<OwnItem> Added, int Skipped);
+
 /// <summary>An item as its owner sees it. Deliberately has no bought fields.</summary>
 /// <param name="Thumbnail">Path to the item's thumbnail image, when one was found from its link.</param>
 public sealed record OwnItem(Guid Id, string Name, string? Link, decimal? Price, string? Notes, bool ReallyWant, string? Thumbnail);

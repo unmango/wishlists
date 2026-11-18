@@ -19,8 +19,10 @@ const thumbnailLookupMs = 3000;
 
 function useRefreshMineForThumbnail() {
   const mutate = useMutate();
-  return (saved: OwnItem | undefined) => {
-    if (saved?.link && !saved.thumbnail) setTimeout(() => void mutate(['/api/wishlists/mine']), thumbnailLookupMs);
+  return (...saved: (OwnItem | undefined)[]) => {
+    if (saved.some(x => x?.link && !x.thumbnail)) {
+      setTimeout(() => void mutate(['/api/wishlists/mine']), thumbnailLookupMs);
+    }
   };
 }
 
@@ -56,6 +58,18 @@ export function useEditItem() {
     await refresh();
     // Same-link edits keep their thumbnail, so in practice this fires for a new link.
     refreshForThumbnail(data);
+  }, options);
+}
+
+/** Adds many items at once. All or nothing: a failed import adds no items. */
+export function useImportItems() {
+  const refresh = useRefreshMine();
+  const refreshForThumbnail = useRefreshMineForThumbnail();
+  return useSWRMutation('import-items', async (_, { arg: items }: { arg: ItemRequest[] }) => {
+    const { data } = await client.POST('/api/wishlists/mine/items/import', { body: { items } });
+    await refresh();
+    refreshForThumbnail(...(data?.added ?? []));
+    return data;
   }, options);
 }
 

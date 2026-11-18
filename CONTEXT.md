@@ -32,6 +32,10 @@ _Avoid_: gift, wish
 A small picture on an item, found automatically from the item's link. Never chosen or uploaded by the owner. When the link changes or is cleared, the thumbnail goes with it.
 _Avoid_: picture, photo, preview image, og image
 
+**Import**:
+Adding many items to your own wishlist at once from a file. An import only adds items: it never edits or removes ones already there, and skips items already on the wishlist.
+_Avoid_: upload, sync, bulk add
+
 **Mark bought**:
 What a gift-giver does to an item so other gift-givers know it's taken. Visible to every member except the owner.
 _Avoid_: claim, reserve

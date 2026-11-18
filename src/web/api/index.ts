@@ -12,6 +12,7 @@ export type GiftWishlist = components['schemas']['GiftWishlist'];
 export type GiftItem = components['schemas']['GiftItem'];
 export type ItemRequest = components['schemas']['ItemRequest'];
 export type MyPurchase = components['schemas']['MyPurchase'];
+export type ImportResult = components['schemas']['ImportResult'];
 
 /** An API call that didn't succeed. */
 export class ApiError extends Error {
