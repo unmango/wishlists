@@ -1,7 +1,7 @@
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useId, useState } from 'react';
-import type { OwnItem } from '../api';
+import { useEffect, useId, useRef, useState } from 'react';
+import { ApiError, type OwnItem } from '../api';
 import { formatPrice, linkHost } from '../format';
 import { useImportItems } from '../hooks';
 import { importRequest, type ImportRow, type PickedFile, planImport, type PlannedRow } from '../import/csvImport';
@@ -45,6 +45,14 @@ export function ImportSheet({ file, existing, onClose }: Props) {
 function Preview({ initial, existing, onDone }: { initial: ImportRow[]; existing: OwnItem[]; onDone: () => void }) {
   const [rows, setRows] = useState(initial);
   const importItems = useImportItems();
+  // An import still running when its preview closes mustn't close a newer preview when it finishes.
+  const open = useRef(true);
+  useEffect(() => {
+    open.current = true;
+    return () => {
+      open.current = false;
+    };
+  }, []);
   const plan = planImport(rows, existing);
   const toAdd = importRequest(plan);
   const count = (status: PlannedRow['status']) => plan.filter(r => r.status === status).length;
@@ -56,7 +64,7 @@ function Preview({ initial, existing, onDone }: { initial: ImportRow[]; existing
   }
 
   function add() {
-    void importItems.trigger(toAdd, { onSuccess: onDone });
+    void importItems.trigger(toAdd, { onSuccess: () => open.current && onDone() });
   }
 
   const summary = [
@@ -71,8 +79,11 @@ function Preview({ initial, existing, onDone }: { initial: ImportRow[]; existing
 
       {importItems.error && (
         <p role='alert' className='m-0 rounded-[10px] bg-accent-soft px-3.5 py-2.5 text-sm text-danger'>
-          {importItems.error instanceof Error ? importItems.error.message : 'Couldn’t import. Try again.'}{' '}
-          Nothing was added.
+          {importItems.error instanceof ApiError
+            // The API answered, so the single save never happened.
+            ? `${importItems.error.message} Nothing was added.`
+            // No answer: the save may or may not have happened.
+            : 'Couldn’t reach the app. Check your wishlist before trying again.'}
         </p>
       )}
 

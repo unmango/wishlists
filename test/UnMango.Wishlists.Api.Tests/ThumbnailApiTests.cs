@@ -80,7 +80,8 @@ public sealed class ThumbnailApiTests(AppFixture app)
 			"/api/wishlists/mine/items/import", new ImportRequest([Item(first), Item(second) with { Name = "Hat" }]), Ct);
 		var result = await response.Content.ReadFromJsonAsync<ImportResult>(Ct);
 
-		Assert.All(result!.Added, x => Assert.Null(x.Thumbnail));
+		Assert.Equal(2, result!.Added.Count);
+		Assert.All(result.Added, x => Assert.Null(x.Thumbnail));
 		foreach (var added in result.Added) {
 			var item = await EventuallyAsync(ada, added.Id, x => x.Thumbnail is not null);
 			Assert.StartsWith($"/api/items/{added.Id}/thumbnail", item.Thumbnail);
