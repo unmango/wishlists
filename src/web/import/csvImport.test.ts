@@ -81,6 +81,25 @@ describe('readImport', () => {
     ]);
   });
 
+  test('keeps a quote inside an unquoted cell, like an inch mark', () => {
+    const csv = 'name,price\nTV 55" wide,300\nSocks,5';
+
+    expect(rowsOf(csv).map(r => [r.name, r.price])).toEqual([['TV 55" wide', 300], ['Socks', 5]]);
+  });
+
+  test('drops a price too big to be real, with a warning, so it cannot fail the whole import', () => {
+    const [row] = rowsOf(`name,price\nSocks,${'9'.repeat(30)}`);
+
+    expect(row!.price).toBeNull();
+    expect(row!.warnings).toEqual(['price not understood']);
+  });
+
+  test('skips blank lines before the header, and rows that only fill columns it ignores', () => {
+    const csv = '\n,\nName,Aisle\nSocks,3\n,7\n';
+
+    expect(rowsOf(csv).map(r => r.name)).toEqual(['Socks']);
+  });
+
   test('refuses a file with no columns it knows', () => {
     expect(readImport('Thing,Cost\nSocks,12')).toEqual({
       error: 'Couldn’t find a name, link or price column. The first row needs headers like Name, Link and Price.',

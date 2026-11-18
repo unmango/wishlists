@@ -343,9 +343,12 @@ internal static class WishlistsApi
 	private static OwnItem ToOwn(WishlistItem x) =>
 		new(x.Id, x.Name, x.Link, x.Price, x.Notes, x.ReallyWant, ThumbnailPath.For(x));
 
-	/// <summary>Two items are the same when they share a link, or a name when neither has a link.</summary>
+	/// <summary>
+	/// Two items are the same when they share a link, or a name when neither has a link.
+	/// The phone's preview matches the same way: both lower-case names, which (unlike upper-casing) maps letters one to one.
+	/// </summary>
 	private static string DuplicateKey(string name, string? link) =>
-		Clean(link) is { } l ? $"link:{l}" : $"name:{name.Trim().ToUpperInvariant()}";
+		Clean(link) is { } l ? $"link:{l}" : $"name:{name.Trim().ToLowerInvariant()}";
 
 	private static string? Clean(string? value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 

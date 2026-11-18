@@ -1,5 +1,5 @@
 import type { ItemRequest } from '../api';
-import { cleanPrice, isPlainPrice, isWebLink } from '../components/itemForm';
+import { cleanPrice, isPlainPrice, isWebLink, itemLimits } from '../itemRules';
 
 /** One item read from a CSV file, before the owner reviews it. */
 export type ImportRow = {
@@ -13,28 +13,25 @@ export type ImportRow = {
   warnings: string[];
 };
 
-// The same limits as the item form and the API.
-const maxName = 200;
-const maxNotes = 2000;
-const maxLink = 2000;
-
-type Field = 'name' | 'link' | 'price' | 'notes' | 'reallyWant';
-
 /** Header names for each field, matched ignoring case. Earlier aliases win when a file has more than one. */
-const aliases: Record<Field, string[]> = {
-  name: ['name', 'item', 'title', 'description'],
-  link: ['link', 'product link', 'url'],
-  price: ['price'],
-  notes: ['notes', 'comments'],
-  reallyWant: ['really want'],
-};
+const aliases = [
+  ['name', ['name', 'item', 'title', 'description']],
+  ['link', ['link', 'product link', 'url']],
+  ['price', ['price']],
+  ['notes', ['notes', 'comments']],
+  ['reallyWant', ['really want']],
+] as const;
+
+type Field = (typeof aliases)[number][0];
 
 /** Splits CSV text into rows of cells: comma-separated, with "quoted" cells that may hold commas, quotes and newlines. */
-export function parseCsv(text: string): string[][] {
+function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];
   let cell = '';
   let quoted = false;
+  // A quote only opens a quoted cell at its start: elsewhere it's just a character, like the inch mark in 55".
+  let atCellStart = true;
 
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
@@ -44,17 +41,24 @@ export function parseCsv(text: string): string[][] {
         i++;
       } else if (c === '"') quoted = false;
       else cell += c;
-    } else if (c === '"') quoted = true;
-    else if (c === ',') {
+    } else if (c === '"' && atCellStart) {
+      quoted = true;
+      atCellStart = false;
+    } else if (c === ',') {
       row.push(cell);
       cell = '';
+      atCellStart = true;
     } else if (c === '\n' || c === '\r') {
       if (c === '\r' && text[i + 1] === '\n') i++;
       row.push(cell);
       rows.push(row);
       row = [];
       cell = '';
-    } else cell += c;
+      atCellStart = true;
+    } else {
+      cell += c;
+      atCellStart = false;
+    }
   }
 
   if (cell !== '' || row.length > 0) {
@@ -68,7 +72,7 @@ export function parseCsv(text: string): string[][] {
 function columnsFor(header: string[]): Partial<Record<Field, number>> {
   const names = header.map(h => h.trim().toLowerCase());
   const columns: Partial<Record<Field, number>> = {};
-  for (const [field, options] of Object.entries(aliases) as [Field, string[]][]) {
+  for (const [field, options] of aliases) {
     const index = options.map(o => names.indexOf(o)).find(i => i >= 0);
     if (index !== undefined) columns[field] = index;
   }
@@ -80,7 +84,7 @@ function readRow(cells: string[], columns: Partial<Record<Field, number>>): Impo
   const warnings: string[] = [];
 
   const rawLink = cell('link');
-  const linkOk = rawLink === '' || (rawLink.length <= maxLink && isWebLink(rawLink));
+  const linkOk = rawLink === '' || (rawLink.length <= itemLimits.link && isWebLink(rawLink));
   if (!linkOk) warnings.push('link not understood');
 
   const rawPrice = cleanPrice(cell('price'));
@@ -88,36 +92,44 @@ function readRow(cells: string[], columns: Partial<Record<Field, number>>): Impo
   if (!priceOk) warnings.push('price not understood');
 
   const name = cell('name');
-  if (name.length > maxName) warnings.push('name shortened');
+  if (name.length > itemLimits.name) warnings.push('name shortened');
   const notes = cell('notes');
-  if (notes.length > maxNotes) warnings.push('notes shortened');
+  if (notes.length > itemLimits.notes) warnings.push('notes shortened');
 
   return {
-    name: name.slice(0, maxName).trim(),
+    name: name.slice(0, itemLimits.name).trim(),
     link: linkOk && rawLink ? rawLink : null,
     price: priceOk && rawPrice ? Number(rawPrice) : null,
-    notes: notes.slice(0, maxNotes).trim() || null,
+    notes: notes.slice(0, itemLimits.notes).trim() || null,
     reallyWant: ['yes', 'true', 'x', '1'].includes(cell('reallyWant').toLowerCase()),
     warnings,
   };
 }
 
+const noItems = 'That file has no items in it.';
+
 /** The most items one file may import. The API has the same limit. */
-export const maxImportItems = 200;
+const maxImportItems = 200;
 
 /** Reads a CSV file's items for the import preview, or says why the file can't be imported. */
 export function readImport(text: string): { rows: ImportRow[] } | { error: string } {
   // Excel starts UTF-8 files with a byte order mark, which would otherwise stick to the first header.
-  const [header = [], ...body] = parseCsv(text.replace(/^\uFEFF/, ''));
+  const isBlank = (cells: string[]) => cells.every(c => c.trim() === '');
+  const lines = parseCsv(text.replace(/^\uFEFF/, ''));
+  // The header is the first line with anything on it.
+  const [header = [], ...body] = lines.slice(Math.max(0, lines.findIndex(cells => !isBlank(cells))));
   const columns = columnsFor(header);
-  const filled = body.filter(cells => cells.some(c => c.trim() !== ''));
+  const used = Object.values(columns);
+  // A row that only fills columns the import ignores has nothing to add.
+  const filled = body.filter(cells => !isBlank(used.map(i => cells[i] ?? '')));
 
-  if (filled.length === 0) return { error: 'That file has no items in it.' };
-  if (Object.keys(columns).length === 0) {
+  if (body.length === 0) return { error: noItems };
+  if (used.length === 0) {
     return {
       error: 'Couldn’t find a name, link or price column. The first row needs headers like Name, Link and Price.',
     };
   }
+  if (filled.length === 0) return { error: noItems };
   if (filled.length > maxImportItems) {
     return {
       error:
@@ -129,7 +141,7 @@ export function readImport(text: string): { rows: ImportRow[] } | { error: strin
 }
 
 /** What happens to a row: added, skipped as already on the wishlist, or waiting for the owner to name it. */
-export type ImportStatus = 'add' | 'duplicate' | 'needs-name';
+type ImportStatus = 'add' | 'duplicate' | 'needs-name';
 
 export type PlannedRow = ImportRow & { status: ImportStatus };
 
@@ -138,7 +150,7 @@ function duplicateKey(item: { name: string; link: string | null }): string | und
   const link = item.link?.trim();
   if (link) return `link:${link}`;
   const name = item.name.trim();
-  return name ? `name:${name.toUpperCase()}` : undefined;
+  return name ? `name:${name.toLowerCase()}` : undefined;
 }
 
 /** Decides each row's status against what's already on the wishlist. Earlier rows in the file win over later ones. */

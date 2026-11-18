@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ApiError, type ItemRequest, type OwnItem } from '../api';
 import { toNumber } from '../format';
+import { cleanPrice, isPlainPrice, isWebLink, itemLimits } from '../itemRules';
 
 /** What the item form's inputs hold, all as typed. */
 export type ItemFields = { name: string; link: string; price: string; notes: string; reallyWant: boolean };
@@ -10,34 +11,20 @@ export type ItemErrors = Partial<Record<keyof ItemFields | 'form', string>>;
 
 const fieldNames = ['name', 'link', 'price', 'notes', 'reallyWant'] as const satisfies (keyof ItemFields)[];
 
-export function isWebLink(value: string): boolean {
-  try {
-    return ['http:', 'https:'].includes(new URL(value).protocol);
-  } catch {
-    return false;
-  }
-}
-
-/** Drops the dollar signs, thousands commas and spaces people type around a price. */
-export const cleanPrice = (value: string) => value.replace(/[$,\s]/g, '');
-
-/** A plain decimal only: Number() would also take '0x10', '1e3' and 'Infinity'. */
-export const isPlainPrice = (value: string) => /^\d+(\.\d{1,2})?$/.test(value);
-
 /** Turns what was typed into an ItemRequest. Mirrors the API's own checks so most mistakes never leave the phone. */
 export const itemSchema = z.object({
-  name: z.string().trim().min(1, 'Give it a name.').max(200, 'Keep the name under 200 characters.'),
+  name: z.string().trim().min(1, 'Give it a name.').max(itemLimits.name, 'Keep the name under 200 characters.'),
   link: z
     .string()
     .trim()
-    .refine(v => v === '' || (v.length <= 2000 && isWebLink(v)), 'Enter a link that starts with https://.')
+    .refine(v => v === '' || (v.length <= itemLimits.link && isWebLink(v)), 'Enter a link that starts with https://.')
     .transform(v => v || null),
   price: z
     .string()
     .transform(cleanPrice)
     .refine(v => v === '' || isPlainPrice(v), 'Enter a price like 24 or 24.99.')
     .transform(v => (v === '' ? null : Number(v))),
-  notes: z.string().trim().max(2000, 'Keep notes under 2,000 characters.').transform(v => v || null),
+  notes: z.string().trim().max(itemLimits.notes, 'Keep notes under 2,000 characters.').transform(v => v || null),
   reallyWant: z.boolean(),
 }) satisfies z.ZodType<ItemRequest, ItemFields>;
 
