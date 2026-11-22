@@ -55,7 +55,7 @@ describe('sortLabel', () => {
 });
 
 describe('toSort', () => {
-  test('falls back to the order for anything unknown', () => {
+  test('uses the order for anything unknown', () => {
     expect(toSort('priceLow')).toBe('priceLow');
     expect(toSort('price')).toBe('order');
     expect(toSort(null)).toBe('order');

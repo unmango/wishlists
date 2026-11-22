@@ -15,7 +15,7 @@ type Props = {
   onCancel: () => void;
 };
 
-/** How close to the top or bottom of the screen a drag starts scrolling, in pixels. The bottom has the tab bar. */
+/** How near the top or bottom of the screen, in pixels, a drag scrolls the page. The bottom allows for the tab bar. */
 const scrollEdge = { top: 80, bottom: 140 };
 
 /** A ref callback that keeps `elements` in step with what's rendered. */
@@ -46,7 +46,7 @@ export function ReorderList({ items, saving, error, onDone, onCancel }: Props) {
   const hintId = useId();
   const byId = new Map(items.map(x => [x.id, x]));
 
-  // While dragging near the top or bottom of the screen, scroll so long lists can be rearranged end to end.
+  // While the owner drags an item near the top or bottom of the screen, scroll the page, so they can move items end to end in long lists.
   useEffect(() => {
     if (!dragging) return;
     let frame = 0;

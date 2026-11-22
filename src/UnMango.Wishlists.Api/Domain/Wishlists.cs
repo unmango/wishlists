@@ -7,8 +7,8 @@ public sealed record WishlistCreated(Guid WishlistId, Guid OwnerId, string Name,
 public sealed record WishlistRenamed(string Name);
 
 /// <param name="Position">
-/// Where the item goes in the order, counting every stored item (removed ones too) from 0 at the top.
-/// Items stored before the order existed have none and go to the bottom, so old wishlists keep oldest-first.
+/// The item's place in the order, counting every stored item (removed ones too) from 0 at the top.
+/// Items that older releases stored have none, and applying them puts them at the bottom, so old wishlists keep oldest-first.
 /// </param>
 public sealed record ItemAdded(
 	Guid ItemId,
@@ -30,8 +30,8 @@ public sealed record ItemEdited(
 public sealed record ItemRemoved(Guid ItemId);
 
 /// <summary>
-/// The owner rearranged their current items, top first. Applying it is part of the stored contract: ids that aren't
-/// current items are ignored, and current items it leaves out go on top in their order. Removed items keep their slots.
+/// The owner rearranged their current items, top first. Applying it is part of the stored contract: it ignores ids that
+/// aren't current items, puts current items it leaves out on top in their order, and keeps removed items in their slots.
 /// </summary>
 public sealed record ItemsReordered(IReadOnlyList<Guid> ItemIds);
 
@@ -76,8 +76,8 @@ public sealed record WishlistView(
 	}
 
 	/// <summary>
-	/// The event that puts current items in the order of <paramref name="itemIds" />. Ids that aren't current items are dropped,
-	/// and current items left out go on top in their order: they're most likely ones added while the owner was reordering.
+	/// The event that puts current items in the order of <paramref name="itemIds" />. It drops ids that aren't current items and
+	/// puts current items left out on top in their order: most likely the owner added them on another phone mid-reorder.
 	/// </summary>
 	public ItemsReordered Reorder(IEnumerable<Guid> itemIds) {
 		var current = CurrentItems.Select(x => x.Id).ToList();
@@ -85,7 +85,7 @@ public sealed record WishlistView(
 		return new ItemsReordered([..current.Except(listed), ..listed]);
 	}
 
-	// Removed items keep their slots, so a gift-giver still sees them where they were; current items fill the rest in the new order.
+	// Removed items keep their slots, so a gift-giver still sees them in their old places; current items fill the rest in the new order.
 	public WishlistView Apply(ItemsReordered e) {
 		var byId = CurrentItems.ToDictionary(x => x.Id);
 		var slots = Items.Index().Where(x => !x.Item.Removed).Select(x => x.Index);

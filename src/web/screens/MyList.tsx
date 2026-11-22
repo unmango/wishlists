@@ -66,7 +66,7 @@ export function MyList() {
   const [reordering, setReordering] = useState(false);
   const reorder = useReorderItems();
 
-  // Reordering always works on the owner's order, and leaves the view on it.
+  // Reordering always shows the owner's order, and leaves the view on it.
   function startReorder() {
     setSort('order');
     reorder.reset();

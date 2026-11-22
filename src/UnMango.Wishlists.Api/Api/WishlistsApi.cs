@@ -167,7 +167,7 @@ internal static class WishlistsApi
 				var seen = stream.Aggregate!.CurrentItems
 					.Select(x => DuplicateKey(x.Name, x.Link))
 					.ToHashSet(StringComparer.Ordinal);
-				// The added items go on top, in the file's order.
+				// Put the added items on top, in the file's order.
 				var added = req.Items
 					.Select(x => new ItemAdded(Guid.CreateVersion7(), x.Name.Trim(), Clean(x.Link), x.Price, Clean(x.Notes), x.ReallyWant))
 					.Where(x => seen.Add(DuplicateKey(x.Name, x.Link)))
@@ -201,7 +201,7 @@ internal static class WishlistsApi
 					return TypedResults.NotFound();
 				}
 
-				// An exclusive lock makes saves from two phones at once wait their turn instead of failing, so the last save wins.
+				// An exclusive lock queues saves from two phones at once instead of rejecting one, so the last save sets the order.
 				var stream = await session.Events.FetchForExclusiveWriting<WishlistView>(current.Id, cancellationToken);
 				var reordered = stream.Aggregate!.Reorder(itemIds);
 				stream.AppendOne(reordered);

@@ -3,7 +3,7 @@ import { type Sort, toSort } from '../sorting/sorts';
 
 const key = 'wishlists.sort';
 
-// Storage can be missing or throw (private windows, blocked site data): then the sort just isn't remembered.
+// Private windows and blocked site data make storage throw an error: then this just doesn't remember the sort.
 function read(): Sort {
   try {
     return toSort(localStorage.getItem(key));

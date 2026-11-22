@@ -16,7 +16,7 @@ function byPrice(direction: 1 | -1) {
 export const sorts = ['order', 'reallyWant', 'priceHigh', 'priceLow'] as const;
 export type Sort = (typeof sorts)[number];
 
-/** `order` has no comparer or fixed label: it's the owner's order as it comes, named after the owner. */
+/** `order` has no comparer or fixed label: it keeps the owner's order unchanged and takes the owner's name. */
 const choices: Record<Sort, { label: string | undefined; compare: Compare | undefined }> = {
   order: { label: undefined, compare: undefined },
   reallyWant: { label: 'Really want first', compare: (a, b) => Number(b.reallyWant) - Number(a.reallyWant) },

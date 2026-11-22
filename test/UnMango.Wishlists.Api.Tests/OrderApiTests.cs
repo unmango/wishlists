@@ -26,7 +26,7 @@ public sealed class OrderApiTests(AppFixture app)
 		(await client.GetFromJsonAsync<Me>("/api/me", Ct))!.WishlistId;
 
 	[Fact]
-	public async Task A_new_item_goes_on_top() {
+	public async Task Adding_an_item_puts_it_on_top() {
 		var (_, ada) = await app.JoinAsync("Ada");
 
 		await AddAsync(ada, "Socks");
@@ -36,7 +36,7 @@ public sealed class OrderApiTests(AppFixture app)
 	}
 
 	[Fact]
-	public async Task An_import_goes_on_top_in_file_order() {
+	public async Task Import_puts_items_on_top_in_file_order() {
 		var (_, ada) = await app.JoinAsync("Ada");
 		await AddAsync(ada, "Socks");
 
@@ -64,7 +64,7 @@ public sealed class OrderApiTests(AppFixture app)
 	}
 
 	[Fact]
-	public async Task The_last_reorder_wins() {
+	public async Task The_last_reorder_sets_the_order() {
 		var (_, ada) = await app.JoinAsync("Ada");
 		var a = await AddAsync(ada, "A");
 		var b = await AddAsync(ada, "B");
@@ -76,7 +76,7 @@ public sealed class OrderApiTests(AppFixture app)
 	}
 
 	[Fact]
-	public async Task Reorders_saved_at_the_same_time_both_succeed() {
+	public async Task Reorders_saved_at_the_same_time_all_return_ok() {
 		var (_, ada) = await app.JoinAsync("Ada");
 		var ids = new List<Guid>();
 		for (var i = 0; i < 5; i++) ids.Add((await AddAsync(ada, $"Item {i}")).Id);
@@ -89,7 +89,7 @@ public sealed class OrderApiTests(AppFixture app)
 	}
 
 	[Fact]
-	public async Task Items_left_out_of_a_reorder_stay_on_top_in_their_order() {
+	public async Task Reorder_puts_items_it_leaves_out_on_top_in_their_order() {
 		// Say the owner added C on another phone while this one was reordering A and B.
 		var (_, ada) = await app.JoinAsync("Ada");
 		var a = await AddAsync(ada, "A");
@@ -157,7 +157,7 @@ public sealed class OrderApiTests(AppFixture app)
 	}
 
 	[Fact]
-	public async Task Items_stored_before_the_order_existed_keep_oldest_first() {
+	public async Task Items_that_older_releases_stored_keep_oldest_first() {
 		var (_, ada) = await app.JoinAsync("Ada");
 		var adaList = await WishlistIdAsync(ada);
 		var store = app.Services.GetRequiredService<IDocumentStore>();
