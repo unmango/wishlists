@@ -280,6 +280,61 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/wishlists/mine/items/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ImportRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ImportResult"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/wishlists/mine/items/{itemId}": {
         parameters: {
             query?: never;
@@ -515,6 +570,14 @@ export interface components {
             errors?: {
                 [key: string]: string[];
             };
+        };
+        ImportRequest: {
+            items: components["schemas"]["ItemRequest"][];
+        };
+        ImportResult: {
+            added: components["schemas"]["OwnItem"][];
+            /** Format: int32 */
+            skipped: number | string;
         };
         ItemRequest: {
             name: string;

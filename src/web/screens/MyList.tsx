@@ -1,11 +1,13 @@
-import { faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFileImport, faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { type FormEvent, useState } from 'react';
+import { type ChangeEvent, type FormEvent, useRef, useState } from 'react';
 import type { OwnItem } from '../api';
+import { ImportSheet } from '../components/ImportSheet';
 import { ItemSheet } from '../components/ItemSheet';
 import { Card, ErrorMessage, Loading, PageHeader, ReallyWantStar, Screen, Thumbnail } from '../components/ui';
 import { formatPrice, linkHost } from '../format';
 import { useMyWishlist, useRenameWishlist } from '../hooks';
+import { type PickedFile, readCsvFile } from '../import/csvImport';
 
 function itemMeta(item: OwnItem): string {
   const parts = [linkHost(item.link) ?? 'No link'];
@@ -61,6 +63,15 @@ export function MyList() {
   // undefined: sheet closed. null: adding. An item: editing it.
   const [sheetItem, setSheetItem] = useState<OwnItem | null | undefined>(undefined);
   const [renaming, setRenaming] = useState(false);
+  const [picked, setPicked] = useState<PickedFile>();
+  const filePicker = useRef<HTMLInputElement>(null);
+
+  async function pickFile(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    // Cleared so picking the same file again (say, after fixing it) still fires a change.
+    e.target.value = '';
+    if (file) setPicked(await readCsvFile(file));
+  }
 
   return (
     <Screen>
@@ -69,14 +80,24 @@ export function MyList() {
           eyebrow='My list'
           title={data?.name ?? 'My wishlist'}
           action={data && (
-            <button
-              type='button'
-              aria-label='Rename list'
-              onClick={() => setRenaming(true)}
-              className='flex size-11 shrink-0 items-center justify-center rounded-full bg-card text-soft'
-            >
-              <FontAwesomeIcon icon={faPen} aria-hidden='true' />
-            </button>
+            <>
+              <button
+                type='button'
+                onClick={() => filePicker.current?.click()}
+                className='flex h-11 shrink-0 items-center gap-2 rounded-full bg-card px-4 text-soft'
+              >
+                <FontAwesomeIcon icon={faFileImport} aria-hidden='true' />
+                Import
+              </button>
+              <button
+                type='button'
+                aria-label='Rename list'
+                onClick={() => setRenaming(true)}
+                className='flex size-11 shrink-0 items-center justify-center rounded-full bg-card text-soft'
+              >
+                <FontAwesomeIcon icon={faPen} aria-hidden='true' />
+              </button>
+            </>
           )}
         />
       )}
@@ -84,7 +105,9 @@ export function MyList() {
       {isLoading && <Loading />}
       {error && <ErrorMessage error={error} />}
       {data && data.items.length === 0 && (
-        <p className='px-5 text-muted'>Your list is empty. Add the first thing you’d like.</p>
+        <p className='px-5 text-muted'>
+          Your list is empty. Add the first thing you’d like, or import a list you already keep as a CSV file.
+        </p>
       )}
 
       <ul className='flex flex-col gap-2.5 px-4'>
@@ -127,6 +150,16 @@ export function MyList() {
       </button>
 
       <ItemSheet item={sheetItem} onClose={() => setSheetItem(undefined)} />
+
+      <input
+        ref={filePicker}
+        type='file'
+        // The MIME types help Android pickers that grey out files the extension alone doesn't match.
+        accept='.csv,text/csv,text/comma-separated-values'
+        onChange={e => void pickFile(e)}
+        hidden
+      />
+      <ImportSheet file={picked} existing={data?.items ?? []} onClose={() => setPicked(undefined)} />
     </Screen>
   );
 }

@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.1.8](https://github.com/unmango/wishlists/compare/v0.1.7...v0.1.8) (2026-11-18)
+
+
+### Features
+
+* import items into your own wishlist from a CSV file ([#517](https://github.com/unmango/wishlists/issues/517)) ([33eeda2](https://github.com/unmango/wishlists/commit/33eeda2049929b0a6e7c94874acb2dabbdd96a41))
+
+
+### Bug Fixes
+
+* only close the import preview that finished, and be honest about unknown outcomes ([#519](https://github.com/unmango/wishlists/issues/519)) ([f14e82c](https://github.com/unmango/wishlists/commit/f14e82c8fbbe775ef1bedfd54eb5f78e527ad776))
+
+
+### Dependencies
+
+* update dependency jetbrains.resharper.globaltools to v2026.3.0 ([#509](https://github.com/unmango/wishlists/issues/509)) ([202c93a](https://github.com/unmango/wishlists/commit/202c93a92c54948d281adda814a37ed1c3b349db))
+* update dependency marten to 9.60.0 ([#510](https://github.com/unmango/wishlists/issues/510)) ([6eaa27c](https://github.com/unmango/wishlists/commit/6eaa27c19e489e6d51c909fafdb471160be5fd10))
+* update dotnet monorepo ([#507](https://github.com/unmango/wishlists/issues/507)) ([0457b65](https://github.com/unmango/wishlists/commit/0457b65ac7d2f75e5809c34ce2bee6ad1a431b48))
+* update postgres docker tag to v18.7 ([#511](https://github.com/unmango/wishlists/issues/511)) ([b06ba05](https://github.com/unmango/wishlists/commit/b06ba050be6d86e478404c70f72c77396b91bf78))
+
+## [0.1.7](https://github.com/unmango/wishlists/compare/v0.1.6...v0.1.7) (2026-11-09)
+
+
+### Features
+
+* show item thumbnails found from their link ([#503](https://github.com/unmango/wishlists/issues/503)) ([902b750](https://github.com/unmango/wishlists/commit/902b750dbf3fc4b0ca63677e7c5de9cc6ae8ecea))
+
+
+### Dependencies
+
+* update dependency xunit.v3 to 4.0.3 ([#505](https://github.com/unmango/wishlists/issues/505)) ([b04681c](https://github.com/unmango/wishlists/commit/b04681cac00f18249145c04df0fa5995fbff8dd6))
+
 ## [0.1.6](https://github.com/unmango/wishlists/compare/v0.1.5...v0.1.6) (2026-11-07)
 
 

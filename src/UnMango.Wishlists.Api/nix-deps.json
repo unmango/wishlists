@@ -11,28 +11,38 @@
   },
   {
     "pname": "JasperFx",
-    "version": "2.100.0",
-    "hash": "sha256-6nt81RUzcnq50+MptbAZbLXEgBTPvznMkjH3wmMKBQg="
+    "version": "2.101.0",
+    "hash": "sha256-Ev+PijWdurcVe1WDNkGMIw9E4Z7s9pOl2TzutPFb7pQ="
+  },
+  {
+    "pname": "JasperFx",
+    "version": "2.102.0",
+    "hash": "sha256-0mw3U2aX+xOZ92juEw/f+sb+8boQxQKVbERZgP1L510="
   },
   {
     "pname": "JasperFx.Events",
-    "version": "2.100.0",
-    "hash": "sha256-v0oylQXeMxbxOGXLPrIfiiWyG51IL5beQYhP0FFDMkE="
+    "version": "2.101.0",
+    "hash": "sha256-kyrKtrhDW6S6SmjIJ2v9L2CdgxR/GmJ9l5OPzPAWyPI="
+  },
+  {
+    "pname": "JasperFx.Events",
+    "version": "2.102.0",
+    "hash": "sha256-zyXD/29cIywWM0q4vkWPpVxGQATgi3avNVsIJr3c720="
   },
   {
     "pname": "Marten",
-    "version": "9.58.0",
-    "hash": "sha256-ubEXPs8xLZy1wQZBCDbUtNnNndio2itzAM9KkNhtbL0="
+    "version": "9.62.0",
+    "hash": "sha256-P4xfDYeBi0Ewz25oiSZnUfVMO0heLT5h7YDfVACQRqY="
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.Google",
-    "version": "10.0.14",
-    "hash": "sha256-ACCU1lnLAjFxVO3wG7xj4L/j1Dr4TSHYqRwTztMG38A="
+    "version": "10.0.15",
+    "hash": "sha256-FiK/dSCwyxdeq2pBKV9D6uyU18y8GR0DSuyNe12KDJ4="
   },
   {
     "pname": "Microsoft.AspNetCore.OpenApi",
-    "version": "10.0.14",
-    "hash": "sha256-apfyJFWq5DvIZkcs8dTP3LxNZSCRwYfwKgIpbeM69g8="
+    "version": "10.0.15",
+    "hash": "sha256-AhwLxQ8+h3z4/9XTu6BmaVBYRAb2kZDYc15DFpwh/Ok="
   },
   {
     "pname": "Microsoft.Bcl.TimeProvider",
@@ -41,8 +51,8 @@
   },
   {
     "pname": "Microsoft.Extensions.ApiDescription.Server",
-    "version": "10.0.14",
-    "hash": "sha256-sRRF03887lSMO7RZ9W3lB9ZIY6PEWoLwgfxutcfoJE8="
+    "version": "10.0.15",
+    "hash": "sha256-CGCPBE9J7vMPr8ZLJYi62/klLPEbCVGuIoB5jBvmrLA="
   },
   {
     "pname": "Microsoft.IO.RecyclableMemoryStream",
@@ -51,8 +61,8 @@
   },
   {
     "pname": "Microsoft.OpenApi",
-    "version": "2.12.2",
-    "hash": "sha256-OjW4VjHhx7h3thJEypPgQvaiScouBV/Vw9krVPGyR6k="
+    "version": "2.13.0",
+    "hash": "sha256-83e1TBWbfn9H6FhzkGZsud/4u05Vr4LE7byQ0cDS+UM="
   },
   {
     "pname": "NetTopologySuite",
@@ -121,17 +131,17 @@
   },
   {
     "pname": "Weasel.Core",
-    "version": "9.49.0",
-    "hash": "sha256-AtYR0cicPxPl4c35sD1X2+5Veyv23HbzKDyyQpIyPt0="
+    "version": "9.51.0",
+    "hash": "sha256-uvkoL/g30iFFq2oPGcR2p+t3JazlFFDcfm9P8scch3E="
   },
   {
     "pname": "Weasel.Postgresql",
-    "version": "9.49.0",
-    "hash": "sha256-9wLrZOJPGG7MD5+DuZuGGZXCTQUvMNmw/SEylsWsZqs="
+    "version": "9.51.0",
+    "hash": "sha256-fmaDVBZ/ccAR/ohCPftOsvej4PAdb6+lGYqcpV+r5aI="
   },
   {
     "pname": "Weasel.Storage",
-    "version": "9.49.0",
-    "hash": "sha256-tD3YwxnxBOggF5EvdkOKev2ZmPLz0geCAc58xfgoq9Q="
+    "version": "9.51.0",
+    "hash": "sha256-95CMxzhn4GD6wsgww7YSsTdeHyBoKlotA5OdvVP9b1I="
   }
 ]
