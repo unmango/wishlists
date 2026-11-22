@@ -34,7 +34,7 @@ export function ImportSheet({ file, existing, onClose }: Props) {
                 {file.error}
               </p>
             )
-            // Keyed so a new file starts fresh.
+            // Keyed so a new file gets fresh state.
             : <Preview key={file.name} initial={file.rows} existing={existing} onDone={onClose} />}
         </>
       )}
@@ -45,7 +45,7 @@ export function ImportSheet({ file, existing, onClose }: Props) {
 function Preview({ initial, existing, onDone }: { initial: ImportRow[]; existing: OwnItem[]; onDone: () => void }) {
   const [rows, setRows] = useState(initial);
   const importItems = useImportItems();
-  // An import still running when its preview closes mustn't close a newer preview when it finishes.
+  // An import that outlives its preview mustn't close a newer preview once the server answers it.
   const open = useRef(true);
   useEffect(() => {
     open.current = true;
@@ -80,20 +80,20 @@ function Preview({ initial, existing, onDone }: { initial: ImportRow[]; existing
       {importItems.error && (
         <p role='alert' className='m-0 rounded-[10px] bg-accent-soft px-3.5 py-2.5 text-sm text-danger'>
           {importItems.error instanceof ApiError
-            // The API answered, so the single save never happened.
+            // The API sent an answer, so it saved nothing.
             ? `${importItems.error.message} Nothing was added.`
-            // No answer: the save may or may not have happened.
+            // No answer: the API may or may not have saved the items.
             : 'Couldn’t reach the app. Check your wishlist before trying again.'}
         </p>
       )}
 
       <ul className='-mx-5 flex max-h-[55svh] flex-col overflow-y-auto border-y border-line'>
         {plan.map((row, index) => (
-          // The file's row order never changes, so the index is a stable key.
+          // Nothing reorders the file's rows, so the index makes a stable key.
           <li key={index} className='border-b border-line px-5 py-3 last:border-b-0'>
             <PreviewRow
               row={row}
-              // Rows that came without a name keep their field after it's typed, so focus stays put.
+              // Rows the file left unnamed keep their field after the owner types a name, so the input keeps focus.
               editable={!initial[index]!.name}
               onRename={name => rename(index, name)}
             />

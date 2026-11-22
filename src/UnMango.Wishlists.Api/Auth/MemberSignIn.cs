@@ -38,14 +38,14 @@ internal sealed class MemberSignIn(IDocumentSession session, ILogger<MemberSignI
 
 		try {
 			await session.SaveChangesAsync(cancellationToken);
-			logger.LogInformation("Member {MemberId} joined", memberId);
+			logger.LogInformation("Created member {MemberId}", memberId);
 			return MemberView.Create(joined);
 		}
 		catch (Exception ex) when (IsUniqueViolation(ex)) {
-			// Two sign-ins raced and the unique index on GoogleSubject rejected the second.
+			// Two concurrent sign-ins hit the unique index on GoogleSubject, which rejected the second.
 			session.EjectAllPendingChanges();
 			return await FindAsync(profile.Subject, cancellationToken)
-			       ?? throw new InvalidOperationException("Member disappeared after a sign-in race");
+			       ?? throw new InvalidOperationException("Couldn't find the member after a sign-in race");
 		}
 	}
 

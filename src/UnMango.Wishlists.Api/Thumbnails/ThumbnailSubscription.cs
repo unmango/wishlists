@@ -9,8 +9,8 @@ namespace UnMango.Wishlists.Api.Thumbnails;
 
 /// <summary>
 /// Looks for a thumbnail whenever an item gets a new link, in the background on the async daemon.
-/// It starts from the first event, so items saved before thumbnails existed are back-filled.
-/// One attempt per link: misses aren't recorded or retried.
+/// It reads from the first event, so it back-fills items saved before the thumbnails feature.
+/// One attempt per link: it neither records nor retries misses.
 /// </summary>
 public sealed class ThumbnailSubscription : SubscriptionBase
 {
@@ -49,7 +49,7 @@ public sealed class ThumbnailSubscription : SubscriptionBase
 			try {
 				image = await _client.FindAsync(link, cancellationToken);
 			} catch (Exception ex) when (ex is not OperationCanceledException) {
-				// A surprise in one page mustn't pause the subscription and stall every later lookup.
+				// A surprise in one page mustn't pause the subscription and hold up every later lookup.
 				_logger.LogWarning(ex, "Thumbnail lookup failed for item {ItemId}", itemId);
 				continue;
 			}
@@ -58,13 +58,13 @@ public sealed class ThumbnailSubscription : SubscriptionBase
 			if (image is null) continue;
 
 			// Appended in its own session, not through `operations`, so the inline WishlistView projection sees it.
-			// If the daemon stops before saving its progress, the item already has a thumbnail next time and is skipped.
+			// If something stops the daemon before it saves its progress, the next run sees the thumbnail and skips the item.
 			try {
 				await using var session = operations.DocumentStore.LightweightSession();
 				session.Events.Append(e.StreamId, new ItemThumbnailFound(itemId, link, image.AbsoluteUri));
 				await session.SaveChangesAsync(cancellationToken);
 			} catch (Exception ex) when (ex is not OperationCanceledException) {
-				// Most likely a concurrent write to the same stream. Losing one thumbnail beats stalling every later lookup.
+				// Most likely a concurrent write to the same stream. Losing one thumbnail beats holding up every later lookup.
 				_logger.LogWarning(ex, "Couldn't record the thumbnail for item {ItemId}", itemId);
 			}
 		}

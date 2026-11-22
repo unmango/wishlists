@@ -2,8 +2,8 @@ import { faGift } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const messages: Record<string, string> = {
-  denied: 'That Google account can’t sign in here. Try a different one.',
-  failed: 'Signing in with Google didn’t finish. Try again.',
+  denied: 'This site doesn’t accept that Google account. Try a different one.',
+  failed: 'Google didn’t complete the sign-in. Try again.',
 };
 
 function GoogleLogo() {

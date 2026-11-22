@@ -23,7 +23,7 @@ internal sealed class MartenXmlRepository(IDocumentStore store) : IXmlRepository
 	public void StoreElement(XElement element, string friendlyName) {
 		using var session = store.LightweightSession();
 		session.Store(new DataProtectionKey(friendlyName, element.ToString(SaveOptions.DisableFormatting)));
-		// Same here for saving. Keys are written rarely.
+		// Same here for saving. The app rarely writes keys.
 		session.SaveChangesAsync().GetAwaiter().GetResult();
 	}
 }

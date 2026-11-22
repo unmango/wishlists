@@ -13,7 +13,7 @@ export type ImportRow = {
   warnings: string[];
 };
 
-/** Header names for each field, matched ignoring case. Earlier aliases win when a file has more than one. */
+/** Header names for each field, matched ignoring case. Earlier aliases beat later ones when a file has more than one. */
 const aliases = [
   ['name', ['name', 'item', 'title', 'description']],
   ['link', ['link', 'product link', 'url']],
@@ -113,7 +113,7 @@ const maxImportItems = 200;
 
 /** Reads a CSV file's items for the import preview, or says why the file can't be imported. */
 export function readImport(text: string): { rows: ImportRow[] } | { error: string } {
-  // Excel starts UTF-8 files with a byte order mark, which would otherwise stick to the first header.
+  // Excel starts UTF-8 files with a byte order mark, which the first header would otherwise pick up.
   const isBlank = (cells: string[]) => cells.every(c => c.trim() === '');
   const lines = parseCsv(text.replace(/^\uFEFF/, ''));
   // The header is the first line with anything on it.
@@ -140,7 +140,7 @@ export function readImport(text: string): { rows: ImportRow[] } | { error: strin
   return { rows: filled.map(cells => readRow(cells, columns)) };
 }
 
-/** What happens to a row: added, skipped as already on the wishlist, or waiting for the owner to name it. */
+/** What the import does with a row: adds it, skips it as already on the wishlist, or holds it for the owner to name. */
 type ImportStatus = 'add' | 'duplicate' | 'needs-name';
 
 export type PlannedRow = ImportRow & { status: ImportStatus };
@@ -153,7 +153,7 @@ function duplicateKey(item: { name: string; link: string | null }): string | und
   return name ? `name:${name.toLowerCase()}` : undefined;
 }
 
-/** Decides each row's status against what's already on the wishlist. Earlier rows in the file win over later ones. */
+/** Decides each row's status against what's already on the wishlist. Earlier rows in the file beat later ones. */
 export function planImport(rows: ImportRow[], existing: { name: string; link?: string | null }[]): PlannedRow[] {
   const seen = new Set(existing.map(x => duplicateKey({ name: x.name, link: x.link ?? null })));
   return rows.map(row => {

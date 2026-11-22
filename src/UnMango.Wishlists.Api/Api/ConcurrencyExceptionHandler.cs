@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Diagnostics;
 
 namespace UnMango.Wishlists.Api.Api;
 
-/// <summary>Two people changed the same list at once. The client should reload and try again.</summary>
+/// <summary>Two people changed the same list at once. The client should reload the list and try the change again.</summary>
 internal sealed class ConcurrencyExceptionHandler(IProblemDetailsService problemDetails) : IExceptionHandler
 {
 	public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken) {
@@ -13,7 +13,7 @@ internal sealed class ConcurrencyExceptionHandler(IProblemDetailsService problem
 		return await problemDetails.TryWriteAsync(new ProblemDetailsContext {
 			HttpContext = context,
 			Exception = exception,
-			ProblemDetails = { Title = "Someone else changed this at the same time. Reload and try again." },
+			ProblemDetails = { Title = "Someone else changed this at the same time. Reload the page and try again." },
 		});
 	}
 }

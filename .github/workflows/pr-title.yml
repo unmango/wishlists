@@ -10,9 +10,9 @@ permissions:
   pull-requests: read
 
 jobs:
-  # PRs land as squash merges, so the PR title becomes the commit subject on
-  # main. release-please parses those subjects; a title without a Conventional
-  # Commits type never reaches a release.
+  # We squash-merge PRs, so the PR title becomes the commit subject on
+  # main. release-please parses those subjects; it leaves a title without a
+  # Conventional Commits type out of every release.
   conventional-commits:
     runs-on: ubuntu-latest
     steps:

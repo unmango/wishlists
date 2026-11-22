@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Brings everything that depends on the .NET version in line with global.json,
-# so a Renovate .NET bump (patch, minor or major) builds without hand edits:
+# so CI can build a Renovate .NET bump (patch, minor or major) without hand edits:
 #
 #   1. Moves the target framework, the nix SDK/runtime, the Docker images and
 #      the Makefile's output path to global.json's major version.
 #   2. Updates the flake's nixpkgs if it doesn't have that SDK yet, or only a
 #      release candidate of it.
-#   3. Refreshes packages.lock.json when `dotnet restore --locked-mode` fails,
-#      e.g. on a major bump, where Renovate's own restore can't succeed because
+#   3. Refreshes packages.lock.json when `dotnet restore --locked-mode` reports an error,
+#      e.g. on a major bump, where Renovate's own restore can't finish the job because
 #      the new packages don't support the old target framework (NU1202).
 #   4. Regenerates nix-deps.json from the lock files.
 #
@@ -28,7 +28,7 @@ sed -i -E "s|(mcr\.microsoft\.com/dotnet/[a-z]+):[0-9]+\.0|\1:${major}.0|g" \
 	Dockerfile hack/Dockerfile
 sed -i -E "s|bin/Debug/net[0-9]+\.0/|bin/Debug/${tfm}/|g" Makefile
 
-# 2. The flake's nixpkgs must ship this SDK, or the nix build can't happen.
+# 2. The flake's nixpkgs must ship this SDK, or nix can't build the app.
 # Right after a major release, nixpkgs may only have a release candidate,
 # whose runtime can't run the GA build tools (dotnet-getdocument), so try a
 # newer nixpkgs for that too.
@@ -50,7 +50,7 @@ fi
 # 3. Restore with the nix SDK, the same one the nix build uses. It can be a
 # different patch (or a release candidate) than global.json pins, so move
 # global.json aside while restoring, like default.nix does. The lock files
-# don't depend on the SDK patch.
+# don't record the SDK patch.
 dotnet=(nix shell --inputs-from . "nixpkgs#${sdk}" --command dotnet)
 mv global.json global.json.bak
 trap 'mv global.json.bak global.json' EXIT

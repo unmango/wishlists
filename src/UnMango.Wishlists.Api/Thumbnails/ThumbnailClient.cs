@@ -8,7 +8,7 @@ public sealed record ThumbnailImage(string ContentType, byte[] Bytes);
 
 /// <summary>
 /// Looks at an item's link for a thumbnail, and downloads it. Every miss (an error, a timeout, a page
-/// with no image, something too big or not an image) comes back as null, never as an exception.
+/// with no image, something too big or not an image) returns null, never an exception.
 /// </summary>
 public sealed class ThumbnailClient(HttpClient http)
 {
@@ -58,7 +58,7 @@ public sealed class ThumbnailClient(HttpClient http)
 		});
 
 	private async Task<T?> Guard<T>(CancellationToken cancellationToken, Func<CancellationToken, Task<T?>> fetch) where T : class {
-		// HttpClient.Timeout stops at the headers; this covers reading the body too.
+		// HttpClient.Timeout only covers the headers; this covers reading the body too.
 		using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 		if (http.Timeout != Timeout.InfiniteTimeSpan) timeout.CancelAfter(http.Timeout);
 

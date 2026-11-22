@@ -6,7 +6,7 @@ namespace UnMango.Wishlists.Api.Thumbnails;
 /// <summary>Finds the image a shop page advertises for sharing (og:image, then twitter:image).</summary>
 public static partial class PageImage
 {
-	// Most specific first.
+	// Try the most specific tag first.
 	private static readonly string[] Keys = ["og:image:secure_url", "og:image", "og:image:url", "twitter:image", "twitter:image:src"];
 
 	public static Uri? Find(string html, Uri page) {

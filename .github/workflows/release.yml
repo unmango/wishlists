@@ -8,10 +8,10 @@ permissions:
   contents: read
 
 jobs:
-  # Opens or updates the release PR, and tags vX.Y.Z when it merges. The tag
+  # Opens or updates the release PR, and tags vX.Y.Z when someone merges it. The tag
   # is pushed with the release App's token rather than GITHUB_TOKEN, so it
   # triggers the CI workflow, which publishes the chart and image at that
-  # version. A PR opened with GITHUB_TOKEN would also arrive without its CI checks.
+  # version. A PR opened with GITHUB_TOKEN would also skip its CI checks.
   release-please:
     permissions:
       contents: write

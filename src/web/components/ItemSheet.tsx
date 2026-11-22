@@ -16,7 +16,7 @@ export function ItemSheet({ item, onClose }: Props) {
   const titleId = useId();
   return (
     <BottomSheet open={item !== undefined} onClose={onClose} labelledBy={titleId}>
-      {/* Keyed so each opening starts from the item's current values. */}
+      {/* Keyed so each opening resets the form to the item's current values. */}
       {item !== undefined && <ItemForm key={item?.id ?? 'new'} item={item} titleId={titleId} onDone={onClose} />}
     </BottomSheet>
   );
@@ -32,7 +32,7 @@ function ItemForm({ item, titleId, onDone }: { item: OwnItem | null; titleId: st
   const busy = add.isMutating || edit.isMutating || remove.isMutating;
   const failed = add.error ?? edit.error;
   const errors: ItemErrors = {
-    ...(failed && saveErrors(failed, 'Couldn’t save. Try again.')),
+    ...(failed && saveErrors(failed, 'Couldn’t save the item. Try again.')),
     ...(remove.error && saveErrors(remove.error, 'Couldn’t remove it. Try again.')),
     ...invalid,
   };

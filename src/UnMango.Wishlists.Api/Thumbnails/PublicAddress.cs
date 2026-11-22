@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace UnMango.Wishlists.Api.Thumbnails;
 
-/// <summary>Decides whether an outbound connection may go to an address: only the public internet is allowed.</summary>
+/// <summary>Decides whether an outbound connection may use an address: it allows only the public internet.</summary>
 public static class PublicAddress
 {
 	private static readonly IPNetwork[] BlockedV4 = [

@@ -26,7 +26,7 @@ builder.Services
 	.AddOpenApi(options => options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1)
 	.AddWishlistsAuth(builder.Configuration, builder.Environment);
 
-// The app runs behind the cluster's ingress, which terminates TLS.
+// The cluster's ingress sits in front of the app and terminates TLS.
 builder.Services.Configure<ForwardedHeadersOptions>(options => {
 	options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 	options.KnownIPNetworks.Clear();
@@ -39,7 +39,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options => {
 	}
 });
 
-// Every request to an item's link goes through the SSRF guard.
+// The SSRF guard checks every request to an item's link.
 builder.Services.AddHttpClient<ThumbnailClient>(http => ThumbnailClient.Configure(http))
 	.ConfigurePrimaryHttpMessageHandler(GuardedHandler.Create);
 
@@ -57,7 +57,7 @@ if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connecti
 		})
 		.UseLightweightSessions()
 		.ApplyAllDatabaseChangesOnStartup()
-		// Thumbnail lookups run in the background. HotCold elects one leader, so only one pod looks things up.
+		// The async daemon handles thumbnail lookups. HotCold elects one leader, so only one pod looks things up.
 		.AddSubscriptionWithServices<ThumbnailSubscription>(ServiceLifetime.Scoped, o => o.Name = "Thumbnails")
 		.AddAsyncDaemon(DaemonMode.HotCold);
 
@@ -80,7 +80,7 @@ if (app.Environment.IsDevelopment()) {
 	app.UseWebSockets();
 	app.UseViteDevelopmentServer(useMiddleware: true);
 } else if (!app.Environment.IsOpenApiCodegen()) {
-	// Serve wwwroot/index.html at "/". Screens are hash routes, so no fallback route is needed.
+	// Serve wwwroot/index.html at "/". Screens use hash routes, so the app needs no fallback route.
 	app.UseDefaultFiles();
 	app.UseStaticFiles();
 }

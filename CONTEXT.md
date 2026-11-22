@@ -5,7 +5,7 @@ A private wishlists app for one household. Each member keeps a list, and other m
 ## Language
 
 **Household**:
-The group of people who use the app together. Never described by size, names or relationships.
+The group of people who share the app. Never described by size, names or relationships.
 _Avoid_: family, the family
 
 **Member**:
@@ -37,7 +37,7 @@ How one member chooses to show a wishlist while looking at it, such as "really w
 _Avoid_: order (for a viewer's choice), filter
 
 **Thumbnail**:
-A small picture on an item, found automatically from the item's link. Never chosen or uploaded by the owner. When the link changes or is cleared, the thumbnail goes with it.
+A small picture on an item, found automatically from the item's link. Never chosen or uploaded by the owner. Changing or clearing the link removes the thumbnail.
 _Avoid_: picture, photo, preview image, og image
 
 **Import**:
@@ -53,6 +53,6 @@ The person who runs the app and the repo, named on GitHub only by their handle.
 
 ## Example dialogue
 
-> **Dev:** "A member reported the sheet won't close on Android."
+> **Dev:** "A member reported they can't close the sheet on Android."
 > **Maintainer:** "Was it the owner editing their own wishlist, or a gift-giver?"
 > **Dev:** "A gift-giver, right after they marked an item bought."

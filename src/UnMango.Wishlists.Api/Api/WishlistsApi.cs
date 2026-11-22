@@ -146,7 +146,7 @@ internal static class WishlistsApi
 				stream.AppendOne(added);
 				await session.SaveChangesAsync(cancellationToken);
 
-				// No thumbnail yet: it's looked for in the background.
+				// No thumbnail yet: a background job looks for it.
 				var item = new OwnItem(added.ItemId, added.Name, added.Link, added.Price, added.Notes, added.ReallyWant, null);
 				return TypedResults.Created($"/api/wishlists/mine/items/{item.Id}", item);
 			});
@@ -163,7 +163,7 @@ internal static class WishlistsApi
 				}
 
 				var stream = await session.Events.FetchForWriting<WishlistView>(current.Id, cancellationToken);
-				// Import only adds: anything already on the wishlist, or earlier in the file, is skipped.
+				// Import only adds items: it skips anything already on the wishlist or earlier in the file.
 				var seen = stream.Aggregate!.CurrentItems
 					.Select(x => DuplicateKey(x.Name, x.Link))
 					.ToHashSet(StringComparer.Ordinal);
@@ -178,7 +178,7 @@ internal static class WishlistsApi
 				stream.AppendMany(added);
 				await session.SaveChangesAsync(cancellationToken);
 
-				// No thumbnails yet: they're looked for in the background, as for items added by hand.
+				// No thumbnails yet: a background job looks for them, as for items added by hand.
 				IReadOnlyList<OwnItem> items = added
 					.Select(x => new OwnItem(x.ItemId, x.Name, x.Link, x.Price, x.Notes, x.ReallyWant, null))
 					.ToList();
@@ -347,7 +347,7 @@ internal static class WishlistsApi
 				if (buyer != memberId) {
 					return TypedResults.Problem(
 						statusCode: StatusCodes.Status403Forbidden,
-						title: "Only the person who bought this item can unmark it.");
+						title: "Only the member who bought this item can unmark it.");
 				}
 
 				stream.AppendOne(new ItemUnmarked(itemId, memberId));
@@ -374,7 +374,7 @@ internal static class WishlistsApi
 
 	/// <summary>
 	/// Two items are the same when they share a link, or a name when neither has a link.
-	/// The phone's preview matches the same way: both lower-case names, which (unlike upper-casing) maps letters one to one.
+	/// The phone's preview matches items the same way: both lower-case names, which (unlike upper-casing) maps letters one to one.
 	/// </summary>
 	private static string DuplicateKey(string name, string? link) =>
 		Clean(link) is { } l ? $"link:{l}" : $"name:{name.Trim().ToLowerInvariant()}";

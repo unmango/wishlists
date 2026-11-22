@@ -55,7 +55,7 @@ public sealed record WishlistView(
 	Guid PurchasesId,
 	IReadOnlyList<WishlistItem> Items)
 {
-	// Removed items are kept so a gift-giver who already bought one can still see it.
+	// The view keeps removed items so a gift-giver who already bought one can still see it.
 	[JsonIgnore]
 	public IEnumerable<WishlistItem> CurrentItems => Items.Where(x => !x.Removed);
 
@@ -109,7 +109,7 @@ public sealed record WishlistView(
 			.ToList(),
 	};
 
-	// A lookup that finishes after the link changed is for a link the item no longer has.
+	// A lookup the daemon finishes after an edit to the link holds a link the item no longer has.
 	public WishlistView Apply(ItemThumbnailFound e) => this with {
 		Items = Items.Select(x => x.Id == e.ItemId && x.Link == e.Link ? x with { ThumbnailUrl = e.ImageUrl } : x).ToList(),
 	};

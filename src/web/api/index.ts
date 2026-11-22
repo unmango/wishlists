@@ -14,13 +14,13 @@ export type ItemRequest = components['schemas']['ItemRequest'];
 export type MyPurchase = components['schemas']['MyPurchase'];
 export type ImportResult = components['schemas']['ImportResult'];
 
-/** An API call that didn't succeed. */
+/** An API call that returned an error. */
 export class ApiError extends Error {
   readonly status: number;
   readonly body: unknown;
 
   constructor(status: number, body: unknown) {
-    super(problemTitle(body) ?? `Request failed (${status})`);
+    super(problemTitle(body) ?? `The server returned an error (${status})`);
     this.status = status;
     this.body = body;
   }
@@ -57,7 +57,7 @@ function isMatch(value: unknown, partial: unknown): boolean {
   return Object.entries(partial).every(([k, v]) => isMatch((value as Record<string, unknown>)[k], v));
 }
 
-const prefix = '/api'; // The slash is an aesthetic choice, it has no effect
+const prefix = '/api'; // The slash is an aesthetic choice; nothing reads it
 // Errors from the hook are whatever throwOnError threw.
 export const useQuery = createQueryHook<paths, `${string}/${string}`, typeof prefix, ApiError>(defaultClient, prefix);
 export const useMutate = createMutateHook(defaultClient, prefix, isMatch);

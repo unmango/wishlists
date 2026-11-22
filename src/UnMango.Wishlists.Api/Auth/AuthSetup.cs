@@ -41,7 +41,7 @@ internal static class AuthSetup
 					o.ExpireTimeSpan = TimeSpan.FromDays(30);
 					o.SlidingExpiration = true;
 
-					// Without IsPersistent the cookie has no Expires, so it dies with the browser session: closing an
+					// Without IsPersistent the cookie has no Expires, so the browser drops it with the session: closing an
 					// installed home-screen app or restarting the phone would sign the member out. ExpireTimeSpan alone
 					// only limits the ticket inside the cookie.
 					o.Events.OnSigningIn = ctx => {
@@ -61,7 +61,7 @@ internal static class AuthSetup
 						};
 					}
 
-					// The front end signs in explicitly through /auth/login, so API calls get status codes, not redirects.
+					// The front end starts sign-in explicitly through /auth/login, so API calls get status codes, not redirects.
 					o.Events.OnRedirectToLogin = ctx => {
 						ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
 						return Task.CompletedTask;
@@ -73,7 +73,7 @@ internal static class AuthSetup
 				});
 
 			if (google is not { ClientId.Length: > 0, ClientSecret.Length: > 0 }) {
-				// Development uses /auth/dev-login instead. Anywhere else, nobody could sign in, so fail loudly.
+				// Development uses /auth/dev-login instead. Anywhere else, nobody could get a session, so fail loudly.
 				if (environment.IsProduction() && !environment.IsOpenApiCodegen()) {
 					throw new InvalidOperationException("Auth:Google:ClientId and Auth:Google:ClientSecret are required.");
 				}
@@ -137,7 +137,7 @@ internal static class AuthSetup
 			});
 
 			if (environment.IsDevelopment()) {
-				// Lets you sign in locally without Google credentials. Never mapped outside Development.
+				// Gives you a local session without Google credentials. Never mapped outside Development.
 				auth.MapGet("/dev-login", async Task<Results<RedirectHttpResult, ValidationProblem>> (
 					HttpContext context,
 					[FromServices] MemberSignIn signIn,

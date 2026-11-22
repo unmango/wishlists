@@ -5,7 +5,7 @@ namespace UnMango.Wishlists.Api.Thumbnails;
 
 /// <summary>
 /// The HTTP handler for every request the server makes to an item's link. It checks the resolved
-/// address when it connects, so redirects and DNS tricks can't reach the cluster or the host.
+/// address on each connection, so redirects and DNS tricks can't reach the cluster or the host.
 /// </summary>
 public static class GuardedHandler
 {

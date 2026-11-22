@@ -6,7 +6,7 @@ COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 COPY vite.config.ts tsconfig*.json index.html ./
-# A directory source copies its contents, so public/ needs its own line to stay a folder.
+# A directory source copies its contents, so public/ needs its own line to keep the folder.
 COPY public/ ./public/
 COPY src/web/ ./src/web/
 

@@ -1,6 +1,6 @@
 namespace UnMango.Wishlists.Api.Domain;
 
-// Bought marks live in their own stream so reading a wishlist for its owner never loads them.
+// Bought marks have their own stream so reading a wishlist for its owner never loads them.
 public sealed record PurchasesOpened(Guid PurchasesId, Guid WishlistId);
 
 public sealed record ItemMarkedBought(Guid ItemId, Guid BuyerId);

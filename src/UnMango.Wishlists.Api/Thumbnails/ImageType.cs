@@ -2,7 +2,7 @@ using System.Net.Http.Headers;
 
 namespace UnMango.Wishlists.Api.Thumbnails;
 
-/// <summary>The raster image formats a thumbnail may be. SVG is never allowed, since it can carry script.</summary>
+/// <summary>The raster image formats a thumbnail may use. It never allows SVG, since SVG can carry script.</summary>
 public static class ImageType
 {
 	private static readonly HashSet<string> Allowed = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
