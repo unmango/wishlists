@@ -12,7 +12,7 @@ CMD ["bun", "dev"]
 FROM web AS manifest
 RUN bun run build
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0-noble AS api
+FROM mcr.microsoft.com/dotnet/sdk:11.0-resolute AS api
 
 WORKDIR /work
 COPY src/UnMango.Wishlists.Api/packages.lock.json ./

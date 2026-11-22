@@ -29,7 +29,7 @@ test:
 nix:
 	$(NIX) build .#api .#web .#wishlists .#docker
 
-api: src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api
+api: src/UnMango.Wishlists.Api/bin/Debug/net11.0/UnMango.Wishlists.Api
 web: dist/index.html
 
 deps: ${API_DIR}/nix-deps.json ${WEB_DIR}/bun.nix
@@ -76,7 +76,7 @@ bin/image.tar: Dockerfile ${API_SRC} ${WEB_SRC}
 .PHONY: src/UnMango.Wishlists.Api/nix-deps.json
 src/UnMango.Wishlists.Api/nix-deps.json: bin/fetch-deps.sh
 	$< $@
-src/UnMango.Wishlists.Api/bin/Debug/net10.0/UnMango.Wishlists.Api: ${API_SRC}
+src/UnMango.Wishlists.Api/bin/Debug/net11.0/UnMango.Wishlists.Api: ${API_SRC}
 	$(DOTNET) build
 
 src/web/bun.nix: bun.lock
