@@ -1,9 +1,11 @@
 import { faCheck, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { GiftItem, Me } from '../api';
+import { SortMenu } from '../components/SortMenu';
 import { Card, ErrorMessage, Loading, ReallyWantStar, Screen, Thumbnail } from '../components/ui';
 import { formatPrice, linkHost } from '../format';
-import { href, useMarkBought, useUnmarkBought, useWishlist } from '../hooks';
+import { href, useMarkBought, useSort, useUnmarkBought, useWishlist } from '../hooks';
+import { sortItems } from '../sorting/sorts';
 
 function ItemRow(
   { item, wishlistId, ownerName, me }: { item: GiftItem; wishlistId: string; ownerName: string; me: Me },
@@ -97,6 +99,7 @@ function ItemRow(
 export function TheirList({ id, me }: { id: string; me: Me }) {
   const { data, error, isLoading } = useWishlist(id);
   const ownerName = data?.ownerName.split(' ')[0] ?? '';
+  const [sort, setSort] = useSort();
 
   return (
     <Screen>
@@ -120,10 +123,17 @@ export function TheirList({ id, me }: { id: string; me: Me }) {
       {error && <ErrorMessage error={error} />}
       {data && data.items.length === 0 && <p className='px-5 text-muted'>{ownerName} hasn’t added anything yet.</p>}
 
+      {data && data.items.length > 0 && (
+        <div className='px-3 pb-1'>
+          <SortMenu sort={sort} onChange={setSort} ownerName={ownerName || 'Owner'} />
+        </div>
+      )}
+
       <ul className='flex flex-col gap-2.5 px-4 pt-1'>
-        {data?.items.map(item => (
-          <ItemRow key={item.id} item={item} wishlistId={data.id} ownerName={ownerName} me={me} />
-        ))}
+        {data
+          && sortItems(data.items, sort).map(item => (
+            <ItemRow key={item.id} item={item} wishlistId={data.id} ownerName={ownerName} me={me} />
+          ))}
       </ul>
     </Screen>
   );

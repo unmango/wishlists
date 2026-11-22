@@ -1,19 +1,16 @@
-import { faFileImport, faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFileImport, faPen, faPlus, faSort } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { type ChangeEvent, type FormEvent, useRef, useState } from 'react';
 import type { OwnItem } from '../api';
 import { ImportSheet } from '../components/ImportSheet';
 import { ItemSheet } from '../components/ItemSheet';
-import { Card, ErrorMessage, Loading, PageHeader, ReallyWantStar, Screen, Thumbnail } from '../components/ui';
-import { formatPrice, linkHost } from '../format';
-import { useMyWishlist, useRenameWishlist } from '../hooks';
+import { OwnItemSummary } from '../components/OwnItemSummary';
+import { ReorderList } from '../components/ReorderList';
+import { SortMenu } from '../components/SortMenu';
+import { Card, ErrorMessage, Loading, PageHeader, Screen } from '../components/ui';
+import { useMyWishlist, useRenameWishlist, useReorderItems, useSort } from '../hooks';
 import { type PickedFile, readCsvFile } from '../import/csvImport';
-
-function itemMeta(item: OwnItem): string {
-  const parts = [linkHost(item.link) ?? 'No link'];
-  if (item.notes) parts.push(item.notes.split('\n')[0]!);
-  return parts.join(' · ');
-}
+import { sortItems } from '../sorting/sorts';
 
 function RenameForm({ current, onDone }: { current: string; onDone: () => void }) {
   const [name, setName] = useState(current);
@@ -65,6 +62,20 @@ export function MyList() {
   const [renaming, setRenaming] = useState(false);
   const [picked, setPicked] = useState<PickedFile>();
   const filePicker = useRef<HTMLInputElement>(null);
+  const [sort, setSort] = useSort();
+  const [reordering, setReordering] = useState(false);
+  const reorder = useReorderItems();
+
+  // Reordering always works on the owner's order, and leaves the view on it.
+  function startReorder() {
+    setSort('order');
+    reorder.reset();
+    setReordering(true);
+  }
+
+  function saveOrder(itemIds: string[]) {
+    void reorder.trigger(itemIds, { onSuccess: () => setReordering(false) });
+  }
 
   async function pickFile(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -110,44 +121,66 @@ export function MyList() {
         </p>
       )}
 
-      <ul className='flex flex-col gap-2.5 px-4'>
-        {data?.items.map(item => (
-          <li key={item.id}>
-            <Card>
-              <button
-                type='button'
-                onClick={() => setSheetItem(item)}
-                className='flex w-full items-center gap-2.5 px-4 py-3.5 text-left text-ink'
-              >
-                <Thumbnail src={item.thumbnail} />
-                <div className='flex min-w-0 flex-1 flex-col gap-0.5'>
-                  <div className='flex items-center gap-1.5'>
-                    {item.reallyWant && <ReallyWantStar label='Really want' />}
-                    <span className='text-base font-medium break-words'>{item.name}</span>
-                  </div>
-                  <div className='truncate text-[13px] text-muted'>{itemMeta(item)}</div>
-                </div>
-                <div className='text-[15px] font-bold'>{formatPrice(item.price)}</div>
-              </button>
-            </Card>
-          </li>
-        ))}
-      </ul>
+      {data && data.items.length > 0 && !reordering && (
+        <div className='flex items-center justify-between gap-2 px-3 pb-2'>
+          <SortMenu sort={sort} onChange={setSort} ownerName={undefined} />
+          {data.items.length > 1 && (
+            <button
+              type='button'
+              onClick={startReorder}
+              className='flex h-11 items-center gap-2 rounded-full bg-card px-4 text-sm text-soft'
+            >
+              <FontAwesomeIcon icon={faSort} aria-hidden='true' />
+              Reorder
+            </button>
+          )}
+        </div>
+      )}
 
-      {data && data.items.length > 0 && (
+      {data && reordering
+        ? (
+          <ReorderList
+            items={data.items}
+            saving={reorder.isMutating}
+            error={reorder.error}
+            onDone={saveOrder}
+            onCancel={() => setReordering(false)}
+          />
+        )
+        : (
+          <ul className='flex flex-col gap-2.5 px-4'>
+            {data && sortItems(data.items, sort).map(item => (
+              <li key={item.id}>
+                <Card>
+                  <button
+                    type='button'
+                    onClick={() => setSheetItem(item)}
+                    className='flex w-full items-center gap-2.5 px-4 py-3.5 text-left text-ink'
+                  >
+                    <OwnItemSummary item={item} />
+                  </button>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        )}
+
+      {data && data.items.length > 0 && !reordering && (
         <p className='mx-5 mt-3 text-[13px] leading-snug text-muted'>
           You won’t see what’s been bought. Tap an item to edit or remove it.
         </p>
       )}
 
-      <button
-        type='button'
-        onClick={() => setSheetItem(null)}
-        className='fixed right-[max(20px,calc(50vw-204px))] bottom-24 flex h-14 items-center gap-2 rounded-xl bg-primary px-5.5 text-base font-medium text-on-primary shadow-[0_6px_16px_rgba(0,0,0,0.25)]'
-      >
-        <FontAwesomeIcon icon={faPlus} aria-hidden='true' />
-        Add item
-      </button>
+      {!reordering && (
+        <button
+          type='button'
+          onClick={() => setSheetItem(null)}
+          className='fixed right-[max(20px,calc(50vw-204px))] bottom-24 flex h-14 items-center gap-2 rounded-xl bg-primary px-5.5 text-base font-medium text-on-primary shadow-[0_6px_16px_rgba(0,0,0,0.25)]'
+        >
+          <FontAwesomeIcon icon={faPlus} aria-hidden='true' />
+          Add item
+        </button>
+      )}
 
       <ItemSheet item={sheetItem} onClose={() => setSheetItem(undefined)} />
 

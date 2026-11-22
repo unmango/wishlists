@@ -14,6 +14,7 @@ internal static class WishlistsApi
 	private const int MaxNotesLength = 2000;
 	private const int MaxLinkLength = 2000;
 	private const int MaxImportItems = 200;
+	private const int MaxReorderItems = 1000;
 
 	extension(IEndpointRouteBuilder endpoints)
 	{
@@ -139,7 +140,8 @@ internal static class WishlistsApi
 					Clean(req.Link),
 					req.Price,
 					Clean(req.Notes),
-					req.ReallyWant);
+					req.ReallyWant,
+					Position: 0);
 
 				stream.AppendOne(added);
 				await session.SaveChangesAsync(cancellationToken);
@@ -165,9 +167,11 @@ internal static class WishlistsApi
 				var seen = stream.Aggregate!.CurrentItems
 					.Select(x => DuplicateKey(x.Name, x.Link))
 					.ToHashSet(StringComparer.Ordinal);
+				// The added items go on top, in the file's order.
 				var added = req.Items
 					.Select(x => new ItemAdded(Guid.CreateVersion7(), x.Name.Trim(), Clean(x.Link), x.Price, Clean(x.Notes), x.ReallyWant))
 					.Where(x => seen.Add(DuplicateKey(x.Name, x.Link)))
+					.Select((x, i) => x with { Position = i })
 					.ToList();
 
 				// One save, so a failure adds nothing and gift-givers never see a half-imported wishlist.
@@ -179,6 +183,31 @@ internal static class WishlistsApi
 					.Select(x => new OwnItem(x.ItemId, x.Name, x.Link, x.Price, x.Notes, x.ReallyWant, null))
 					.ToList();
 				return TypedResults.Ok(new ImportResult(items, req.Items.Count - items.Count));
+			});
+
+			mine.MapPut("/order", async Task<Results<Ok<OwnWishlist>, NotFound, ValidationProblem>> (
+				ClaimsPrincipal user,
+				[FromServices] IDocumentSession session,
+				[FromBody] ReorderRequest req,
+				CancellationToken cancellationToken
+			) => {
+				if (req.ItemIds is not { Count: <= MaxReorderItems } itemIds) {
+					return TypedResults.ValidationProblem(new Dictionary<string, string[]> {
+						["itemIds"] = [$"Reorder at most {MaxReorderItems} items at a time."],
+					});
+				}
+
+				if (await OwnWishlistAsync(session, user.MemberId, cancellationToken) is not { } current) {
+					return TypedResults.NotFound();
+				}
+
+				// No version check: if the owner reorders on two phones at once, the last save wins.
+				var stream = await session.Events.FetchForWriting<WishlistView>(current.Id, cancellationToken);
+				var reordered = stream.Aggregate!.Reorder(itemIds);
+				stream.AppendOne(reordered);
+				await session.SaveChangesAsync(cancellationToken);
+
+				return TypedResults.Ok(ToOwn(stream.Aggregate.Apply(reordered)));
 			});
 
 			mine.MapPut("/items/{itemId:guid}", async Task<Results<Ok<OwnItem>, NotFound, ValidationProblem>> (

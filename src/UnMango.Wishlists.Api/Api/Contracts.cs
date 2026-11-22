@@ -11,6 +11,9 @@ public sealed record RenameWishlist(string Name);
 /// <summary>Items to add to your own wishlist at once, from a file the owner picked.</summary>
 public sealed record ImportRequest(IReadOnlyList<ItemRequest> Items);
 
+/// <summary>The owner's new order for their wishlist: item ids, top first.</summary>
+public sealed record ReorderRequest(IReadOnlyList<Guid> ItemIds);
+
 /// <summary>What an import added, and how many items it skipped because they were already on the wishlist.</summary>
 public sealed record ImportResult(IReadOnlyList<OwnItem> Added, int Skipped);
 

@@ -6,13 +6,18 @@ public sealed record WishlistCreated(Guid WishlistId, Guid OwnerId, string Name,
 
 public sealed record WishlistRenamed(string Name);
 
+/// <param name="Position">
+/// Where the item goes in the order, counting every stored item (removed ones too) from 0 at the top.
+/// Items stored before the order existed have none and go to the bottom, so old wishlists keep oldest-first.
+/// </param>
 public sealed record ItemAdded(
 	Guid ItemId,
 	string Name,
 	string? Link,
 	decimal? Price,
 	string? Notes,
-	bool ReallyWant);
+	bool ReallyWant,
+	int? Position = null);
 
 public sealed record ItemEdited(
 	Guid ItemId,
@@ -23,6 +28,9 @@ public sealed record ItemEdited(
 	bool ReallyWant);
 
 public sealed record ItemRemoved(Guid ItemId);
+
+/// <summary>The owner rearranged their current items. <paramref name="ItemIds" /> lists every current item, top first.</summary>
+public sealed record ItemsReordered(IReadOnlyList<Guid> ItemIds);
 
 /// <summary>A thumbnail found on the page at <paramref name="Link" />, recorded in the background after the item was saved.</summary>
 public sealed record ItemThumbnailFound(Guid ItemId, string Link, string ImageUrl);
@@ -58,9 +66,29 @@ public sealed record WishlistView(
 
 	public WishlistView Apply(WishlistRenamed e) => this with { Name = e.Name };
 
-	public WishlistView Apply(ItemAdded e) => this with {
-		Items = [..Items, new WishlistItem(e.ItemId, e.Name, e.Link, e.Price, e.Notes, e.ReallyWant)],
-	};
+	public WishlistView Apply(ItemAdded e) {
+		var item = new WishlistItem(e.ItemId, e.Name, e.Link, e.Price, e.Notes, e.ReallyWant);
+		var index = Math.Clamp(e.Position ?? Items.Count, 0, Items.Count);
+		return this with { Items = [..Items.Take(index), item, ..Items.Skip(index)] };
+	}
+
+	/// <summary>
+	/// The event that puts current items in the order of <paramref name="itemIds" />. Ids that aren't current items are dropped,
+	/// and current items left out go on top in their order: they're most likely ones added while the owner was reordering.
+	/// </summary>
+	public ItemsReordered Reorder(IEnumerable<Guid> itemIds) {
+		var current = CurrentItems.Select(x => x.Id).ToList();
+		var listed = itemIds.Distinct().Where(current.Contains).ToList();
+		return new ItemsReordered([..current.Except(listed), ..listed]);
+	}
+
+	// Removed items keep their slots, so a gift-giver still sees them where they were; current items fill the rest in the new order.
+	public WishlistView Apply(ItemsReordered e) {
+		var order = Reorder(e.ItemIds).ItemIds;
+		var byId = CurrentItems.ToDictionary(x => x.Id);
+		var next = 0;
+		return this with { Items = Items.Select(x => x.Removed ? x : byId[order[next++]]).ToList() };
+	}
 
 	public WishlistView Apply(ItemEdited e) => this with {
 		Items = Items.Select(x => x.Id == e.ItemId
