@@ -46,6 +46,7 @@ jobs:
 
       # Take bun from the flake's locked nixpkgs, so CI uses the same bun as the nix build and dev shell.
       - run: nix shell --inputs-from . nixpkgs#bun --command bun install --frozen-lockfile
+      - run: nix shell --inputs-from . nixpkgs#bun --command bun test
       - run: nix shell --inputs-from . nixpkgs#bun --command bun run build
 
   nix:

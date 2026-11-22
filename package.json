@@ -2,13 +2,14 @@
   "name": "unmango-wishlists",
   "packageManager": "bun@1.4.4",
   "private": true,
-  "version": "0.1.7",
+  "version": "0.1.8",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "bun test"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
