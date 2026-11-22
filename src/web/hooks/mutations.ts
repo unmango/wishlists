@@ -81,6 +81,15 @@ export function useRemoveItem() {
   }, options);
 }
 
+/** Saves the owner's order: item ids, top first. */
+export function useReorderItems() {
+  const mutate = useMutate();
+  return useSWRMutation('reorder-items', async (_, { arg: itemIds }: { arg: string[] }) => {
+    await client.PUT('/api/wishlists/mine/order', { body: { itemIds } });
+    await mutate(['/api/wishlists/mine']);
+  }, options);
+}
+
 export function useRenameWishlist() {
   const refresh = useRefreshMine();
   return useSWRMutation('rename-wishlist', async (_, { arg }: { arg: string }) => {
