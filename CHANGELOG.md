@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.10](https://github.com/unmango/wishlists/compare/v0.1.9...v0.1.10) (2026-11-22)
+
+
+### Features
+
+* **web:** make Wishlists an installed app on phones ([#539](https://github.com/unmango/wishlists/issues/539)) ([01efc41](https://github.com/unmango/wishlists/commit/01efc41f27f5365bd68d5de8baa8d80ea405a898)), closes [#536](https://github.com/unmango/wishlists/issues/536)
+
+
+### Documentation
+
+* add a runbook that restores the wishlists database ([#535](https://github.com/unmango/wishlists/issues/535)) ([21a3dc7](https://github.com/unmango/wishlists/commit/21a3dc7c054da271f095c43e8f9a5085ff2ed0ef))
+* **context:** define Installed app ([#537](https://github.com/unmango/wishlists/issues/537)) ([a32c773](https://github.com/unmango/wishlists/commit/a32c773a16ac8dad2dc74224ace303029b1c7967))
+* record the in-place restore in the runbook ([#540](https://github.com/unmango/wishlists/issues/540)) ([77fdc5b](https://github.com/unmango/wishlists/commit/77fdc5bd622d61a16d8dcc31c1f2726383f721ea))
+
 ## [0.1.9](https://github.com/unmango/wishlists/compare/v0.1.8...v0.1.9) (2026-11-22)
 
 
