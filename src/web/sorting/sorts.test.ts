@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { move, type Sort, sortItems, sortLabel, toSort } from './sorts';
+import { type Sort, sortItems, sortLabel, toSort } from './sorts';
 
 type Item = { name: string; reallyWant: boolean; price: number | string | null };
 const item = (name: string, reallyWant = false, price: number | string | null = null): Item => ({
@@ -59,19 +59,5 @@ describe('toSort', () => {
     expect(toSort('priceLow')).toBe('priceLow');
     expect(toSort('price')).toBe('order');
     expect(toSort(null)).toBe('order');
-  });
-});
-
-describe('move', () => {
-  test('moves one entry to a new index', () => {
-    expect(move(['a', 'b', 'c', 'd'], 0, 2)).toEqual(['b', 'c', 'a', 'd']);
-    expect(move(['a', 'b', 'c', 'd'], 3, 0)).toEqual(['d', 'a', 'b', 'c']);
-  });
-
-  test('clamps out-of-range targets and returns a copy', () => {
-    const list = ['a', 'b'];
-    expect(move(list, 0, 9)).toEqual(['b', 'a']);
-    expect(move(list, 1, -3)).toEqual(['b', 'a']);
-    expect(move(list, 0, 0)).not.toBe(list);
   });
 });

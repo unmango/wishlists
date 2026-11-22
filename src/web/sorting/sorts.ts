@@ -38,12 +38,3 @@ export function sortItems<T extends Sortable>(items: readonly T[], sort: Sort): 
   const compare = choices[sort].compare;
   return compare ? [...items].sort(compare) : [...items];
 }
-
-/** A copy of `list` with the entry at `from` moved to `to`. */
-export function move<T>(list: readonly T[], from: number, to: number): T[] {
-  const next = [...list];
-  const [entry] = next.splice(from, 1);
-  if (entry === undefined) return next;
-  next.splice(Math.max(0, Math.min(to, next.length)), 0, entry);
-  return next;
-}
