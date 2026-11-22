@@ -4,7 +4,7 @@ import { type KeyboardEvent, type PointerEvent, useEffect, useId, useRef, useSta
 import type { OwnItem } from '../api';
 import { move } from '../sorting/sorts';
 import { OwnItemSummary } from './OwnItemSummary';
-import { Card } from './ui';
+import { Card, ErrorMessage } from './ui';
 
 type Props = {
   items: OwnItem[];
@@ -18,6 +18,14 @@ type Props = {
 /** How close to the top or bottom of the screen a drag starts scrolling, in pixels. The bottom has the tab bar. */
 const scrollEdge = { top: 80, bottom: 140 };
 
+/** A ref callback that keeps `elements` in step with what's rendered. */
+function register<T extends HTMLElement>(elements: Map<string, T>, id: string) {
+  return (el: T | null) => {
+    if (el) elements.set(id, el);
+    else elements.delete(id);
+  };
+}
+
 /** Puts the dragged item after every other item whose middle is above the pointer. */
 function dragTo(ids: string[], id: string, y: number, rows: Map<string, HTMLElement>): string[] {
   const from = ids.indexOf(id);
@@ -28,7 +36,7 @@ function dragTo(ids: string[], id: string, y: number, rows: Map<string, HTMLElem
   return from === to ? ids : move(ids, from, to);
 }
 
-/** The owner's list with drag handles. Nothing is saved until Done. */
+/** The owner's wishlist with drag handles. Nothing is saved until Done. */
 export function ReorderList({ items, saving, error, onDone, onCancel }: Props) {
   const [ids, setIds] = useState(() => items.map(x => x.id));
   const [dragging, setDragging] = useState<string>();
@@ -101,11 +109,7 @@ export function ReorderList({ items, saving, error, onDone, onCancel }: Props) {
           Done
         </button>
       </div>
-      {!!error && (
-        <p role='alert' className='mx-4 mt-0 mb-2 text-sm text-danger'>
-          {error instanceof Error ? error.message : 'Couldn’t save the order. Try again.'}
-        </p>
-      )}
+      {!!error && <ErrorMessage error={error} />}
 
       <ul className='flex flex-col gap-2.5 px-4'>
         {ids.map(id => {
@@ -114,10 +118,7 @@ export function ReorderList({ items, saving, error, onDone, onCancel }: Props) {
           return (
             <li
               key={id}
-              ref={el => {
-                if (el) rows.current.set(id, el);
-                else rows.current.delete(id);
-              }}
+              ref={register(rows.current, id)}
             >
               <Card className={`flex items-center gap-1 pl-4 ${dragging === id ? 'ring-2 ring-primary' : ''}`}>
                 <div className='flex min-w-0 flex-1 items-center gap-2.5 py-3.5'>
@@ -125,10 +126,7 @@ export function ReorderList({ items, saving, error, onDone, onCancel }: Props) {
                 </div>
                 <button
                   type='button'
-                  ref={el => {
-                    if (el) handles.current.set(id, el);
-                    else handles.current.delete(id);
-                  }}
+                  ref={register(handles.current, id)}
                   aria-label={`Move ${item.name}`}
                   aria-describedby={hintId}
                   onPointerDown={e => startDrag(id, e)}

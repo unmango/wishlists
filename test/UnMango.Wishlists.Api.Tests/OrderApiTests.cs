@@ -76,6 +76,19 @@ public sealed class OrderApiTests(AppFixture app)
 	}
 
 	[Fact]
+	public async Task Reorders_saved_at_the_same_time_both_succeed() {
+		var (_, ada) = await app.JoinAsync("Ada");
+		var ids = new List<Guid>();
+		for (var i = 0; i < 5; i++) ids.Add((await AddAsync(ada, $"Item {i}")).Id);
+
+		var responses = await Task.WhenAll(Enumerable.Range(0, 5).Select(i =>
+			ada.PutAsJsonAsync(Order, new ReorderRequest([..ids.Skip(i), ..ids.Take(i)]), Ct)));
+
+		Assert.All(responses, x => Assert.Equal(HttpStatusCode.OK, x.StatusCode));
+		Assert.Equal(5, (await MineAsync(ada)).Count());
+	}
+
+	[Fact]
 	public async Task Items_left_out_of_a_reorder_stay_on_top_in_their_order() {
 		// Say the owner added C on another phone while this one was reordering A and B.
 		var (_, ada) = await app.JoinAsync("Ada");

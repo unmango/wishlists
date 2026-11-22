@@ -1,28 +1,7 @@
 import { toNumber } from '../format';
 
-/** How a member chooses to show a wishlist. A sort never changes the owner's order. */
-export const sorts = ['order', 'reallyWant', 'priceHigh', 'priceLow'] as const;
-export type Sort = (typeof sorts)[number];
-
 type Sortable = { reallyWant: boolean; price?: number | string | null };
-
-export function toSort(value: unknown): Sort {
-  return sorts.find(x => x === value) ?? 'order';
-}
-
-/** The menu label. `ownerName` is the first name of the owner, or undefined on your own wishlist. */
-export function sortLabel(sort: Sort, ownerName: string | undefined): string {
-  switch (sort) {
-    case 'order':
-      return ownerName ? `${ownerName}’s order` : 'My order';
-    case 'reallyWant':
-      return 'Really want first';
-    case 'priceHigh':
-      return 'Price high to low';
-    case 'priceLow':
-      return 'Price low to high';
-  }
-}
+type Compare = (a: Sortable, b: Sortable) => number;
 
 function byPrice(direction: 1 | -1) {
   return (a: Sortable, b: Sortable) => {
@@ -33,15 +12,31 @@ function byPrice(direction: 1 | -1) {
   };
 }
 
-const compare: Record<Exclude<Sort, 'order'>, (a: Sortable, b: Sortable) => number> = {
-  reallyWant: (a, b) => Number(b.reallyWant) - Number(a.reallyWant),
-  priceHigh: byPrice(-1),
-  priceLow: byPrice(1),
+/** How a member chooses to show a wishlist, in menu order. A sort never changes the owner's order. */
+export const sorts = ['order', 'reallyWant', 'priceHigh', 'priceLow'] as const;
+export type Sort = (typeof sorts)[number];
+
+/** `order` has no comparer or fixed label: it's the owner's order as it comes, named after the owner. */
+const choices: Record<Sort, { label: string | undefined; compare: Compare | undefined }> = {
+  order: { label: undefined, compare: undefined },
+  reallyWant: { label: 'Really want first', compare: (a, b) => Number(b.reallyWant) - Number(a.reallyWant) },
+  priceHigh: { label: 'Price high to low', compare: byPrice(-1) },
+  priceLow: { label: 'Price low to high', compare: byPrice(1) },
 };
+
+export function toSort(value: unknown): Sort {
+  return sorts.find(x => x === value) ?? 'order';
+}
+
+/** The menu label. `ownerName` is the first name of the owner, or undefined on your own wishlist. */
+export function sortLabel(sort: Sort, ownerName: string | undefined): string {
+  return choices[sort].label ?? (ownerName ? `${ownerName}’s order` : 'My order');
+}
 
 /** A sorted copy. The sort is stable, so items it treats as equal keep the owner's order. */
 export function sortItems<T extends Sortable>(items: readonly T[], sort: Sort): T[] {
-  return sort === 'order' ? [...items] : [...items].sort(compare[sort]);
+  const compare = choices[sort].compare;
+  return compare ? [...items].sort(compare) : [...items];
 }
 
 /** A copy of `list` with the entry at `from` moved to `to`. */

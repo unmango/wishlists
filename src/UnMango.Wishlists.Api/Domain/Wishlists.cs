@@ -29,7 +29,10 @@ public sealed record ItemEdited(
 
 public sealed record ItemRemoved(Guid ItemId);
 
-/// <summary>The owner rearranged their current items. <paramref name="ItemIds" /> lists every current item, top first.</summary>
+/// <summary>
+/// The owner rearranged their current items, top first. Applying it is part of the stored contract: ids that aren't
+/// current items are ignored, and current items it leaves out go on top in their order. Removed items keep their slots.
+/// </summary>
 public sealed record ItemsReordered(IReadOnlyList<Guid> ItemIds);
 
 /// <summary>A thumbnail found on the page at <paramref name="Link" />, recorded in the background after the item was saved.</summary>

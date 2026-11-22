@@ -201,8 +201,8 @@ internal static class WishlistsApi
 					return TypedResults.NotFound();
 				}
 
-				// No version check: if the owner reorders on two phones at once, the last save wins.
-				var stream = await session.Events.FetchForWriting<WishlistView>(current.Id, cancellationToken);
+				// An exclusive lock makes saves from two phones at once wait their turn instead of failing, so the last save wins.
+				var stream = await session.Events.FetchForExclusiveWriting<WishlistView>(current.Id, cancellationToken);
 				var reordered = stream.Aggregate!.Reorder(itemIds);
 				stream.AppendOne(reordered);
 				await session.SaveChangesAsync(cancellationToken);

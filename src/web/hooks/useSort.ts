@@ -20,7 +20,7 @@ function write(sort: Sort) {
   }
 }
 
-/** The viewer's sort, remembered on this device. One setting for every wishlist, never saved to the account. */
+/** The member's sort, remembered on this device. One setting for every wishlist, never saved to the account. */
 export function useSort() {
   const [sort, setSort] = useState(read);
   return [sort, (next: Sort) => {

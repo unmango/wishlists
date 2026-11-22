@@ -10,7 +10,7 @@ type Props = {
   ownerName: string | undefined;
 };
 
-/** A small "Sort: Sam's order ▾" button that opens the four choices. */
+/** A small "Sort: Bob's order ▾" button that opens the four choices. */
 export function SortMenu({ sort, onChange, ownerName }: Props) {
   const [open, setOpen] = useState(false);
   const menuId = useId();

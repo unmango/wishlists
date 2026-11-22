@@ -48,9 +48,9 @@ describe('sortItems', () => {
 
 describe('sortLabel', () => {
   test('names the order after the owner, or "My order" on your own list', () => {
-    expect(sortLabel('order', 'Sam')).toBe('Sam’s order');
+    expect(sortLabel('order', 'Bob')).toBe('Bob’s order');
     expect(sortLabel('order', undefined)).toBe('My order');
-    expect(sortLabel('priceHigh', 'Sam')).toBe('Price high to low');
+    expect(sortLabel('priceHigh', 'Bob')).toBe('Price high to low');
   });
 });
 
