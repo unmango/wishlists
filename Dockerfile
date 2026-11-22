@@ -12,7 +12,7 @@ COPY src/web/ ./src/web/
 
 RUN bun run build
 
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0-noble AS api
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:11.0-noble AS api
 ARG CONFIGURATION=Release
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -33,7 +33,7 @@ RUN dotnet publish \
     --configuration $CONFIGURATION \
     --output /out
 
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:10.0-noble AS app
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:11.0-noble AS app
 # The content root is the working directory, so without this ASP.NET looks for
 # /wwwroot instead of /app/wwwroot and serves 404 for the web app.
 WORKDIR /app
