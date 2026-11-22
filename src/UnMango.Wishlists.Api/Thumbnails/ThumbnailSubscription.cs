@@ -50,7 +50,7 @@ public sealed class ThumbnailSubscription : SubscriptionBase
 				image = await _client.FindAsync(link, cancellationToken);
 			} catch (Exception ex) when (ex is not OperationCanceledException) {
 				// A surprise in one page mustn't pause the subscription and hold up every later lookup.
-				_logger.LogWarning(ex, "Couldn't look up a thumbnail for item {ItemId}", itemId);
+				_logger.LogWarning(ex, "Thumbnail lookup failed for item {ItemId}", itemId);
 				continue;
 			}
 
