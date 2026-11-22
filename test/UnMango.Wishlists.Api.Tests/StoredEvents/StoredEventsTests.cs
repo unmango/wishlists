@@ -26,6 +26,7 @@ public sealed class StoredEventsTests(AppFixture app) : IAsyncLifetime
 	private static readonly Guid AdaPurchases = Guid.Parse("0195a000-0000-7000-8000-00000000a003");
 	private static readonly Guid Socks = Guid.Parse("0195a000-0000-7000-8000-0000000000c1");
 	private static readonly Guid Hat = Guid.Parse("0195a000-0000-7000-8000-0000000000c2");
+	private static readonly Guid Scarf = Guid.Parse("0195a000-0000-7000-8000-0000000000c3");
 
 	private static readonly JsonSerializerOptions Readable = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 	private static readonly StoredStream[] Streams = Load();
@@ -67,6 +68,7 @@ public sealed class StoredEventsTests(AppFixture app) : IAsyncLifetime
 		Assert.Equal((Ada, "Ada's winter list", AdaPurchases), (wishlist.OwnerId, wishlist.Name, wishlist.PurchasesId));
 		Assert.Equal<WishlistItem>([
 			new(Socks, "Socks", "https://shop.example.com/socks", 12.50m, "Wool, size L", true, ThumbnailUrl: "https://cdn.example.com/socks.png"),
+			new(Scarf, "Scarf", null, null, null, false),
 			new(Hat, "Wool hat", "https://shop.example.com/hat", 20m, "Grey", true, Removed: true),
 		], wishlist.Items);
 
