@@ -8,6 +8,10 @@ This repo is public. Nothing pushed to GitHub may identify the household or what
 - **Test data and screenshots** use made-up people on `example.com` (Ada, Bob, ...), never real data from the live site.
 - **Private details** belong in project memory or chat, never in the repo. If a task needs one, paraphrase it with role words before it reaches GitHub.
 
+## Stored events are contracts
+
+Never rename, retype or remove a stored event type or field. Add new ones instead, and add an example to `test/UnMango.Wishlists.Api.Tests/StoredEvents/stored-events.json` for any new event or field. See `docs/adr/0001-stored-events-are-contracts.md`.
+
 ## Agent skills
 
 ### Issue tracker
