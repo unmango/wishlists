@@ -13,7 +13,7 @@ internal sealed class ConcurrencyExceptionHandler(IProblemDetailsService problem
 		return await problemDetails.TryWriteAsync(new ProblemDetailsContext {
 			HttpContext = context,
 			Exception = exception,
-			ProblemDetails = { Title = "Someone else changed this at the same time. Reload the page and try it again." },
+			ProblemDetails = { Title = "Someone else changed this at the same time. Reload the page and try again." },
 		});
 	}
 }

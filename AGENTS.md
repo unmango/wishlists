@@ -12,11 +12,11 @@ This repo is public. Nothing pushed to GitHub may identify the household or what
 
 Give every verb an object, in UI copy, error and log messages, code comments and docs. Name who acts on what.
 
-- "Try it again.", not "Try again."
+- "Couldn’t sign you out.", not "Couldn’t sign out."
 - "Tap “I’ll get this” to add it here.", not "...and it shows up here."
 - "A background job looks for the thumbnail.", not "The thumbnail is looked for in the background."
 
-Leave fixed wording alone: Google's sign-in button text ("Continue with Google") and the standard "Sign out" label, event type names (renaming one orphans stored events), API routes and contract names, and Helm chart boilerplate.
+Leave fixed wording alone: "Try again" in error messages, Google's sign-in button text ("Continue with Google") and the standard "Sign out" label, event type names (renaming one orphans stored events), API routes and contract names, and Helm chart boilerplate.
 
 ## Agent skills
 

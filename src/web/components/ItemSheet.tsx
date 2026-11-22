@@ -32,8 +32,8 @@ function ItemForm({ item, titleId, onDone }: { item: OwnItem | null; titleId: st
   const busy = add.isMutating || edit.isMutating || remove.isMutating;
   const failed = add.error ?? edit.error;
   const errors: ItemErrors = {
-    ...(failed && saveErrors(failed, 'Couldn’t save the item. Try it again.')),
-    ...(remove.error && saveErrors(remove.error, 'Couldn’t remove it. Try it again.')),
+    ...(failed && saveErrors(failed, 'Couldn’t save the item. Try again.')),
+    ...(remove.error && saveErrors(remove.error, 'Couldn’t remove it. Try again.')),
     ...invalid,
   };
 

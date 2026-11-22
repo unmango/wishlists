@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const messages: Record<string, string> = {
   denied: 'This site doesn’t accept that Google account. Try a different one.',
-  failed: 'Google didn’t complete the sign-in. Try it again.',
+  failed: 'Google didn’t complete the sign-in. Try again.',
 };
 
 function GoogleLogo() {

@@ -86,7 +86,7 @@ function ItemRow(
 
         {error && (
           <p role='alert' className='m-0 text-sm text-danger'>
-            {error instanceof Error ? error.message : 'We couldn’t save that. Try it again.'}
+            {error instanceof Error ? error.message : 'We couldn’t save that. Try again.'}
           </p>
         )}
       </Card>

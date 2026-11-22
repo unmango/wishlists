@@ -83,7 +83,7 @@ function Preview({ initial, existing, onDone }: { initial: ImportRow[]; existing
             // The API sent an answer, so it saved nothing.
             ? `${importItems.error.message} Nothing was added.`
             // No answer: the API may or may not have saved the items.
-            : 'Couldn’t reach the app. Check your wishlist before you try the import again.'}
+            : 'Couldn’t reach the app. Check your wishlist before trying again.'}
         </p>
       )}
 
