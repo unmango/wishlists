@@ -2,10 +2,10 @@
 
 The live database is the CloudNativePG cluster `postgres` in the `wishlists` namespace on rosequartz. Two copies of it exist:
 
-| Copy | Where | What it gives you | Rehearsed |
-| --- | --- | --- | --- |
-| Barman Cloud (WAL + daily base backup at 00:30 UTC) | Ceph bucket `wishlists-postgres-backups`, ObjectStore `postgres-backups` | Point-in-time recovery, 60 days | 2026-11-22: 12 min, every row count matched |
-| Velero `backblaze-daily` (CSI snapshot moved to Backblaze) | BackupStorageLocation `backblaze`, namespace `velero-system` | Yesterday's volume, off site | 2026-11-22: 4 min to restore the volume, every row count matched |
+| Copy                                                       | Where                                                                    | What it gives you               | Rehearsed                                                        |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------- | ---------------------------------------------------------------- |
+| Barman Cloud (WAL + daily base backup at 00:30 UTC)        | Ceph bucket `wishlists-postgres-backups`, ObjectStore `postgres-backups` | Point-in-time recovery, 60 days | 2026-11-22: 12 min, every row count matched                      |
+| Velero `backblaze-daily` (CSI snapshot moved to Backblaze) | BackupStorageLocation `backblaze`, namespace `velero-system`             | Yesterday's volume, off site    | 2026-11-22: 4 min to restore the volume, every row count matched |
 
 Use the Barman copy first. Use Velero only when the Ceph bucket is gone too.
 
