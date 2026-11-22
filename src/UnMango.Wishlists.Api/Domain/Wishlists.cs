@@ -87,10 +87,11 @@ public sealed record WishlistView(
 
 	// Removed items keep their slots, so a gift-giver still sees them where they were; current items fill the rest in the new order.
 	public WishlistView Apply(ItemsReordered e) {
-		var order = Reorder(e.ItemIds).ItemIds;
 		var byId = CurrentItems.ToDictionary(x => x.Id);
-		var next = 0;
-		return this with { Items = Items.Select(x => x.Removed ? x : byId[order[next++]]).ToList() };
+		var slots = Items.Index().Where(x => !x.Item.Removed).Select(x => x.Index);
+		var placed = slots.Zip(Reorder(e.ItemIds).ItemIds, (slot, id) => (slot, item: byId[id]))
+			.ToDictionary(x => x.slot, x => x.item);
+		return this with { Items = Items.Select((x, i) => placed.GetValueOrDefault(i, x)).ToList() };
 	}
 
 	public WishlistView Apply(ItemEdited e) => this with {
