@@ -7,7 +7,8 @@ const key = 'wishlists.sort';
 function read(): Sort {
   try {
     return toSort(localStorage.getItem(key));
-  } catch {
+  } catch (error) {
+    console.debug('Couldn’t read the saved sort, so using the owner’s order.', error);
     return 'order';
   }
 }
@@ -15,8 +16,9 @@ function read(): Sort {
 function write(sort: Sort) {
   try {
     localStorage.setItem(key, sort);
-  } catch {
-    // Not remembered, but still used for this visit.
+  } catch (error) {
+    // This visit still uses the sort; the next one won't remember it.
+    console.debug('Couldn’t save the sort on this device.', error);
   }
 }
 
