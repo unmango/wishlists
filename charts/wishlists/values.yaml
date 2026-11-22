@@ -51,7 +51,7 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 1654
 
-# The port the app listens on inside the container (the .NET image's default).
+# The port the app binds inside the container (the .NET image's default).
 containerPort: 8080
 
 # Settings for the app. Each one becomes an environment variable on the container.
@@ -63,7 +63,7 @@ app:
     existingSecret: ""
     existingSecretKey: connection-string
   google:
-    # Secret holding the Google OAuth client. Required: the app won't start in Production without it.
+    # Secret holding the Google OAuth client. Required: without it, the app throws an exception on startup in Production.
     existingSecret: ""
     clientIdKey: client-id
     clientSecretKey: client-secret

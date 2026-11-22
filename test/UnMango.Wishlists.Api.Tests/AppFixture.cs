@@ -19,7 +19,7 @@ namespace UnMango.Wishlists.Api.Tests;
 
 /// <summary>
 /// Runs the API against a real Postgres. Set WISHLISTS_TEST_CONNECTION_STRING to use an existing
-/// database; otherwise one is started with Testcontainers.
+/// database; otherwise Testcontainers starts one.
 /// </summary>
 public sealed class AppFixture : IAsyncLifetime
 {
@@ -44,11 +44,11 @@ public sealed class AppFixture : IAsyncLifetime
 				services
 					.AddAuthentication(TestAuthHandler.Scheme)
 					.AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.Scheme, null);
-				// Thumbnail lookups go to the fake web instead of the internet.
+				// Thumbnail lookups reach the fake web instead of the internet.
 				services.AddHttpClient<ThumbnailClient>().ConfigurePrimaryHttpMessageHandler(() => Web);
 			}));
 
-		// Force startup so the schema exists before tests run.
+		// Force startup so the schema exists before any test uses it.
 		_ = _factory.Server;
 	}
 
@@ -69,7 +69,7 @@ public sealed class AppFixture : IAsyncLifetime
 		AllowAutoRedirect = false,
 	});
 
-	/// <summary>Signs a new family member in the same way Google sign-in does and returns a client for them.</summary>
+	/// <summary>Signs a new member in the same way Google sign-in does and returns a client for them.</summary>
 	public async Task<(Guid MemberId, HttpClient Client)> JoinAsync(string name) {
 		using var scope = Services.CreateScope();
 		var signIn = scope.ServiceProvider.GetRequiredService<MemberSignIn>();

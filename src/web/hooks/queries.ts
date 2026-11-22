@@ -1,6 +1,6 @@
 import { ApiError, useQuery } from '../api';
 
-/** The signed-in member: null when nobody is signed in, undefined while loading. */
+/** The signed-in member: null without a session, undefined while the request runs. */
 export function useMe() {
   const { data, error, isLoading } = useQuery('/api/me', undefined, { shouldRetryOnError: false });
   const signedOut = error instanceof ApiError && error.status === 401;

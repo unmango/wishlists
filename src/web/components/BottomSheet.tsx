@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode;
 };
 
-/** A modal sheet that slides up from the bottom on phones and centers on wider screens. */
+/** A modal sheet: phones slide it up from the bottom, wider screens center it. */
 export function BottomSheet({ open, onClose, labelledBy, children }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
 

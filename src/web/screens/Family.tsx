@@ -39,7 +39,9 @@ export function Family({ me }: { me: Me }) {
       {isLoading && <Loading />}
       {error && <ErrorMessage error={error} />}
       {data && others.length === 0 && (
-        <p className='px-5 text-muted'>Nobody else has signed in yet. Their lists show up here once they do.</p>
+        <p className='px-5 text-muted'>
+          No other lists yet. You’ll see each member’s list here once they open the app.
+        </p>
       )}
 
       <ul className='flex flex-col gap-2.5 px-4'>

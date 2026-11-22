@@ -54,7 +54,7 @@ export function Card({ children, className = '' }: { children: ReactNode; classN
   return <div className={`rounded-[10px] bg-card shadow-[0_1px_2px_rgba(0,0,0,0.06)] ${className}`}>{children}</div>;
 }
 
-/** An item's thumbnail, or nothing at all when it has none or the image won't load. */
+/** An item's thumbnail, or nothing at all when it has none or the browser can't load the image. */
 export function Thumbnail({ src }: { src: string | null }) {
   const [failed, setFailed] = useState<string>();
   if (!src || failed === src) return null;
@@ -74,7 +74,7 @@ export function Loading() {
 }
 
 export function ErrorMessage({ error }: { error: unknown }) {
-  const message = error instanceof Error ? error.message : 'Something went wrong.';
+  const message = error instanceof Error ? error.message : 'The app hit an error.';
   return (
     <p role='alert' className='mx-4 rounded-[10px] bg-accent-soft px-4 py-3 text-sm text-danger'>
       {message}
@@ -89,7 +89,7 @@ const tabs: { route: Route; label: string; icon: typeof faUsers }[] = [
 ];
 
 export function TabBar({ active }: { active: Route['name'] }) {
-  // Someone else's list belongs under Family.
+  // The Family tab covers someone else's list.
   const current = active === 'list' ? 'family' : active;
 
   return (

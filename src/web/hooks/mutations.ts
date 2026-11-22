@@ -2,7 +2,7 @@ import { useSWRConfig } from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { defaultClient as client, type ItemRequest, type OwnItem, useMutate } from '../api';
 
-// Errors land in the hook's `error` instead of rejecting trigger().
+// The hook's `error` holds errors instead of trigger() throwing them.
 const options = { throwOnError: false } as const;
 
 /** Refreshes what a change to my own list affects: the list itself and the family item counts. */
@@ -12,8 +12,8 @@ function useRefreshMine() {
 }
 
 /**
- * A new link's thumbnail is looked for in the background after the save, so refresh my list once
- * more after it has had time to land. Otherwise it shows up on the next normal refresh.
+ * The server looks for a new link's thumbnail in the background after the save, so refresh my list
+ * once more after giving it time. Otherwise the next normal refresh picks it up.
  */
 const thumbnailLookupMs = 3000;
 
@@ -26,7 +26,7 @@ function useRefreshMineForThumbnail() {
   };
 }
 
-/** Refreshes someone else's list and my purchases after a mark changes. */
+/** Refreshes someone else's list and my purchases after a change to a mark. */
 function useRefreshMarks(wishlistId: string) {
   const mutate = useMutate();
   return () =>
@@ -56,7 +56,7 @@ export function useEditItem() {
       body: item,
     });
     await refresh();
-    // Same-link edits keep their thumbnail, so in practice this fires for a new link.
+    // Same-link edits keep their thumbnail, so in practice only a new link triggers this.
     refreshForThumbnail(data);
   }, options);
 }
@@ -95,7 +95,7 @@ export function useMarkBought(wishlistId: string, itemId: string) {
     try {
       await client.PUT('/api/wishlists/{id}/items/{itemId}/bought', { params: { path: { id: wishlistId, itemId } } });
     } finally {
-      // Refresh even on a conflict, so the list shows who got there first.
+      // Refresh even on a conflict, so the list shows who claimed the item first.
       await refresh();
     }
   }, options);
@@ -118,7 +118,7 @@ export function useSignOut() {
   const { mutate } = useSWRConfig();
   return useSWRMutation('sign-out', async () => {
     const response = await fetch('/auth/logout', { method: 'POST' });
-    if (!response.ok) throw new Error('Couldn’t sign out. Try again.');
+    if (!response.ok) throw new Error('Couldn’t sign you out. Try it again.');
     await mutate(() => true, undefined, { revalidate: false });
     window.location.assign('/');
   }, options);

@@ -28,7 +28,7 @@ export function Buying() {
       {isLoading && <Loading />}
       {error && <ErrorMessage error={error} />}
       {data && count === 0 && (
-        <p className='px-5 text-muted'>Nothing yet. Tap “I’ll get this” on someone’s list and it shows up here.</p>
+        <p className='px-5 text-muted'>Nothing yet. Tap “I’ll get this” on someone’s list to add it here.</p>
       )}
 
       <div className='flex flex-col gap-4.5 px-4'>

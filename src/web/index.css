@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Light and dark follow the phone's setting. Colors come from the step 2 mockup. */
+/* The phone's setting picks light or dark. The step 2 mockup set the colors. */
 :root {
   color-scheme: light dark;
   --wl-ground: #f3f3f8;

@@ -32,7 +32,7 @@ public sealed class ThumbnailApiTests(AppFixture app)
 	private static async Task<OwnItem> MineAsync(HttpClient client, Guid itemId) =>
 		(await client.GetFromJsonAsync<OwnWishlist>("/api/wishlists/mine", Ct))!.Items.Single(x => x.Id == itemId);
 
-	/// <summary>Polls until the background lookup has landed.</summary>
+	/// <summary>Polls until the background lookup has recorded the thumbnail.</summary>
 	private static async Task<OwnItem> EventuallyAsync(HttpClient client, Guid itemId, Func<OwnItem, bool> done) {
 		var deadline = DateTime.UtcNow.AddSeconds(15);
 		while (true) {
