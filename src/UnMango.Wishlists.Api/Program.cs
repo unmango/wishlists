@@ -1,14 +1,12 @@
-using JasperFx;
 using JasperFx.Events.Daemon;
-using JasperFx.Events.Projections;
 using Marten;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi;
 using UnMango.Wishlists.Api;
 using UnMango.Wishlists.Api.Api;
 using UnMango.Wishlists.Api.Auth;
-using UnMango.Wishlists.Api.Domain;
 using UnMango.Wishlists.Api.Extensions;
+using UnMango.Wishlists.Api.Storage;
 using UnMango.Wishlists.Api.Thumbnails;
 using Vite.AspNetCore;
 
@@ -45,16 +43,7 @@ builder.Services.AddHttpClient<ThumbnailClient>(http => ThumbnailClient.Configur
 
 if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connectionString) {
 	builder.Services
-		.AddMarten(options => {
-			options.Connection(connectionString);
-			options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
-			options.Projections.Snapshot<MemberView>(SnapshotLifecycle.Inline);
-			options.Projections.Snapshot<WishlistView>(SnapshotLifecycle.Inline);
-			options.Projections.Snapshot<PurchasesView>(SnapshotLifecycle.Inline);
-			options.Schema.For<MemberView>().UniqueIndex(x => x.GoogleSubject);
-			options.Schema.For<WishlistView>().Index(x => x.OwnerId);
-			options.Schema.For<DataProtectionKey>().Identity(x => x.Id);
-		})
+		.AddMarten(options => WishlistsStore.Configure(options, connectionString))
 		.UseLightweightSessions()
 		.ApplyAllDatabaseChangesOnStartup()
 		// The async daemon handles thumbnail lookups. HotCold elects one leader, so only one pod looks things up.
@@ -62,6 +51,9 @@ if (builder.Configuration.GetConnectionString("App") is { Length: > 0 } connecti
 		.AddAsyncDaemon(DaemonMode.HotCold);
 
 	builder.Services.PersistDataProtectionKeysToMarten();
+
+	// First in line, so views are rebuilt before the daemon or the server starts. See docs/adr/0001-stored-events-are-contracts.md.
+	builder.Services.Insert(0, ServiceDescriptor.Singleton<IHostedService, RebuildViewsOnStartup>());
 }
 
 var app = builder.Build();

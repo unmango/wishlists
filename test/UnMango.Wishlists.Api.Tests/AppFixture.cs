@@ -34,6 +34,8 @@ public sealed class AppFixture : IAsyncLifetime
 			connectionString = _container.GetConnectionString();
 		}
 
+		ConnectionString = connectionString;
+
 		_factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder
 			.UseEnvironment("Testing")
 			.UseSetting("ConnectionStrings:App", connectionString)
@@ -60,6 +62,9 @@ public sealed class AppFixture : IAsyncLifetime
 	public const string AllowedEmail = "allowed@example.com";
 
 	public IServiceProvider Services => _factory!.Services;
+
+	/// <summary>The test database, for tests that need a store of their own.</summary>
+	public string ConnectionString { get; private set; } = "";
 
 	/// <summary>The pretend internet that thumbnail lookups reach.</summary>
 	public FakeWeb Web { get; } = new();

@@ -18,6 +18,10 @@ Give every verb an object, in UI copy, error and log messages, code comments and
 
 Leave fixed wording alone: "Try again" in error messages, Google's sign-in button text ("Continue with Google") and the standard "Sign out" label, event type names (renaming one orphans stored events), API routes and contract names, and Helm chart boilerplate.
 
+## Stored events are contracts
+
+Never rename, retype or remove a stored event type or field. Add new ones instead, and add an example to `test/UnMango.Wishlists.Api.Tests/StoredEvents/stored-events.json` for any new event or field. See `docs/adr/0001-stored-events-are-contracts.md`.
+
 ## Agent skills
 
 ### Issue tracker

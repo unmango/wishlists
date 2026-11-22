@@ -1,0 +1,147 @@
+{
+  "streams": [
+    {
+      "id": "0195a000-0000-7000-8000-00000000a001",
+      "type": "member_view",
+      "events": [
+        {
+          "type": "member_joined",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.MemberJoined, UnMango.Wishlists.Api",
+          "data": {
+            "MemberId": "0195a000-0000-7000-8000-00000000a001",
+            "GoogleSubject": "100000000000000000001",
+            "Email": "ada@example.com",
+            "DisplayName": "Ada Example",
+            "AvatarUrl": "https://example.com/ada.png"
+          }
+        }
+      ]
+    },
+    {
+      "id": "0195a000-0000-7000-8000-00000000b001",
+      "type": "member_view",
+      "events": [
+        {
+          "type": "member_joined",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.MemberJoined, UnMango.Wishlists.Api",
+          "data": {
+            "MemberId": "0195a000-0000-7000-8000-00000000b001",
+            "GoogleSubject": "100000000000000000002",
+            "Email": "bob@example.com",
+            "DisplayName": "Bob Example",
+            "AvatarUrl": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "0195a000-0000-7000-8000-00000000a002",
+      "type": "wishlist_view",
+      "events": [
+        {
+          "type": "wishlist_created",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.WishlistCreated, UnMango.Wishlists.Api",
+          "data": {
+            "WishlistId": "0195a000-0000-7000-8000-00000000a002",
+            "OwnerId": "0195a000-0000-7000-8000-00000000a001",
+            "Name": "Ada's wishlist",
+            "PurchasesId": "0195a000-0000-7000-8000-00000000a003"
+          }
+        },
+        {
+          "type": "wishlist_renamed",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.WishlistRenamed, UnMango.Wishlists.Api",
+          "data": { "Name": "Ada's winter list" }
+        },
+        {
+          "type": "item_added",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemAdded, UnMango.Wishlists.Api",
+          "data": {
+            "ItemId": "0195a000-0000-7000-8000-0000000000c1",
+            "Name": "Socks",
+            "Link": "https://shop.example.com/socks",
+            "Price": 12.50,
+            "Notes": "Wool, size L",
+            "ReallyWant": true
+          }
+        },
+        {
+          "type": "item_added",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemAdded, UnMango.Wishlists.Api",
+          "data": {
+            "ItemId": "0195a000-0000-7000-8000-0000000000c2",
+            "Name": "Hat",
+            "Link": null,
+            "Price": null,
+            "Notes": null,
+            "ReallyWant": false
+          }
+        },
+        {
+          "type": "item_thumbnail_found",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemThumbnailFound, UnMango.Wishlists.Api",
+          "data": {
+            "ItemId": "0195a000-0000-7000-8000-0000000000c1",
+            "Link": "https://shop.example.com/socks",
+            "ImageUrl": "https://cdn.example.com/socks.png"
+          }
+        },
+        {
+          "type": "item_edited",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemEdited, UnMango.Wishlists.Api",
+          "data": {
+            "ItemId": "0195a000-0000-7000-8000-0000000000c2",
+            "Name": "Wool hat",
+            "Link": "https://shop.example.com/hat",
+            "Price": 20,
+            "Notes": "Grey",
+            "ReallyWant": true
+          }
+        },
+        {
+          "type": "item_removed",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemRemoved, UnMango.Wishlists.Api",
+          "data": { "ItemId": "0195a000-0000-7000-8000-0000000000c2" }
+        }
+      ]
+    },
+    {
+      "id": "0195a000-0000-7000-8000-00000000a003",
+      "type": "purchases_view",
+      "events": [
+        {
+          "type": "purchases_opened",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.PurchasesOpened, UnMango.Wishlists.Api",
+          "data": {
+            "PurchasesId": "0195a000-0000-7000-8000-00000000a003",
+            "WishlistId": "0195a000-0000-7000-8000-00000000a002"
+          }
+        },
+        {
+          "type": "item_marked_bought",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemMarkedBought, UnMango.Wishlists.Api",
+          "data": {
+            "ItemId": "0195a000-0000-7000-8000-0000000000c1",
+            "BuyerId": "0195a000-0000-7000-8000-00000000b001"
+          }
+        },
+        {
+          "type": "item_marked_bought",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemMarkedBought, UnMango.Wishlists.Api",
+          "data": {
+            "ItemId": "0195a000-0000-7000-8000-0000000000c2",
+            "BuyerId": "0195a000-0000-7000-8000-00000000b001"
+          }
+        },
+        {
+          "type": "item_unmarked",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemUnmarked, UnMango.Wishlists.Api",
+          "data": {
+            "ItemId": "0195a000-0000-7000-8000-0000000000c2",
+            "BuyerId": "0195a000-0000-7000-8000-00000000b001"
+          }
+        }
+      ]
+    }
+  ]
+}
