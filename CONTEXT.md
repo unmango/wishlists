@@ -28,6 +28,14 @@ _Avoid_: list (when ambiguous), registry
 One thing on a wishlist: a name, and optionally a link, price, notes and a "really want" flag. An item with a link may also show a thumbnail.
 _Avoid_: gift, wish
 
+**Order**:
+The owner's arrangement of the items on their wishlist. Every member sees it by default. Only the owner changes it, and a new item starts at the top.
+_Avoid_: sort order, ranking, priority
+
+**Sort**:
+How one member chooses to show a wishlist while looking at it, such as "really want" first or by price. A sort never changes the order, and items it treats as equal keep the order.
+_Avoid_: order (for a viewer's choice), filter
+
 **Thumbnail**:
 A small picture on an item, found automatically from the item's link. Never chosen or uploaded by the owner. When the link changes or is cleared, the thumbnail goes with it.
 _Avoid_: picture, photo, preview image, og image
