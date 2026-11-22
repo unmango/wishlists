@@ -85,6 +85,26 @@
     url = "https://registry.npmjs.org/@cacheable/utils/-/utils-2.5.0.tgz";
     hash = "sha512-buipgOVDkkPXNR5+xBpDw7Zk2n1EvU7qBJCNUcL7rhQ//kfpOXPAvQ511Os0vpLYJ1pZnvudNytkQt2hst3wqA==";
   };
+  "@dnd-kit/accessibility@3.1.1" = fetchurl {
+    url = "https://registry.npmjs.org/@dnd-kit/accessibility/-/accessibility-3.1.1.tgz";
+    hash = "sha512-2P+YgaXF+gRsIihwwY1gCsQSYnu9Zyj2py8kY5fFvUM1qm2WA2u639R6YNVfU4GWr+ZM5mqEsfHZZLoRONbemw==";
+  };
+  "@dnd-kit/core@6.3.1" = fetchurl {
+    url = "https://registry.npmjs.org/@dnd-kit/core/-/core-6.3.1.tgz";
+    hash = "sha512-xkGBRQQab4RLwgXxoqETICr6S5JlogafbhNsidmrkVv2YRs5MLwpjoF2qpiGjQt8S9AoxtIV603s0GIUpY5eYQ==";
+  };
+  "@dnd-kit/modifiers@9.0.0" = fetchurl {
+    url = "https://registry.npmjs.org/@dnd-kit/modifiers/-/modifiers-9.0.0.tgz";
+    hash = "sha512-ybiLc66qRGuZoC20wdSSG6pDXFikui/dCNGthxv4Ndy8ylErY0N3KVxY2bgo7AWwIbxDmXDg3ylAFmnrjcbVvw==";
+  };
+  "@dnd-kit/sortable@10.0.0" = fetchurl {
+    url = "https://registry.npmjs.org/@dnd-kit/sortable/-/sortable-10.0.0.tgz";
+    hash = "sha512-+xqhmIIzvAYMGfBYYnbKuNicfSsk4RksY2XdmJhT+HAC01nix6fHCztU68jooFiMUB01Ky3F0FyOvhG/BZrWkg==";
+  };
+  "@dnd-kit/utilities@3.2.2" = fetchurl {
+    url = "https://registry.npmjs.org/@dnd-kit/utilities/-/utilities-3.2.2.tgz";
+    hash = "sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg==";
+  };
   "@emnapi/core@1.11.3" = fetchurl {
     url = "https://registry.npmjs.org/@emnapi/core/-/core-1.11.3.tgz";
     hash = "sha512-zLpS5asjEb7lq8jYLq37N6XKaE41DIexlY1rF/z4/tIl3wo13Sqm28fRyfIsKZD+NZ8mM5RoKkpW/rBcuoSZSg==";
