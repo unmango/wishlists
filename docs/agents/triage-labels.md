@@ -14,4 +14,4 @@ When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the 
 
 Edit the right-hand column to match whatever vocabulary you actually use.
 
-Only `wontfix` exists in the GitHub repo so far. Before applying any other label for the first time, create it with `gh label create "<label>"`, because `gh issue edit --add-label` rejects a missing label.
+Only `wontfix` exists in the GitHub repo so far. Before applying any other label for the first time, create it with `gh label create "<label>"`, because `gh issue edit --add-label` fails on a missing label.
