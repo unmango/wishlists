@@ -48,6 +48,10 @@ _Avoid_: upload, sync, bulk add
 What a gift-giver does to an item so other gift-givers know it's taken. Visible to every member except the owner.
 _Avoid_: claim, reserve
 
+**Installed app**:
+Wishlists added to a phone's home screen, with its own icon and name. It opens without the browser bar.
+_Avoid_: PWA, web app, home screen shortcut
+
 **Maintainer**:
 The person who runs the app and the repo, named on GitHub only by their handle.
 
