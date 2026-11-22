@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.1.9](https://github.com/unmango/wishlists/compare/v0.1.8...v0.1.9) (2026-11-22)
+
+
+### Features
+
+* let owners arrange their wishlist and viewers sort it ([#531](https://github.com/unmango/wishlists/issues/531)) ([02a11a1](https://github.com/unmango/wishlists/commit/02a11a18051a09e49dd63cd816b9fdc018708d1a))
+* treat stored events as contracts and rebuild views on startup ([#530](https://github.com/unmango/wishlists/issues/530)) ([bb530b0](https://github.com/unmango/wishlists/commit/bb530b069b17df4ce0e534e60c71b681acce17b0))
+
+
+### Documentation
+
+* write UI copy, messages, comments and docs with transitive verbs ([#532](https://github.com/unmango/wishlists/issues/532)) ([d88a803](https://github.com/unmango/wishlists/commit/d88a8034cb00ce90d3e47543f633f103173a8471))
+
+
+### Tests
+
+* add stored examples of item positions and reorders ([#534](https://github.com/unmango/wishlists/issues/534)) ([c3f11fa](https://github.com/unmango/wishlists/commit/c3f11fa4cf2a73cb8c8c3a1fae13e10eff775a43))
+
+
+### Dependencies
+
+* replace deprecated rolldown-vite with vite 8 ([#527](https://github.com/unmango/wishlists/issues/527)) ([6238e42](https://github.com/unmango/wishlists/commit/6238e42a732038f04fba035ab1b62ffd3e19b37c))
+* update bun to v1.4.5 ([#524](https://github.com/unmango/wishlists/issues/524)) ([2a70cf1](https://github.com/unmango/wishlists/commit/2a70cf1c6a925e31dd3c3b5c48288e275aebc809))
+* update dependency dprint/dprint to v0.65.0 ([#526](https://github.com/unmango/wishlists/issues/526)) ([4814b3a](https://github.com/unmango/wishlists/commit/4814b3aacf0f8d02365088c7ecfd56830799a9a1))
+* update dependency testcontainers.postgresql to 4.17.0 ([#528](https://github.com/unmango/wishlists/issues/528)) ([96a13fa](https://github.com/unmango/wishlists/commit/96a13fa8220bc83ab0db64b0aca89099ad00e85e))
+* update dotnet monorepo to v11 ([#512](https://github.com/unmango/wishlists/issues/512)) ([16ea267](https://github.com/unmango/wishlists/commit/16ea267cc484634f6197cdb27aa057e5a790cfdc))
+* update oven/bun docker tag to v1.4.5 ([#525](https://github.com/unmango/wishlists/issues/525)) ([7e6f288](https://github.com/unmango/wishlists/commit/7e6f28875992f554a669073aeb81e30c545d810b))
+* update postgres docker tag to v19 ([#529](https://github.com/unmango/wishlists/issues/529)) ([d6bb0a5](https://github.com/unmango/wishlists/commit/d6bb0a585b78473c9c7d029cd467c55a75f09e5c))
+
+
+### Continuous Integration
+
+* sync .NET version, lock files and nix deps on Renovate PRs ([#514](https://github.com/unmango/wishlists/issues/514)) ([737aff6](https://github.com/unmango/wishlists/commit/737aff6518cb25bcb29c1f6f9354e76f6e19684d))
+
 ## [0.1.8](https://github.com/unmango/wishlists/compare/v0.1.7...v0.1.8) (2026-11-18)
 
 
