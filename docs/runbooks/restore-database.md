@@ -60,7 +60,7 @@ spec:
         name: barman-cloud.cloudnative-pg.io
         parameters:
           barmanObjectName: postgres-backups
-          serverName: postgres
+          serverName: postgres-r1 # the live cluster's archive folder
 ```
 
 Run the count in `postgres-drill-1`, then `kubectl -n wishlists delete cluster postgres-drill` (its volume uses the `Delete` reclaim policy).
@@ -69,16 +69,19 @@ Run the count in `postgres-drill-1`, then `kubectl -n wishlists delete cluster p
 
 The app connects to `postgres-rw` with a client certificate, so the restored cluster must keep the name `postgres` and the same certificate secrets.
 
-1. Stop Flux from recreating the old cluster: `flux -n flux-system suspend kustomization apps-wishlists`.
-2. Stop the app: `kubectl -n wishlists scale deploy/wishlists --replicas 0`.
-3. Delete the broken cluster: `kubectl -n wishlists delete cluster postgres`. Its volume goes with it. The certificate secrets (`postgres-pki-ca`, `postgres-server-cert`, `postgres-replication-cert`) and the ObjectStore stay.
-4. Apply the live manifest from the-cluster with two changes:
-   - Replace `bootstrap.initdb` with `bootstrap.recovery` and an `externalClusters` entry, as in the drill above (`serverName: postgres`).
-   - Point the WAL archiver at a new folder, so the new timeline never overwrites the old one: add `serverName: postgres-r1` (then `-r2`, ...) to the `barman-cloud.cloudnative-pg.io` plugin parameters.
-5. Wait for `kubectl -n wishlists get cluster postgres` to report `Cluster in healthy state`, then run the count.
-6. Start the app: `kubectl -n wishlists scale deploy/wishlists --replicas 1`. Sign in on the site. An existing session that still works proves the data protection keys came back.
-7. Commit the same manifest change to the-cluster (`apps/wishlists`), then `flux -n flux-system resume kustomization apps-wishlists`. Flux must not try to put `initdb` back.
-8. Take a fresh base backup (`kubectl cnpg backup postgres -m plugin --plugin-name barman-cloud.cloudnative-pg.io`), so the next recovery has a short WAL replay.
+The archive folder the live cluster writes to is the `serverName` in its plugin parameters (`postgres-r1` since the 2026-11-22 rehearsal). Recover from that folder, and archive into the next one.
+
+1. Stop Flux from recreating the old cluster or the app: `flux -n flux-system suspend kustomization apps-wishlists` and `flux -n wishlists suspend helmrelease wishlists`.
+2. If the old cluster still answers, take a base backup now (step 9's command) and wait for it to complete. The restore then replays minutes of WAL instead of a day's.
+3. Stop the app: `kubectl -n wishlists scale deploy/wishlists --replicas 0`.
+4. Delete the broken cluster: `kubectl -n wishlists delete cluster postgres`. Its volume goes with it. The certificate secrets (`postgres-pki-ca`, `postgres-server-cert`, `postgres-replication-cert`) and the ObjectStore stay.
+5. Apply the live manifest from the-cluster with two changes:
+   - Point `externalClusters` at the folder the old cluster archived into (`serverName: postgres-r1`), as in the drill above.
+   - Point the WAL archiver at the next folder (`serverName: postgres-r2`, ...), so the new timeline never mixes with the old one. CNPG refuses a folder that already holds WAL.
+6. Wait for `kubectl -n wishlists get cluster postgres` to report `Cluster in healthy state`, then run the count. If the recovery pod sits in `Init` for minutes, its node's container runtime is probably sick: delete the cluster, force-delete the stuck pod, and apply it again with a `spec.affinity.nodeAffinity` rule that excludes that node.
+7. Start the app: `kubectl -n wishlists scale deploy/wishlists --replicas 1`. Sign in on the site. An existing session that still works proves the data protection keys came back.
+8. Commit the same manifest change to the-cluster (`apps/wishlists`), then resume the Kustomization and the HelmRelease. Flux must not put the old `serverName` back.
+9. Take a fresh base backup (`kubectl cnpg backup postgres -m plugin --plugin-name barman-cloud.cloudnative-pg.io`), so the next recovery has a short WAL replay.
 
 ## Restore from Backblaze (last resort)
 
@@ -123,10 +126,11 @@ EOF
 postgres -c config_file=/tmp/pg.conf &
 ```
 
-Run the count with `psql -h /tmp -U postgres -d wishlists`. To bring the data back, `pg_dump -h /tmp -U postgres -Fc wishlists` from that pod, then create a fresh `postgres` cluster (steps 1 to 4 above with `initdb`) and `pg_restore` the dump into it as the `wishlists` owner. Delete `wishlists-drill` afterwards.
+Run the count with `psql -h /tmp -U postgres -d wishlists`. To bring the data back, `pg_dump -h /tmp -U postgres -Fc wishlists` from that pod, then create a fresh `postgres` cluster (steps 1 to 5 above with `initdb`) and `pg_restore` the dump into it as the `wishlists` owner. Delete `wishlists-drill` afterwards.
 
 ## Timings from the 2026-11-22 rehearsal
 
 - **Ceph point in time, side cluster:** 12 minutes from apply to Ready. Most of it was WAL replay: 69 segments since the 00:30 base backup, at about 10 seconds each. `archive_timeout: 5min` closes a segment every 5 minutes, so a restore late in the day replays up to about 290 segments, roughly 50 minutes.
 - **Backblaze, side namespace:** the Velero restore finished in 4 minutes. Ceph timed out the first mount of the new volume and retried it after 2 minutes. Postgres recovered from the crash-consistent snapshot in under a second.
-- Both copies matched the live row counts exactly, including the data protection key.
+- **Ceph point in time, in place:** with a base backup taken just before, the restored `postgres` cluster reached Ready 2 minutes 48 seconds after the apply. The first attempt landed on a node whose container runtime kept timing out and sat in `Init` for 17 minutes; pinned to another node, it recovered at once. The site was down for 23 minutes in total, and about 6 without the sick node.
+- Every restore matched the live row counts exactly, including the data protection key.
