@@ -102,6 +102,29 @@
           "type": "item_removed",
           "dotnetType": "UnMango.Wishlists.Api.Domain.ItemRemoved, UnMango.Wishlists.Api",
           "data": { "ItemId": "0195a000-0000-7000-8000-0000000000c2" }
+        },
+        {
+          "type": "item_added",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemAdded, UnMango.Wishlists.Api",
+          "data": {
+            "ItemId": "0195a000-0000-7000-8000-0000000000c3",
+            "Name": "Scarf",
+            "Link": null,
+            "Price": null,
+            "Notes": null,
+            "ReallyWant": false,
+            "Position": 0
+          }
+        },
+        {
+          "type": "items_reordered",
+          "dotnetType": "UnMango.Wishlists.Api.Domain.ItemsReordered, UnMango.Wishlists.Api",
+          "data": {
+            "ItemIds": [
+              "0195a000-0000-7000-8000-0000000000c1",
+              "0195a000-0000-7000-8000-0000000000c3"
+            ]
+          }
         }
       ]
     },
