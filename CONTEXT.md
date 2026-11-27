@@ -44,6 +44,10 @@ _Avoid_: picture, photo, preview image, og image
 Adding many items to your own wishlist at once from a file. An import only adds items: it never edits or removes ones already there, and skips items already on the wishlist.
 _Avoid_: upload, sync, bulk add
 
+**Sale date**:
+A day the owner expects an item's price might change, such as a holiday sale. It's a hint, not a promise. An item has at most one, only the owner sets or clears it, and every member sees it. A past sale date stays until the owner changes or clears it.
+_Avoid_: deal, price drop, sale (for the date itself)
+
 **Mark bought**:
 What a gift-giver does to an item so other gift-givers know it's taken. Visible to every member except the owner.
 _Avoid_: claim, reserve
